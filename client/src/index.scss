@@ -1,0 +1,28 @@
+:root {
+  --primary: #311b92;
+  --secondary: #ffd54f;
+  --primary-light: #97d2ec;
+  --secondary-gray: #5f6f94;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  height: 100%;
+}
+
+li {
+  list-style: none;
+}
+
+.form-control {
+  width: 100%;
+}
