@@ -60,7 +60,7 @@ const TransactionList = ({ title }: TransactionListProps) => {
           }}
         >
           <Typography variant="h6">{title}</Typography>
-          <Button
+          <Button className="animate-spin"
             onClick={() => setFormOpen((state) => !state)}
             startIcon={<Icon>add</Icon>}
             variant="outlined"
