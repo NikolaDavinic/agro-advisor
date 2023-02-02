@@ -1,15 +1,24 @@
 import { User } from "../../models/user.model";
 
-export const getAuthToken = () => localStorage.getItem("auth-token");
+interface Session {
+  id: string;
+  expires: string;
+}
 
-export const setAuthToken = (token: string) =>
-  localStorage.setItem("auth-token", token);
+export const lsGetSession: () => Session | null = () => {
+  const lssession = localStorage.getItem("session");
+  if (!lssession) return null;
+  return JSON.parse(lssession);
+};
 
-export const removeAuthToken = () => localStorage.removeItem("auth-token");
+export const lsSetSession = (session: Session) =>
+  localStorage.setItem("session", JSON.stringify(session));
 
-export const getUser = () => JSON.parse(localStorage.getItem("user") || "{}");
+export const lsRemoveSession = () => localStorage.removeItem("session");
 
-export const setUser = (user: User) =>
+export const lsGetUser = () => JSON.parse(localStorage.getItem("user") || "{}");
+
+export const lsSetUser = (user: User) =>
   localStorage.setItem("user", JSON.stringify(user));
 
-export const removeUser = () => localStorage.removeItem("user");
+export const lsRemoveUser = () => localStorage.removeItem("user");
