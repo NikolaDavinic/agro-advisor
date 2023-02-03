@@ -7,6 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\WeatherForecastController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="DTO\NewFile.txt" />
+    <None Remove="Models\NewFile.txt" />
+    <None Remove="Services\NewFile.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.2" />
     <PackageReference Include="MongoDB.Driver" Version="2.19.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
