@@ -2,8 +2,6 @@ import { Box, Button, Grid, Stack, TextField } from "@mui/material";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import { selectUserState, signIn } from "../features/user/userSlice";
-import { useAppDispatch, useAppSelector } from "../hooks/app-redux";
 
 const SignIn = () => {
   const {
@@ -14,23 +12,23 @@ const SignIn = () => {
     reValidateMode: "onSubmit",
   });
 
-  const dispatch = useAppDispatch();
-  const { user, error, status } = useAppSelector(selectUserState);
+  // const dispatch = useAppDispatch();
+  // const { user, error, status } = useAppSelector(selectUserState);
 
   const navigate = useNavigate();
 
-  const onSubmit = handleSubmit((creds) => {
-    console.log("submit");
-    if (status !== "pending") {
-      dispatch(signIn(creds));
-    }
+  const onSubmit = handleSubmit((creds: any) => {
+    // console.log("submit");
+    // if (status !== "pending") {
+    //   dispatch(signIn(creds));
+    // }
   });
 
-  useEffect(() => {
-    if (user) {
-      navigate("/");
-    }
-  }, [navigate, status, user]);
+  // useEffect(() => {
+  //   if (user) {
+  //     navigate("/");
+  //   }
+  // }, [navigate, status, user]);
 
   return (
     <Box
@@ -66,7 +64,7 @@ const SignIn = () => {
           {...register("password", { required: true })}
           error={Boolean(errors.password)}
         ></TextField>
-        <p style={{ color: "red" }}>{error}</p>
+        {/* <p style={{ color: "red" }}>{error}</p> */}
         <Button variant="contained" sx={{ p: 1.2 }} type="submit">
           Sign In
         </Button>

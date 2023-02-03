@@ -1,14 +1,13 @@
 import { Box, Button, Icon, MenuItem, TextField } from "@mui/material";
 import { Stack } from "@mui/system";
 import { useState } from "react";
-import { categoriesSelector } from "../features/categories/categorySlice";
-import { useAppSelector } from "../hooks/app-redux";
+// import { categoriesSelector } from "../features/categories/categorySlice";
 import "./TransactionForm.scss";
 
 const TransactionForm = () => {
   const [formState, setFormState] = useState({ isPayment: false });
 
-  const { categories, status, error } = useAppSelector(categoriesSelector);
+  // const { categories, status, error } = useAppSelector(categoriesSelector);
 
   return (
     <Stack component="form" gap="0.6em">
@@ -18,9 +17,9 @@ const TransactionForm = () => {
         label="Kategorija"
         placeholder="Kategorija"
       >
-        {categories.map((category) => (
+        {/* {categories.map((category) => (
           <MenuItem value={category.id}>{category.name}</MenuItem>
-        ))}
+        ))} */}
       </TextField>
       <Box sx={{ display: "flex" }}>
         <Button

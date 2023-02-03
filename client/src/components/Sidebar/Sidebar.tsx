@@ -2,19 +2,15 @@ import { Button, Menu, MenuItem } from "@mui/material";
 import Icon from "@mui/material/Icon";
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { signOut } from "../../features/user/userSlice";
-import { useAppDispatch } from "../../hooks/app-redux";
 import "./Sidebar.scss";
 
 const Sidebar = (props: any) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const userOptionsOpen = Boolean(anchorEl);
 
-  const dispatch = useAppDispatch();
-
   const handleLogout = () => {
-    dispatch(signOut());
-    setAnchorEl(null);
+    // dispatch(signOut());
+    // setAnchorEl(null);
   };
 
   return (

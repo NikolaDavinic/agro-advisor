@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { selectUser } from "../features/user/userSlice";
-import { useAppSelector } from "../hooks/app-redux";
+// import { selectUser } from "../features/user/userSlice";
+// import { useAppSelector } from "../hooks/app-redux";
 
 interface ProtectedRoutesProps {
   isAllowed?: boolean;

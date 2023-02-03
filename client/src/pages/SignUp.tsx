@@ -2,8 +2,6 @@ import { Box, Button, Grid, Stack, TextField } from "@mui/material";
 import { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import { selectUserState, signUp } from "../features/user/userSlice";
-import { useAppDispatch, useAppSelector } from "../hooks/app-redux";
 // import style from "./signup.module.scss";
 
 interface FormInputs {
@@ -24,20 +22,20 @@ const SignUp = () => {
     reValidateMode: "onChange",
   });
 
-  const { user, error, status } = useAppSelector(selectUserState);
-  const dispatch = useAppDispatch();
+  // const { user, error, status } = useAppSelector(selectUserState);
+  // const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (status === "resolved" && !user) {
-      navigate("/signin");
-    }
-  }, [navigate, status, user]);
+  // useEffect(() => {
+  //   if (status === "resolved" && !user) {
+  //     navigate("/signin");
+  //   }
+  // }, [navigate, status, user]);
 
   const onSubmit = (data: FormInputs) => {
-    if (status !== "pending") {
-      dispatch(signUp(data));
-    }
+    // if (status !== "pending") {
+    //   dispatch(signUp(data));
+    // }
   };
 
   const repeatPasswordValidator = useCallback(
@@ -106,12 +104,12 @@ const SignUp = () => {
           error={Boolean(errors.repeatPassword)}
           helperText={errors.repeatPassword && "Passwords don't match"}
         ></TextField>
-        <p>{error}</p>
+        {/* <p>{error}</p> */}
         <Button
           type="submit"
           variant="contained"
           color="primary"
-          disabled={status === "pending"}
+          // disabled={status === "pending"}
         >
           Sign Up
         </Button>
