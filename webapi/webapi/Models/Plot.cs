@@ -14,8 +14,8 @@ namespace webapi.Models
         public int Area { get; set; } = 0;
         [BsonRequired]
         public int PlotNumber { get; set; }
-        [BsonRequired]
-        public List<GeoJsonPoint<GeoJson2DGeographicCoordinates>> BorderPoints { get; set; } = new();
+        //[BsonRequired]
+        //public List<GeoJsonPoint<>> BorderPoints { get; set; } = null!;
         public string Municipality { get; set; } = null!;
         [BsonRequired]
         public string UserId { get; set; } = null!;

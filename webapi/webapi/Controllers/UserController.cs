@@ -42,8 +42,6 @@ namespace webapi.Controllers
             //    return user;
             //});
 
-
-
             var filter = Builders<User>.Filter.Eq("Id", plot.UserId);
             var update = Builders<User>.Update.Push(e => e.Plots, new PlotSummary
             {
@@ -52,6 +50,8 @@ namespace webapi.Controllers
                 PlotNumber = plot.PlotNumber,
                 Municipality = plot.Municipality
             });
+
+            _context.Users.FindOneAndUpdate(filter, update);
 
             return Ok("Valjda radi");
         }
