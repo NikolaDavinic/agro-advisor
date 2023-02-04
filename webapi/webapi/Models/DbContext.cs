@@ -2,7 +2,7 @@
 
 namespace webapi.Models
 {
-    public class DbContext 
+    public class DbContext
     {
         private readonly IMongoDatabase _db;
         private readonly IMongoClient _mongoClient;

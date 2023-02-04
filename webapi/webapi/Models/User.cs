@@ -12,6 +12,24 @@ namespace webapi.Models
         public string Municipality { get; set; } = null!;
     }
 
+    public class MachinerySummary
+    {
+        public string Id { get; set; } = null!;
+        public int? Type { get; set; }
+        public string? Model { get; set; }
+    }
+
+    public class Transaction
+    {
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string? Id { get; set; }
+        public decimal Value { get; set; }
+        public string CategoryName { get; set; }
+        public string Description { get; set; }
+        public DateTime Date { get; set; }
+    }
+
     public class User
     {
         [BsonId]
@@ -27,5 +45,6 @@ namespace webapi.Models
         public string ImageUrl { get; set; } = null!;
         public string Adress { get; set; } = null!;
         public List<PlotSummary> Plots { get; set; } = new();
+        public List<Transaction> Transactions { get; set; } = new();
     }
 }
