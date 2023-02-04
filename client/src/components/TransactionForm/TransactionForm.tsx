@@ -1,26 +1,25 @@
-import { Box, Button, Icon, MenuItem, TextField } from "@mui/material";
+import { Autocomplete, Box, Button, Icon, TextField } from "@mui/material";
 import { Stack } from "@mui/system";
 import { useState } from "react";
+import { useApi } from "../../hooks/api.hook";
 // import { categoriesSelector } from "../features/categories/categorySlice";
 import "./TransactionForm.scss";
 
 const TransactionForm = () => {
   const [formState, setFormState] = useState({ isPayment: false });
 
-  // const { categories, status, error } = useAppSelector(categoriesSelector);
+  const { result: categories, loading: loadingCategories } =
+    useApi("/category");
 
   return (
     <Stack component="form" gap="0.6em">
-      <TextField
-        select
-        className="form-field"
-        label="Kategorija"
-        placeholder="Kategorija"
-      >
-        {/* {categories.map((category) => (
-          <MenuItem value={category.id}>{category.name}</MenuItem>
-        ))} */}
-      </TextField>
+      <Autocomplete
+        disablePortal
+        options={[]}
+        loading={loadingCategories}
+        loadingText="Ucitavanje kategorija..."
+        renderInput={(params) => <TextField {...params} label="Kategorija" />}
+      />
       <Box sx={{ display: "flex" }}>
         <Button
           sx={{ mr: "5px" }}
