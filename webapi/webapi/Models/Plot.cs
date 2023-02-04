@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace webapi.Models
 {
-    public class Plot
+    public class Plot 
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
@@ -14,8 +14,8 @@ namespace webapi.Models
         public int Area { get; set; } = 0;
         [BsonRequired]
         public int PlotNumber { get; set; }
-        //[BsonRequired]
-        //public List<GeoJsonPoint<>> BorderPoints { get; set; } = null!;
+        [BsonRequired]
+        public GeoJsonPoint<GeoJson2DCoordinates> BorderPoints { get; set; } = null!;
         public string Municipality { get; set; } = null!;
         [BsonRequired]
         public string UserId { get; set; } = null!;
