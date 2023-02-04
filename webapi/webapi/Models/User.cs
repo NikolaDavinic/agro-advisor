@@ -39,9 +39,9 @@ namespace webapi.Models
         public string Name { get; set; } = null!;
         [BsonRequired]
         public string Email { get; set; } = null!;
-        //[JsonIgnore]
-        //[BsonRequired]
-        //public string PasswordHash { get; set; } = null!;
+        [JsonIgnore]
+        [BsonRequired]
+        public string PasswordHash { get; set; } = null!;
         public string ImageUrl { get; set; } = null!;
         public string Adress { get; set; } = null!;
         public List<PlotSummary> Plots { get; set; } = new();

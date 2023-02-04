@@ -1,8 +1,11 @@
 using BookStoreApi.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MongoDB.Driver;
+using webapi.DTO;
 using webapi.Models;
+using ZstdSharp.Unsafe;
 
 namespace webapi.Controllers
 {
@@ -11,49 +14,64 @@ namespace webapi.Controllers
     public class UserController : ControllerBase
     {
         private readonly UsersService _usersService;
-        private readonly DbContext _context;
-        public UserController(ILogger<UserController> logger, UsersService usersService, DbContext context)
+        public UserController(ILogger<UserController> logger, UsersService usersService)
         {
             _usersService = usersService;
-            _context = context;
         }
-        [HttpPost]
-        public async Task<ActionResult> CreateUser([FromBody] User user)
+        [HttpPost("signup")]
+        public async Task<ActionResult> SignUp([FromBody] UserDTO user)
         {
             await _usersService.CreateAsync(user);
-            return Ok("Valjda radi");
+            return Ok(new { msg = "User registered" });
         }
 
-        [HttpPost("plot")]
-        public async Task<ActionResult> CreatePlot([FromBody] Plot plot)
+        [HttpPost("signin")]
+        public async Task<ActionResult> SignIn([FromBody] AuthCredsDTO creds)
         {
-            await _context.Plots.InsertOneAsync(plot);
+            var user = await _usersService.GetByEmailAsync(creds.Email);
 
-            //_context.Users.UpdateOne(x => x.Id == plot.UserId, (user) =>
-            //{
-            //    user.Plots.Add(new PlotSummary
-            //    {
-            //        Id = plot.Id,
-            //        Area = plot.Area,
-            //        PlotNumber = plot.PlotNumber,
-            //        Municipality = plot.Municipality
-            //    });
-
-            //    return user;
-            //});
-
-
-
-            var filter = Builders<User>.Filter.Eq("Id", plot.UserId);
-            var update = Builders<User>.Update.Push(e => e.Plots, new PlotSummary
+            if (user == null || !_usersService.VerifyPassword(creds.Password, user.PasswordHash))
             {
-                Id = plot.Id,
-                Area = plot.Area,
-                PlotNumber = plot.PlotNumber,
-                Municipality = plot.Municipality
-            });
+                return Unauthorized(new { msg = "Wrong email or password" });
+            }
 
-            return Ok("Valjda radi");
+            return Ok(new
+            {
+                User = user,
+                Token = _usersService.CreateToken(user)
+            });
         }
+
+        //[HttpPost("plot")]
+        //public async Task<ActionResult> CreatePlot([FromBody] Plot plot)
+        //{
+        //    await _context.Plots.InsertOneAsync(plot);
+
+        //    //_context.Users.UpdateOne(x => x.Id == plot.UserId, (user) =>
+        //    //{
+        //    //    user.Plots.Add(new PlotSummary
+        //    //    {
+        //    //        Id = plot.Id,
+        //    //        Area = plot.Area,
+        //    //        PlotNumber = plot.PlotNumber,
+        //    //        Municipality = plot.Municipality
+        //    //    });
+
+        //    //    return user;
+        //    //});
+
+        //    var filter = Builders<User>.Filter.Eq("Id", plot.UserId);
+        //    var update = Builders<User>.Update.Push(e => e.Plots, new PlotSummary
+        //    {
+        //        Id = plot.Id,
+        //        Area = plot.Area,
+        //        PlotNumber = plot.PlotNumber,
+        //        Municipality = plot.Municipality
+        //    });
+
+        //    _context.Users.FindOneAndUpdate(filter, update);
+
+        //    return Ok("Valjda radi");
+        //}
     }
 }
