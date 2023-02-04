@@ -4,7 +4,7 @@ using MongoDB.Driver.GeoJsonObjectModel;
 using System.Text.Json.Serialization;
 using webapi.Models;
 
-namespace DTOs
+namespace webapi.DTO
 {
     public class Point
     {
