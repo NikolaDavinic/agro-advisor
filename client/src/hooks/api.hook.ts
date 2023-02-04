@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { api } from "../utils/axios";
+import { api } from "../utils/api/axios";
 
 export function useApi<T>(path: string, initialValue?: T) {
   const [result, setResult] = useState<T | null>(initialValue ?? null);

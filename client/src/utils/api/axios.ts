@@ -1,6 +1,6 @@
 import axios from "axios";
-import { apiEndpoint } from "../constants";
-import { lsGetSession } from "./api/authToken";
+import { apiEndpoint } from "../../constants";
+import { lsGetToken } from "./localStorage";
 
 export default axios;
 
@@ -10,7 +10,7 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (request) => {
-    const token = lsGetSession();
+    const token = lsGetToken();
 
     if (token) {
       request.headers!["Authorization"] = `Bearer ${token}`;

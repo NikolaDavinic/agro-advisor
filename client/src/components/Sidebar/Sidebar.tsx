@@ -2,15 +2,18 @@ import { Button, Menu, MenuItem } from "@mui/material";
 import Icon from "@mui/material/Icon";
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
+import { useAuthContext } from "../../contexts/auth.context";
 import "./Sidebar.scss";
 
 const Sidebar = (props: any) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const userOptionsOpen = Boolean(anchorEl);
 
+  const { signout } = useAuthContext();
+
   const handleLogout = () => {
-    // dispatch(signOut());
-    // setAnchorEl(null);
+    signout();
+    setAnchorEl(null);
   };
 
   return (

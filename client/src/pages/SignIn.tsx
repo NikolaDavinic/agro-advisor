@@ -2,6 +2,10 @@ import { Box, Button, Grid, Stack, TextField } from "@mui/material";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuthContext } from "../contexts/auth.context";
+import { useSnackbar } from "../contexts/snackbar.context";
+import { User } from "../models/user.model";
+import { api } from "../utils/api/axios";
 
 const SignIn = () => {
   const {
@@ -12,23 +16,24 @@ const SignIn = () => {
     reValidateMode: "onSubmit",
   });
 
-  // const dispatch = useAppDispatch();
-  // const { user, error, status } = useAppSelector(selectUserState);
-
+  const { signin } = useAuthContext();
+  const { openSnackbar } = useSnackbar();
   const navigate = useNavigate();
 
   const onSubmit = handleSubmit((creds: any) => {
-    // console.log("submit");
-    // if (status !== "pending") {
-    //   dispatch(signIn(creds));
-    // }
+    api
+      .post<{ user: User; authToken: string }>(`/user/signin`, creds)
+      .then(({ data }) => {
+        signin(data);
+        navigate("/home");
+      })
+      .catch((err) => {
+        openSnackbar({
+          message: "Pogresan email ili lozinka",
+          severity: "error",
+        });
+      });
   });
-
-  // useEffect(() => {
-  //   if (user) {
-  //     navigate("/");
-  //   }
-  // }, [navigate, status, user]);
 
   return (
     <Box

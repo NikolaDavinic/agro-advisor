@@ -4,7 +4,8 @@ import "./index.scss";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
-import { Provider } from "react-redux";
+import { AuthStateProvider } from "./contexts/auth.context";
+
 // --primary: #25316d;
 // --secondary: #fef5ac;
 // --primary-light: #97d2ec;
@@ -15,9 +16,11 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <AuthStateProvider>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </AuthStateProvider>
   </React.StrictMode>
 );
 

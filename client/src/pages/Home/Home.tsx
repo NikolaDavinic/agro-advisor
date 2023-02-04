@@ -1,5 +1,5 @@
 const Home = () => {
-  return <p className="animate-spin">Home</p>;
+  return <p>Home</p>;
 };
 
 export default Home;

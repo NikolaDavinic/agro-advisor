@@ -1,15 +1,18 @@
 import { Box, Button, Grid, Stack, TextField } from "@mui/material";
-import { useCallback, useEffect } from "react";
+import axios, { AxiosError, AxiosResponse } from "axios";
+import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-// import style from "./signup.module.scss";
+import { useSnackbar } from "../contexts/snackbar.context";
+import { ApiMessage } from "../dtos/api-message.dto";
+import { api } from "../utils/api/axios";
 
 interface FormInputs {
   name: string;
-  surname: string;
   password: string;
   email: string;
   repeatPassword: string;
+  address?: string;
 }
 
 const SignUp = () => {
@@ -22,20 +25,30 @@ const SignUp = () => {
     reValidateMode: "onChange",
   });
 
-  // const { user, error, status } = useAppSelector(selectUserState);
-  // const dispatch = useAppDispatch();
+  const { openSnackbar, closeSnackbar } = useSnackbar();
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   if (status === "resolved" && !user) {
-  //     navigate("/signin");
-  //   }
-  // }, [navigate, status, user]);
-
   const onSubmit = (data: FormInputs) => {
-    // if (status !== "pending") {
-    //   dispatch(signUp(data));
-    // }
+    api
+      .post<ApiMessage>("/user/signup", {
+        password: data.password,
+        address: data.address,
+        email: data.email,
+        name: data.name,
+      })
+      .then((res) => {
+        openSnackbar({ message: "Uspesna registracija", severity: "success" });
+        navigate("/signin");
+      })
+      .catch((error: AxiosError<ApiMessage>) => {
+        let message = "Doslo je do greske";
+        if (axios.isAxiosError(error)) {
+          if (error.response?.data) {
+            message = error.response.data.msg;
+          }
+        }
+        openSnackbar({ message, severity: "error" });
+      });
   };
 
   const repeatPasswordValidator = useCallback(
@@ -71,19 +84,18 @@ const SignUp = () => {
           {...register("name", { required: true })}
         ></TextField>
         <TextField
-          label="Surname"
-          className="form-field"
-          error={Boolean(errors.surname)}
-          helperText={errors.surname && "Surname field is required"}
-          {...register("surname", { required: true })}
-        ></TextField>
-        <TextField
           label="Email"
           type="email"
           className="form-field"
           error={Boolean(errors.email)}
           helperText={errors.email && "Email is required"}
           {...register("email", { required: true })}
+        ></TextField>
+        <TextField
+          label="Address"
+          className="form-field"
+          error={Boolean(errors.address)}
+          {...register("address")}
         ></TextField>
         <TextField
           label="Password"
