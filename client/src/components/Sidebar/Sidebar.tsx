@@ -45,6 +45,18 @@ const Sidebar = (props: any) => {
             </NavLink>
           </li>
           <li>
+            <NavLink to="/newplot">
+              {({ isActive }) => (
+                <Icon
+                  sx={{ fontSize: 35 }}
+                  className={`icon ${isActive ? "active" : undefined}`}
+                >
+                  add
+                </Icon>
+              )}
+            </NavLink>
+          </li>
+          <li>
             <NavLink to="/analytics">
               {({ isActive }) => (
                 <Icon
