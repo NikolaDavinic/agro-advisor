@@ -73,7 +73,7 @@ const NewPlot: React.FC = () => {
         }
         else if (municipality.length == 0) {
             setSnackbarSeverity("warning")
-            setSnackbarMessage("municipality is required!");
+            setSnackbarMessage("Municipality is required!");
             setShowSnackbar(true);
             passed = false;
         }
@@ -116,7 +116,7 @@ const NewPlot: React.FC = () => {
     };
     return (
         <div className="w-full h-full flex flex-col p-10">
-            {showSpinner && <CircularProgress className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />}
+            {showSpinner && <CircularProgress className="absolute top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />}
             <Typography gutterBottom variant="h5">
                 New plot
             </Typography>
@@ -158,8 +158,8 @@ const NewPlot: React.FC = () => {
                 type="text"
                 // fullWidth
                 variant="standard"
-                onChange={(e) => setMunicipality(e.target.value)}
-                value={municipality}
+                onChange={(e) => setCulture(e.target.value)}
+                value={culture}
             />
             <Typography gutterBottom variant="body1">
                 Draw plot by selecting border points:
@@ -167,6 +167,7 @@ const NewPlot: React.FC = () => {
             <div className="w-full h-full">
                 <div className="w-full h-3/4 py-4">
                     {/*TODO: Centriraj mapu na adresu korisnika */}
+                    {/* https://www.maptiler.com/cloud/geocoding/ za pretvaranje adrese u  */}
                     <MapContainer className="h-full w-full cursor-crosshair" center={[42.96431, 22.12646]} zoom={15} scrollWheelZoom={true}>
                         <TileLayer
                             url="https://api.maptiler.com/maps/hybrid/{z}/{x}/{y}.jpg?key=v4YRbPNezQckuRrQ6AGT"
