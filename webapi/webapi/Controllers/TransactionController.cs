@@ -50,9 +50,9 @@ namespace webapi.Controllers
                 {
                     Category = new MongoDBRef("TCategory", category.Id),
                     CategoryName = category.Name,
-                    //Date = tDTO.Date,
                     Description = tDTO.Description,
-                    Value = tDTO.Value
+                    Value = tDTO.Value,
+                    Date = tDTO.Date
                 };
 
                 await _transactionService.AddTransactionForUser(userId, transaction);

@@ -71,7 +71,7 @@ const TransactionForm = ({
     onSubmit({
       value: formState ? -data.value : Number(data.value),
       description: data.description,
-      date: data.date,
+      date: new Date(data.date).toISOString(),
       categoryName: data.category?.name ?? "",
       categoryId: data.category?.id,
     });
