@@ -1,11 +1,20 @@
-import { Alert, AlertColor, Button, CircularProgress, Icon, Snackbar, TextField, Typography } from "@mui/material";
-import { MapContainer, TileLayer, Polygon, useMapEvents } from 'react-leaflet';
+import {
+    Alert,
+    AlertColor,
+    Button,
+    CircularProgress,
+    Icon,
+    Snackbar,
+    TextField,
+    Typography
+} from "@mui/material";
+import L, { LatLngExpression, PathOptions } from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { LatLngExpression, PathOptions } from "leaflet";
-import { SetStateAction, useState } from "react";
-import { useAuthContext } from "../../contexts/auth.context";
+import { SetStateAction, useEffect, useState } from "react";
+import { MapContainer, Marker, Polygon, TileLayer, useMapEvents } from "react-leaflet";
 import { useNavigate } from "react-router-dom";
-import { api } from "../../utils/api/axios";
+import { useAuthContext } from "../../contexts/auth.context";
+import axios from "../../utils/api/axios";
 
 export interface Point {
     x: number;
@@ -18,33 +27,51 @@ export interface PlotDTO {
     municipality: string;
     userId?: string;
     currentCulture: string;
-    borderPoints: Point[]
+    borderPoints: Point[];
 }
 interface MapEventsProps {
-    setPositions: React.Dispatch<SetStateAction<LatLngExpression[]>>
+    setPositions: React.Dispatch<SetStateAction<LatLngExpression[]>>;
+    startPos: [number, number]
 }
 const MapEvents = (props: MapEventsProps) => {
     const map = useMapEvents({
-        click(e) {
-            props.setPositions(prevPos => [...prevPos, e.latlng]);
-        }
-    })
+        click(e: any) {
+            props.setPositions((prevPos) => [...prevPos, e.latlng]);
+        },
+    });
+    map.panTo(props.startPos);
     return <></>;
-}
+};
+var homeIcon = L.icon({
+    iconUrl: 'https://cdn1.iconfinder.com/data/icons/engineers7/102/Untitled-28-512.png',
+    iconSize: [50, 50],
+    iconAnchor: [25, 50],
+    popupAnchor: [-3, -76],
+});
 
 const NewPlot: React.FC = () => {
-    const { user, isAuthenticated } = useAuthContext();
+    const { user } = useAuthContext();
+    const [startPosition, setStartPosition] = useState<[number, number]>([43.331456, 21.892134]);
+    useEffect(() => {
+        if (user && user.address && user.address?.length > 0) {
+            axios.get(`https://api.maptiler.com/geocoding/${user.address}.json?key=eIgS48TpQ70m77qKYrsx`)
+                .then(res => {
+                    if (res.data.features.length > 0)
+                        setStartPosition([res.data.features[0].geometry.coordinates[1], res.data.features[0].geometry.coordinates[0]]);
+                })
+        }
+    }, [user]);
 
     const [showSpinner, setShowSpinner] = useState<boolean>(false);
     const [showSnackbar, setShowSnackbar] = useState<boolean>(false);
     const [snackbarMessage, setSnackbarMessage] = useState<string>("");
     const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>("success");
 
-    const redOptions: PathOptions = { color: 'blue', weight: 0.5 }
+    const redOptions: PathOptions = { color: "blue", weight: 0.5 };
     const [borderPoints, setBorderPoints] = useState<LatLngExpression[]>([]);
     const removePoints = () => {
         setBorderPoints([]);
-    }
+    };
 
     const [municipality, setMunicipality] = useState<string>("");
     const [culture, setCulture] = useState<string>("");
@@ -71,7 +98,7 @@ const NewPlot: React.FC = () => {
             setShowSnackbar(true);
             passed = false;
         }
-        else if (municipality.length == 0) {
+        else if (municipality.length === 0) {
             setSnackbarSeverity("warning")
             setSnackbarMessage("Municipality is required!");
             setShowSnackbar(true);
@@ -165,21 +192,15 @@ const NewPlot: React.FC = () => {
                 Draw plot by selecting border points:
             </Typography>
             <div className="w-full h-full">
-                <div className="w-full h-3/4 py-4">
-                    {/*TODO: Centriraj mapu na adresu korisnika */}
-                    {/* https://www.maptiler.com/cloud/geocoding/ za pretvaranje adrese u  */}
-                    <MapContainer className="h-full w-full cursor-crosshair" center={[42.96431, 22.12646]} zoom={15} scrollWheelZoom={true}>
+                <div style={{ minHeight: "450px" }} className="w-full h-3/4 py-4">
+                    <MapContainer className="h-full w-full cursor-crosshair" center={startPosition} zoom={15} scrollWheelZoom={true}>
                         <TileLayer
                             url="https://api.maptiler.com/maps/hybrid/{z}/{x}/{y}.jpg?key=v4YRbPNezQckuRrQ6AGT"
                         />
                         <Polygon pathOptions={redOptions} positions={borderPoints} />
-                        <MapEvents setPositions={setBorderPoints} />
-                        {/*TODO: Marker na adresu korisnika sa ikonicu kuce */}
-                        {/* <Marker icon={pocetakIcon} position={[dogadjaj.ruta.lokacije[0].xCord, dogadjaj.ruta.lokacije[0].yCord]}>
-                        <Popup>
-                            Pocetak rute
-                        </Popup>
-                    </Marker> */}
+                        <MapEvents setPositions={setBorderPoints} startPos={startPosition} />
+                        <Marker icon={homeIcon} position={startPosition}>
+                        </Marker>
                     </MapContainer>
                 </div>
                 <Button onClick={() => removePoints()} variant="contained">
@@ -189,8 +210,10 @@ const NewPlot: React.FC = () => {
                     </Icon>
                 </Button>
             </div>
-            <div className="w-full flex flex-row">
-                <Button fullWidth onClick={() => onCancel()}>Cancel</Button>
+            <div className="w-full flex flex-row mb-5 pb-5">
+                <Button fullWidth onClick={() => onCancel()}>
+                    Cancel
+                </Button>
                 <Button fullWidth variant="contained" onClick={() => onSubmit()}>
                     Add
                 </Button>

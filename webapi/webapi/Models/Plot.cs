@@ -13,7 +13,7 @@ namespace webapi.Models
         public string? CultureName { get; set; }
         public decimal Amount { get; set; }
         public DateTime Date { get; set; }
-    }
+    }   
 
     public class Plot
     {

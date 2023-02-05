@@ -41,6 +41,7 @@ builder.Services.AddSingleton<IMongoClient>((settings) =>
 builder.Services.AddSingleton<IDbContext, DbContext>();
 builder.Services.AddSingleton<UserService>();
 builder.Services.AddSingleton<CategoryService>();
+builder.Services.AddSingleton<TransactionService>();
 
 var DevelopmentOrigins = "CORSDevelopment";
 var ProductionOrigins = "CORSProduction";

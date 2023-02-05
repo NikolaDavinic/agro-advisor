@@ -23,12 +23,17 @@ namespace webapi.Models
     public class Transaction
     {
         [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string? Id { get; set; }
+        public ObjectId? Id { get; set; }
         public decimal Value { get; set; }
+        public MongoDBRef Category { get; set; } = null!;
         public string CategoryName { get; set; } = null!;
         public string Description { get; set; } = null!;
         public DateTime Date { get; set; }
+
+        public Transaction()
+        {
+            this.Id = ObjectId.GenerateNewId();
+        }
     }
 
     public class User
