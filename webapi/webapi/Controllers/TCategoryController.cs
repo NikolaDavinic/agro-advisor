@@ -40,7 +40,7 @@ namespace webapi.Controllers
                 var result = (await _categoryService.GetCategoriesForUserAsync(userId))
                     .Select(c => new {
                         c.Id, 
-                        User = c.User.Id.AsString, 
+                        UserId = c.User?.Id.AsString ?? null, 
                         c.Name 
                     });
 
@@ -63,6 +63,13 @@ namespace webapi.Controllers
                 if (userId == null)
                 {
                     return Unauthorized("Greska pri autentifikaciji");
+                }
+
+                var cat = await _categoryService.GetUserCategory(userId, newCategory.Name);
+
+                if (cat != null)
+                {
+                    return BadRequest(new { msg = "Vec postoji kategorija sa zadatim imenom" });
                 }
 
                 TransactionCategory newC = new() 

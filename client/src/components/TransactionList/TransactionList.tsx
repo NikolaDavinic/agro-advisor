@@ -1,5 +1,12 @@
-import { Box, Button, Icon, Stack, Typography } from "@mui/material";
-import { useState } from "react";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Icon,
+  Stack,
+  Typography,
+} from "@mui/material";
+import { useState, useEffect } from "react";
 import TransactionCard from "../TransactionCard/TransactionCard";
 import { TransactionForm } from "..";
 import { Transacation } from "../../models/transaction.model";
@@ -7,14 +14,51 @@ import { api } from "../../utils/api/axios";
 import { useSnackbar } from "../../contexts/snackbar.context";
 import axios, { AxiosError } from "axios";
 import { ApiMessage } from "../../dtos/api-message.dto";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 interface TransactionListProps {
   title?: string;
 }
 
+interface TransactionsFilter {
+  skip?: number;
+  take?: number;
+  before?: string;
+  categoryId?: string;
+  expense?: boolean;
+}
+
 const TransactionList = ({ title }: TransactionListProps) => {
   const [formOpen, setFormOpen] = useState(false);
+  // const [loading, setLoading] = useState<boolean>(false);
+  const [transactions, setTransactions] = useState<Transacation[]>([]);
+
   const { openSnackbar } = useSnackbar();
+
+  const skip = 0;
+  const take = 5;
+  const before = null;
+  const categoryId = null;
+  const expense = null;
+
+  const fetchMore = () => {
+    // setLoading(true);
+    api
+      .get<Transacation[]>("/transactions/q", {
+        params: { skip, take, before, categoryId, expense },
+      })
+      .then(({ data }) => {
+        setTransactions((prev) => [...data, ...prev]);
+      });
+  };
+
+  useEffect(() => {
+    api
+      .get<Transacation[]>("/transaction/q", { params: { limit: 5 } })
+      .then(({ data }) => {
+        setTransactions((prev) => [...data]);
+      });
+  }, []);
 
   const onAddTransaction = (transaction: Transacation) => {
     api
@@ -57,11 +101,36 @@ const TransactionList = ({ title }: TransactionListProps) => {
       {formOpen && (
         <TransactionForm onSubmit={onAddTransaction}></TransactionForm>
       )}
-      <Stack gap={1}>
-        {/* {transactions.map((t) => (
-          <TransactionCard key={t.id} transaction={t} />
-        ))} */}
-      </Stack>
+      {/* <Stack
+        id="scrollableDiv"
+        sx={{
+          maxHeight: "600px",
+          overflow: "auto",
+          display: "flex",
+          flexDirection: "column-reverse",
+        }}
+      >
+        <InfiniteScroll
+          dataLength={transactions.length}
+          next={fetchMore}
+          style={{ display: "flex", flexDirection: "column-reverse" }}
+          inverse={true}
+          hasMore={true}
+          loader={
+            <Box className="justify-center w-full flex">
+              <CircularProgress className="mt-20" color="primary" />
+            </Box>
+          }
+          scrollableTarget="scrollableDiv"
+          endMessage={""}
+        >
+          <Stack gap="0.6em" padding="1em">
+            {transactions.map((t) => (
+              <TransactionCard transaction={t} key={t.id} />
+            ))}
+          </Stack>
+        </InfiniteScroll> */}
+      {/* </Stack> */}
     </Stack>
   );
 };

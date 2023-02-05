@@ -7,6 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
+using System.Reflection.Emit;
 
 namespace BookStoreApi.Services;
 
@@ -33,6 +34,29 @@ public class TransactionService
         var result = await _context.Users.FindOneAndUpdateAsync(filter, update);
         //return transaction;
     }
+
+    public async Task<List<Transaction>> FilterTransactions(string userId, DateTime? before, int? skip, int? take)
+    {
+        var query = _context.Users.AsQueryable()
+            .Where(u => u.Id == userId)
+            .Single()
+            .Transactions.AsQueryable();
+       
+        if (before != null)
+        {
+            query = query.Where(t => t.Date <= before);
+        }
+
+        var result = await query
+            .Skip(skip ?? 0)
+            .Take(take ?? 10)
+            .OrderByDescending(t => t.Date)
+            .ToAsyncEnumerable()
+            .ToListAsync();
+
+        return result;
+    }
+
     //public async Task<List<TransactionCategory>> GetCategoriesForUserAsync(string userId)
     //{
     //    var filter = Builders<TransactionCategory>.Filter.Eq(x => x.User.Id, userId);

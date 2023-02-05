@@ -1,4 +1,4 @@
-import { Button, Menu, MenuItem } from "@mui/material";
+import { Box, Button, Menu, MenuItem } from "@mui/material";
 import Icon from "@mui/material/Icon";
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
@@ -18,7 +18,7 @@ const Sidebar = (props: any) => {
 
   return (
     <div className="sidebar-content">
-      <nav className="sidebar">
+      <nav className="sidebar" style={{ position: "sticky", top: 0 }}>
         <ul>
           <li>
             <NavLink to="/">
@@ -90,7 +90,9 @@ const Sidebar = (props: any) => {
           </MenuItem>
         </Menu>
       </nav>
-      <div className="content">{props.children}</div>
+      <Box className="content" sx={{ overflow: "auto" }}>
+        {props.children}
+      </Box>
     </div>
   );
 };
