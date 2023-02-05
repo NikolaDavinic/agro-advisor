@@ -10,6 +10,6 @@ namespace webapi.DTO
         public string CategoryId { get; set; } = null!;
         public string CategoryName { get; set; } = null!;
         public string Description { get; set; } = null!;
-        //public DateTime Date { get; set; }
+        public DateTime Date { get; set; }
     }
 }

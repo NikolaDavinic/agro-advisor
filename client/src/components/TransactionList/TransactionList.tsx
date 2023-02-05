@@ -17,8 +17,6 @@ const TransactionList = ({ title }: TransactionListProps) => {
   const { openSnackbar } = useSnackbar();
 
   const onAddTransaction = (transaction: Transacation) => {
-    console.log(transaction);
-
     api
       .post<Transacation>("/transaction", transaction)
       .then((transaction) => {
