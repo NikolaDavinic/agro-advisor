@@ -3,45 +3,6 @@ import { useState } from "react";
 import TransactionCard from "../TransactionCard/TransactionCard";
 import { TransactionForm } from "..";
 
-const transactions = [
-  {
-    id: 1,
-    amount: 10,
-    description: "optional",
-    descriptionPreview: "should be optional",
-    time: "12:00",
-    category: {
-      id: 1,
-      name: "concentrat",
-    },
-    type: "payment",
-  },
-  {
-    id: 2,
-    amount: 20,
-    description: "optional",
-    descriptionPreview: "should be optional",
-    time: "14:00",
-    category: {
-      id: 1,
-      name: "concentrat",
-    },
-    type: "payment",
-  },
-  {
-    id: 3,
-    amount: 10000,
-    description: "optional",
-    descriptionPreview: "should be optional",
-    time: "12:00",
-    category: {
-      id: 1,
-      name: "concentrat",
-    },
-    type: "income",
-  },
-];
-
 interface TransactionListProps {
   title?: string;
 }
@@ -71,9 +32,9 @@ const TransactionList = ({ title }: TransactionListProps) => {
       </Box>
       {formOpen && <TransactionForm></TransactionForm>}
       <Stack gap={1}>
-        {transactions.map((t) => (
+        {/* {transactions.map((t) => (
           <TransactionCard key={t.id} transaction={t} />
-        ))}
+        ))} */}
       </Stack>
     </Stack>
   );

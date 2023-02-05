@@ -24,13 +24,18 @@ public class CategoryService
         _logger = logger;
     }
 
-    public async Task<List<TransactionCategory>> GetCategoriesForUserAsync(string userId) =>
-        await _context.TCategories.Find((c) => c.User.Equals(userId) || c.User == null).ToListAsync();
+    public async Task<List<TransactionCategory>> GetCategoriesForUserAsync(string userId)
+    {
+        var filter = Builders<TransactionCategory>.Filter.Eq(x => x.User.Id, userId);
+        filter |= !Builders<TransactionCategory>.Filter.Exists(x => x.User);
 
-    //public async Task CreateAsync()
-    //{
-        
-    //}
+        var result = await _context.TCategories.Find(filter).ToListAsync();
+        return result;
+    }
+
+    public async Task CreateAsync(TransactionCategory tc) =>
+        await _context.TCategories.InsertOneAsync(tc);
+
 
     //public async Task UpdateAsync(string id, User updatedUser) =>
     //    await _context.Users.ReplaceOneAsync(x => x.Id == id, updatedUser);

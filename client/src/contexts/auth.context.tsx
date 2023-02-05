@@ -80,10 +80,12 @@ export function AuthStateProvider({ children }: AuthStateProviderProps) {
   };
 
   const isAuthenticated: () => boolean = () => {
-    if (!authState?.authToken) return false;
+    const token = lsGetToken();
 
-    const { exp } = jwtDecode<{ exp: number }>(authState.authToken);
-    console.log(exp);
+    if (!token) return false;
+
+    const { exp } = jwtDecode<{ exp: number }>(token);
+
     if (exp) {
       if (Date.now() < exp * 1000) {
         return true;

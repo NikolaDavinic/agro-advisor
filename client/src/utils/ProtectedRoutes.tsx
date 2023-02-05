@@ -1,4 +1,5 @@
 import { Navigate, Outlet } from "react-router-dom";
+import { useAuthContext } from "../contexts/auth.context";
 // import { selectUser } from "../features/user/userSlice";
 // import { useAppSelector } from "../hooks/app-redux";
 
@@ -12,11 +13,9 @@ const ProtectedRoutes = ({
   redirectPath = "/signin",
   isAllowed = true,
 }: ProtectedRoutesProps) => {
-  // const user = useAppSelector(selectUser);
-  // const isAuthenticated = user?.authToken && isAllowed;
-  // console.log(isAuthenticated);
-  // return isAuthenticated ? <Outlet /> : <Navigate to="/signin" />;
-  return <Outlet />;
+  const { isAuthenticated } = useAuthContext();
+  console.log("rg");
+  return isAuthenticated() ? <Outlet /> : <Navigate to={redirectPath} />;
 };
 
 export default ProtectedRoutes;

@@ -1,4 +1,7 @@
+import { User } from "./user.model";
+
 export interface Category {
-  id?: number;
-  name: string;
+  id?: string;
+  name?: string;
+  user?: string | User;
 }

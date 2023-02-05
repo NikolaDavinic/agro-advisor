@@ -10,7 +10,7 @@ namespace webapi.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public int Id { get; set; }
+        public string? Id { get; set; }
         public string Name { get; set; } = null!;
         public MongoDBRef User { get; set; } = null!;
     }

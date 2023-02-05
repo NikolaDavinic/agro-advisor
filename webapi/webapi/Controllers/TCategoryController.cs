@@ -2,6 +2,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualBasic;
+using MongoDB.Bson;
+using MongoDB.Driver;
+using webapi.DTO;
+using webapi.Models;
 
 namespace webapi.Controllers
 {
@@ -32,7 +37,14 @@ namespace webapi.Controllers
                     return Unauthorized("Greska pri autentifikaciji");
                 }
 
-                return Ok(await _categoryService.GetCategoriesForUserAsync(userId));
+                var result = (await _categoryService.GetCategoriesForUserAsync(userId))
+                    .Select(c => new {
+                        c.Id, 
+                        User = c.User.Id.AsString, 
+                        c.Name 
+                    });
+
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -40,18 +52,38 @@ namespace webapi.Controllers
             }
         }
 
-        //[Authorize]
-        //[HttpPost]
-        //public async Task<ActionResult> CreateCategory()
-        //{
-        //    try
-        //    {
+        [Authorize]
+        [HttpPost]
+        public async Task<ActionResult> CreateCategory([FromBody] AddCategoryDTO newCategory)
+        {
+            try
+            {
+                var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("Id"))?.Value;
 
-        //    }
-        //    catch (Exception e)
-        //    {
+                if (userId == null)
+                {
+                    return Unauthorized("Greska pri autentifikaciji");
+                }
 
-        //    }
-        //}
+                TransactionCategory newC = new() 
+                {
+                    Name = newCategory.Name,
+                    User = new MongoDBRef("User", userId),
+                };
+
+                await _categoryService.CreateAsync(newC);
+
+                return Ok(new
+                {
+                    newC.Name,
+                    User = newC.User.Id.AsString,
+                    newC.Id
+                });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { msg = e.Message });
+            }
+        }
     }
 }
