@@ -43,31 +43,6 @@ public class UserService
 
     public async Task<User?> GetByEmailAsync(string email) =>
         await _context.Users.Find(x => x.Email == email).FirstOrDefaultAsync();
-    public async Task SignInAsync(AuthCredsDTO creds)
-    {
-        //var result = await _context.Users.AsQueryable()
-        //   .Where(u => u.Email == creds.Email)
-        //   .Select(r => new 
-        //   {
-        //       r.Id,
-        //       r.Name,
-        //       r.PasswordHash,
-        //       r.Email
-        //   })
-        //   .FirstOrDefaultAsync();
-        var result = await _context.Users.Find(u => u.Email == creds.Email).FirstOrDefaultAsync();
-
-        if (!BCrypt.Net.BCrypt.Verify(creds.Password, result.PasswordHash))
-        {
-            //return Results.BadRequest();
-        }
-
-        //return Results.Ok(new
-        //{
-        //    Token = CreateToken(result),
-        //    User = result
-        //});
-    }
 
     public async Task UpdateAsync(string id, User updatedUser) =>
         await _context.Users.ReplaceOneAsync(x => x.Id == id, updatedUser);

@@ -36,6 +36,8 @@ public class CategoryService
     public async Task CreateAsync(TransactionCategory tc) =>
         await _context.TCategories.InsertOneAsync(tc);
 
+    public async Task<TransactionCategory?> GetAsync(string id) => 
+        await _context.TCategories.Find(x => x.Id == id).FirstOrDefaultAsync();
 
     //public async Task UpdateAsync(string id, User updatedUser) =>
     //    await _context.Users.ReplaceOneAsync(x => x.Id == id, updatedUser);

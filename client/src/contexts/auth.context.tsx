@@ -79,7 +79,7 @@ export function AuthStateProvider({ children }: AuthStateProviderProps) {
     setAuthState({ user, authToken: token });
   };
 
-  const isAuthenticated: () => boolean = () => {
+  const isAuthenticated = () => {
     const token = lsGetToken();
 
     if (!token) return false;
