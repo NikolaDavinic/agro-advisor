@@ -40,7 +40,7 @@ namespace webapi.Controllers
                 var result = (await _categoryService.GetCategoriesForUserAsync(userId))
                     .Select(c => new {
                         c.Id, 
-                        User = c.User?.Id.AsString ?? null, 
+                        UserId = c.User?.Id.AsString ?? null, 
                         c.Name 
                     });
 
