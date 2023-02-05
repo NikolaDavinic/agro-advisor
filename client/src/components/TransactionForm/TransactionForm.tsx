@@ -26,7 +26,9 @@ interface TransactionFormProps {
 const TransactionForm = ({ addingCategoryEn = true }: TransactionFormProps) => {
   const [formState, setFormState] = useState({ isPayment: false });
   const [addingCategory, setAddingCategory] = useState<boolean>(false);
+  const [categoryFilter, setCategoryFilter] = useState<string>("");
   const [newCategory, setNewCategory] = useState<string>("");
+
   const { openSnackbar } = useSnackbar();
 
   const {
@@ -35,7 +37,9 @@ const TransactionForm = ({ addingCategoryEn = true }: TransactionFormProps) => {
     setResult,
   } = useApi<Category[]>("/category");
 
-  const addCategory = () => {
+  const addCategory = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+
     api
       .post<Category>("/category", { name: newCategory })
       .then(({ data }) => {
@@ -95,6 +99,8 @@ const TransactionForm = ({ addingCategoryEn = true }: TransactionFormProps) => {
           getOptionLabel={(o) => o.name ?? ""}
           options={categories ?? []}
           loading={loadingCategories}
+          inputValue={categoryFilter}
+          onInputChange={(e, newvalue) => setCategoryFilter(newvalue)}
           noOptionsText={
             addingCategoryEn && (
               <>
@@ -102,7 +108,10 @@ const TransactionForm = ({ addingCategoryEn = true }: TransactionFormProps) => {
                   Nema opcija
                   <Button
                     variant="outlined"
-                    onClick={() => setAddingCategory(true)}
+                    onClick={() => {
+                      setAddingCategory(true);
+                      setNewCategory(categoryFilter);
+                    }}
                   >
                     Dodaj
                   </Button>
