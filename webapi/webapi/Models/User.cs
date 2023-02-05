@@ -25,6 +25,7 @@ namespace webapi.Models
         [BsonId]
         public ObjectId? Id { get; set; }
         public decimal Value { get; set; }
+        [JsonIgnore]
         public MongoDBRef Category { get; set; } = null!;
         public string CategoryName { get; set; } = null!;
         public string Description { get; set; } = null!;

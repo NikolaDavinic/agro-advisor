@@ -12,6 +12,7 @@ namespace webapi.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string? Id { get; set; }
         public string Name { get; set; } = null!;
-        public MongoDBRef User { get; set; } = null!;
+        [JsonIgnore]
+        public MongoDBRef? User { get; set; } = null!;
     }
 }
