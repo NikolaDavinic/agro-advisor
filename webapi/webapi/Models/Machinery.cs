@@ -1,5 +1,7 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
+using MongoDB.Driver;
+
 namespace webapi.Models
 {
     public class Machinery
@@ -15,7 +17,7 @@ namespace webapi.Models
         public List<string> Images { get; set; } = new();
         public string? LicensePlate { get; set; }
         [BsonRequired]
-        public string UserId { get; set; } = null!;
+        public MongoDBRef UserId { get; set; } = null!;
     }
 
     public enum MachineType

@@ -9,15 +9,15 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BookStoreApi.Services;
 
-public class UsersService
+public class UserService
 {
     private readonly IDbContext _context;
     private readonly IConfiguration _config;
-    private readonly ILogger<UsersService> _logger;
-    public UsersService(
+    private readonly ILogger<UserService> _logger;
+    public UserService(
         IDbContext context, 
         IConfiguration config,
-        ILogger<UsersService> logger)
+        ILogger<UserService> logger)
     {
         _context = context;
         _config = config;
@@ -35,7 +35,7 @@ public class UsersService
         await _context.Users.InsertOneAsync(new User
         {
             PasswordHash = HashPassword(newUser.Password),
-            Adress = newUser.Adress,
+            Address = newUser.Address,
             Email = newUser.Email,
             Name = newUser.Name,
         });

@@ -9,7 +9,7 @@ namespace webapi.Models
 
         public IMongoCollection<User> Users { get; set; }
         public IMongoCollection<Plot> Plots { get; set; }
-
+        public IMongoCollection<TransactionCategory> TCategories { get; set; }
         public DbContext(IMongoClient mongoClient)
         {
             _mongoClient = mongoClient;
@@ -17,6 +17,7 @@ namespace webapi.Models
 
             Users = GetCollection<User>("Users");
             Plots = GetCollection<Plot>("Plots");
+            TCategories = GetCollection<TransactionCategory>("TCategories");
         }
 
         public IMongoCollection<T> GetCollection<T>(string name)

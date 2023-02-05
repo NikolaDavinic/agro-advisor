@@ -10,19 +10,33 @@ using ZstdSharp.Unsafe;
 namespace webapi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("user")]
     public class UserController : ControllerBase
     {
-        private readonly UsersService _usersService;
-        public UserController(ILogger<UserController> logger, UsersService usersService)
+        private readonly UserService _usersService;
+        public UserController(ILogger<UserController> logger, UserService usersService)
         {
             _usersService = usersService;
         }
         [HttpPost("signup")]
         public async Task<ActionResult> SignUp([FromBody] UserDTO user)
         {
-            await _usersService.CreateAsync(user);
-            return Ok(new { msg = "User registered" });
+            try
+            {
+                var euser = await _usersService.GetByEmailAsync(user.Email);
+
+                if (euser != null)
+                {
+                    return BadRequest(new { msg = "Korisnik sa navedenom email adresom vec postoji" });
+                }
+
+                await _usersService.CreateAsync(user);
+                return Ok(new { msg = "Uspesna registracija" });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { msg = "Doslo je do greske" });
+            }
         }
 
         [HttpPost("signin")]
@@ -32,13 +46,13 @@ namespace webapi.Controllers
 
             if (user == null || !_usersService.VerifyPassword(creds.Password, user.PasswordHash))
             {
-                return Unauthorized(new { msg = "Wrong email or password" });
+                return Unauthorized(new { msg = "Pogresan email ili lozinka" });
             }
 
             return Ok(new
             {
                 User = user,
-                Token = _usersService.CreateToken(user)
+                AuthToken = _usersService.CreateToken(user)
             });
         }
 
