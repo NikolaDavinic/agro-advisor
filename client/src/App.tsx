@@ -8,6 +8,7 @@ import { Box, createTheme, ThemeProvider } from "@mui/material";
 import { SignIn, SignUp } from "./pages";
 import ProtectedRoutes from "./utils/ProtectedRoutes";
 import { SnackbarProvider } from "./contexts/snackbar.context";
+import NewPlot from "./components/NewPlot/NewPlot";
 
 const theme = createTheme({
   palette: {
@@ -39,6 +40,7 @@ function App() {
                 <Route path="/home" element={<Home />}></Route>
                 <Route path="/dashboard" element={<Dashboard />}></Route>
                 <Route path="/analytics" element={<Analytics />}></Route>
+                <Route path="/newplot" element={<NewPlot />}></Route>
               </Route>
             </Route>
             <Route path="/signin" element={<SignIn />}></Route>
