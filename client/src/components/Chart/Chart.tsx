@@ -13,6 +13,8 @@ import { useApi } from "../../hooks/api.hook";
 import { Transacation } from "../../models/transaction.model";
 import React from "react";
 import { api } from "../../utils/api/axios";
+import { Box } from "@mui/system";
+import { CircularProgress } from "@mui/material";
 
 ChartJS.register(
   CategoryScale,
@@ -24,7 +26,20 @@ ChartJS.register(
   Legend
 );
 
-const labels = ["January", "February", "Marth", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const labels = [
+  "January",
+  "February",
+  "Marth",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
 
 export const options = {
   responsive: true,
@@ -34,27 +49,21 @@ export const options = {
     },
     title: {
       display: true,
-      text: "Grafikon po prihodu",
+      text: "Prihod po godinama",
     },
   },
 };
 
-
-
 const Chart = (props: any) => {
-
   const [dataStored, setDataStored] = React.useState<boolean>(false);
   const [labelsForChart, setLabelsForChart] = React.useState<any>([]);
   const [apiData, setAPIData] = React.useState<any>([]);
+  const [loading, setLoading] = React.useState<boolean>(false);
   const [data, setData] = React.useState<any>({});
 
-  const {
-    result: dataa,
-    loading: loadingData,
-    setResult,
-  } = useApi<any[]>("/transaction/dataforchart");
-
   const dataForChar = () => {
+    setLoading(true);
+
     api
       .get("/transaction/dataforchart")
       .then((response) => {
@@ -62,21 +71,22 @@ const Chart = (props: any) => {
         const res = makeTwoArraysForChart(d);
         setData(res);
         console.log(res);
-      });
+      })
+      .finally(() => setLoading(false));
   };
 
   React.useEffect(() => {
     dataForChar();
-  }, [])
-
+  }, []);
 
   const makeTwoArraysForChart = (data: Array<any>) => {
     const labels: Array<any> = [];
     const podaci: Array<any> = [];
+
     data?.forEach((el: any) => {
       labels.push(el.date);
       podaci.push(el.suma);
-    })
+    });
     const data1 = {
       labels,
       datasets: [
@@ -89,19 +99,24 @@ const Chart = (props: any) => {
       ],
     };
     return data1;
+  };
+
+  if (loading) {
+    return (
+      <Box>
+        Učitava se graf...
+        {/* <CircularProgress color="primary"></CircularProgress> */}
+      </Box>
+    );
   }
 
   return (
     <>
-      {dataa != null ?
+      {data?.datasets?.length >= 0 && (
         <div className="w-full" style={{ width: "100%" }}>
           <Line options={options} data={data} />
         </div>
-        :
-        <div>
-          Ucitava se graf...
-        </div>
-      }
+      )}
     </>
   );
 };
