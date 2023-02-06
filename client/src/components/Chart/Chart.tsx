@@ -12,6 +12,7 @@ import { Line } from "react-chartjs-2";
 import { useApi } from "../../hooks/api.hook";
 import { Transacation } from "../../models/transaction.model";
 import React from "react";
+import { api } from "../../utils/api/axios";
 
 ChartJS.register(
   CategoryScale,
@@ -56,22 +57,29 @@ const Chart = (props: any) => {
     if(loadingData){
       setAPIData(dataa);
       console.log(data);
+      makeTwoArraysForChart();
     }
     
   }, [])
 
   const data = {
-    labels,
+    labelsForChart,
     datasets: [
       {
         label: "Prihod",
-        data: [12, 53, 3, 61, 52, 12, 63],
+        data: chartData,
         backgroundColor: "#2196F3",
         borderColor: "#2196F3",
       },
     ],
   };
 
+  const makeTwoArraysForChart = () => {
+    apiData.map((el: any) => {
+      setLabelsForChart([...labelsForChart, el.label]);
+      setChartData([...chartData, el.sum]);
+    })
+  }
 
   return (
     <>
