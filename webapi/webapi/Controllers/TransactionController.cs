@@ -124,13 +124,18 @@ namespace webapi.Controllers
 
         [Authorize]
         [HttpGet("q")]
-        public async Task<ActionResult> GetTransactions([FromQuery] DateTime? before, [FromQuery] int? skip, [FromQuery] int? take)
+        public async Task<ActionResult> GetTransactions(
+            [FromQuery] DateTime? before, 
+            [FromQuery] int? skip, 
+            [FromQuery] int? take, 
+            [FromQuery] string? type,
+            [FromQuery] string? categoryIds)
         {
             try
             {
                 var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("Id"))?.Value;
 
-                var transactions = await _transactionService.FilterTransactions(userId, before, skip, take);
+                var transactions = await _transactionService.FilterTransactions(userId, before, skip, take, type, categoryIds);
 
                 return Ok(transactions.Select((t) => new
                 {

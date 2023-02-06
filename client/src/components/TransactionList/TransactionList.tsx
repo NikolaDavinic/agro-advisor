@@ -165,7 +165,7 @@ const TransactionList = ({ title }: TransactionListProps) => {
 
   const applyFilter = () => {
     setSearchFilter({
-      before: filterDate,
+      before: new Date(filterDate).toISOString(),
       type: filterType,
       categoryIds: selectedCategories.map((c) => c.id ?? "").join(","),
     });

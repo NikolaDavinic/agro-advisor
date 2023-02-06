@@ -113,7 +113,7 @@ const Chart = (props: any) => {
   return (
     <>
       {data?.datasets?.length >= 0 && (
-        <div className="w-full" style={{ width: "100%" }}>
+        <div className="w-full">
           <Line options={options} data={data} />
         </div>
       )}

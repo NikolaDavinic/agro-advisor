@@ -61,7 +61,7 @@ public class TransactionService
         return result.ModifiedCount > 0;
     }
 
-    public async Task<List<Transaction>> FilterTransactions(string userId, DateTime? before, int? skip, int? take)
+    public async Task<List<Transaction>> FilterTransactions(string userId, DateTime? before, int? skip, int? take, string? type, string? categoryIds)
     {
         var query = _context.Users.AsQueryable()
             .Where(u => u.Id == userId)
@@ -71,6 +71,20 @@ public class TransactionService
         if (before != null)
         {
             query = query.Where(t => t.Date <= before);
+        }
+
+        if (type == "priliv")
+        {
+            query = query.Where(t => t.Value >= 0);
+        } else if (type == "rashod")
+        {
+            query = query.Where(t => t.Value <= 0);
+        }
+
+        if (categoryIds != null)
+        {
+            List<string> ids = categoryIds.Split(",").ToList();
+            query = query.Where(t => ids.Contains(t.Category.Id.AsString));
         }
 
         var result = await query
