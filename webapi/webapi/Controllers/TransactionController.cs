@@ -149,7 +149,7 @@ namespace webapi.Controllers
         }
 
         [Authorize]
-        [HttpDelete("id")]
+        [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteTransaction(string id)
         {
             try
@@ -170,6 +170,7 @@ namespace webapi.Controllers
                 return BadRequest(new { msg = e.Message });
             }
         }
+
         [HttpGet("dataforchart")]
         public async Task<ActionResult> DataForChart()
         {

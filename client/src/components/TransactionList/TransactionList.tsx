@@ -69,9 +69,8 @@ const TransactionList = ({ title }: TransactionListProps) => {
         },
       })
       .then(({ data }) => {
-        if (data.length === 0) {
+        if (data.length < 5) {
           setHasMore(false);
-          return;
         }
         setTransactions((prev) => [...prev, ...data]);
       })
@@ -92,9 +91,8 @@ const TransactionList = ({ title }: TransactionListProps) => {
         },
       })
       .then(({ data }) => {
-        if (data.length === 0) {
+        if (data.length < 5) {
           setHasMore(false);
-          return;
         }
         setTransactions((prev) => [...data]);
       })
@@ -153,7 +151,7 @@ const TransactionList = ({ title }: TransactionListProps) => {
 
   const deleteTransaction = (transaction: Transacation) => {
     api
-      .delete(`/transaction/${transaction.id}`)
+      .delete<ApiMessage>(`/transaction/${transaction.id}`)
       .then((res) => {
         setTransactions((prev) => prev.filter((t) => t.id !== transaction.id));
         openSnackbar({ message: "Transakcija uspesno obrisana" });
