@@ -65,5 +65,29 @@ namespace webapi.Controllers
             }
         }
 
+        [Authorize]
+        [HttpGet("q")]
+        public async Task<ActionResult> GetTransactions([FromQuery] DateTime? before, [FromQuery] int? skip, [FromQuery] int? take)
+        {
+            try
+            {
+                var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("Id"))?.Value;
+
+                var transactions = await _transactionService.FilterTransactions(userId, before, skip, take);
+
+                return Ok(transactions.Select((t) => new
+                {
+                    Id = t.Id.Value.ToString(),
+                    t.Date,
+                    t.CategoryName,
+                    t.Description,
+                    t.Value,
+                }));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { msg = e.Message });
+            }
+        } 
     }
 }
