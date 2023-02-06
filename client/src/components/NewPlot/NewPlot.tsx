@@ -14,7 +14,7 @@ import { SetStateAction, useEffect, useState } from "react";
 import { MapContainer, Marker, Polygon, TileLayer, useMapEvents } from "react-leaflet";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../contexts/auth.context";
-import axios from "../../utils/api/axios";
+import axios, { api } from "../../utils/api/axios";
 
 export interface Point {
     x: number;
@@ -38,8 +38,10 @@ const MapEvents = (props: MapEventsProps) => {
         click(e: any) {
             props.setPositions((prevPos) => [...prevPos, e.latlng]);
         },
+        load() {
+            map.panTo(props.startPos);
+        }
     });
-    map.panTo(props.startPos);
     return <></>;
 };
 var homeIcon = L.icon({
@@ -128,17 +130,20 @@ const NewPlot: React.FC = () => {
                 x: Number(cords[0]), y: Number(cords[1])
             };
         })
-        // api
-        //     .post("/listing/add", data)
-        //     .then((response) => {
-        //         return navigate("/listing/" + response.data[0].id);
-        //     })
-        //     .catch((error) => {
-        //         console.error(error);
-        //         setSnackbarSeverity("error");
-        //         setSnackbarMessage(error);
-        //         setShowSnackbar(true);
-        //     });
+        api
+            .post("/plot/add", data)
+            .then((response) => {
+                // return navigate("/listing/" + response.data[0].id);
+                setSnackbarSeverity("success");
+                setSnackbarMessage("Plot added successfully!");
+                setShowSnackbar(true);
+            })
+            .catch((error) => {
+                console.error(error);
+                setSnackbarSeverity("error");
+                setSnackbarMessage(error);
+                setShowSnackbar(true);
+            });
         console.log(data);
     };
     return (
