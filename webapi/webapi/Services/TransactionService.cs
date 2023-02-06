@@ -53,11 +53,11 @@ public class TransactionService
 
     public async Task<bool> DeleteTransactionForUser(string userId, string transactionId)
     {
-        var filter = Builders<User>.Filter.Eq((u) => u.Id, userId);
-        filter &= Builders<User>.Filter.ElemMatch(u => u.Transactions, Builders<Transaction>.Filter.Eq(x => x.Id, ObjectId.Parse(transactionId)));
+        var filter = Builders<User>.Filter.Where(u => u.Id == userId);
+        var update = Builders<User>.Update.PullFilter(u => u.Transactions, Builders<Transaction>.Filter.Where(t => t.Id == ObjectId.Parse(transactionId))));
 
-        var result = await _context.Users.DeleteOneAsync(filter);
-        return result.DeletedCount != 0;
+        var result = await _context.Users.UpdateOneAsync(filter, update);
+        return result.ModifiedCount > 0;
     }
 
     public async Task<List<Transaction>> FilterTransactions(string userId, DateTime? before, int? skip, int? take)
