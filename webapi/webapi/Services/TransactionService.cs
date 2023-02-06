@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using System.Reflection.Emit;
+using System.Collections;
 
 namespace BookStoreApi.Services;
 
@@ -54,7 +55,7 @@ public class TransactionService
     public async Task<bool> DeleteTransactionForUser(string userId, string transactionId)
     {
         var filter = Builders<User>.Filter.Where(u => u.Id == userId);
-        var update = Builders<User>.Update.PullFilter(u => u.Transactions, Builders<Transaction>.Filter.Where(t => t.Id == ObjectId.Parse(transactionId))));
+        var update = Builders<User>.Update.PullFilter(u => u.Transactions, Builders<Transaction>.Filter.Where(t => t.Id == ObjectId.Parse(transactionId)));
 
         var result = await _context.Users.UpdateOneAsync(filter, update);
         return result.ModifiedCount > 0;
@@ -82,22 +83,22 @@ public class TransactionService
         return result;
     }
 
-    //public async Task<IEnumerable> GetTransactionDataForChart(string userId)
-    //{
-    //    var user = await _context.Users.Find(x => x.Id == userId).FirstOrDefaultAsync();
+    public async Task<IEnumerable> GetTransactionDataForChart(string userId)
+    {
+        var user = await _context.Users.Find(x => x.Id == userId).FirstOrDefaultAsync();
 
-    //    var groupedElements = user.Transactions.GroupBy(e => e.Date.Year)
-    //        .Select(g => new
-    //        {
-    //            Date = g.Key,
-    //            Suma = g.Sum(e => e.Value),
-    //            Values = g.Select(el => new
-    //            {
-    //                Value = el.Value,
-    //                Date = el.Date
-    //            }).ToList()
-    //        });
-    //    return groupedElements;
+        var groupedElements = user.Transactions.GroupBy(e => e.Date.Year)
+            .Select(g => new
+            {
+                Date = g.Key,
+                Suma = g.Sum(e => e.Value),
+                Values = g.Select(el => new
+                {
+                    Value = el.Value,
+                    Date = el.Date
+                }).ToList()
+            });
+        return groupedElements;
         //var pipline = new BsonDocument[]
         //{
         //    new BsonDocument("$group",
@@ -108,5 +109,5 @@ public class TransactionService
         //        }
         //    )
         //};
-    //}
+    }
 }

@@ -170,26 +170,26 @@ namespace webapi.Controllers
                 return BadRequest(new { msg = e.Message });
             }
         }
-        //[HttpGet("dataforchart")]
-        //public async Task<ActionResult> DataForChart()
-        //{
-        //    try
-        //    {
-        //        var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("Id"))?.Value;
+        [HttpGet("dataforchart")]
+        public async Task<ActionResult> DataForChart()
+        {
+            try
+            {
+                var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("Id"))?.Value;
 
-        //        //if (userId == null)
-        //        //{
-        //        //    return Unauthorized("Greska pri autentifikaciji");
-        //        //}
+                if (userId == null)
+                {
+                    return Unauthorized("Greska pri autentifikaciji");
+                }
 
-        //        var result = await _transactionService.GetTransactionDataForChart(userId);
+                var result = await _transactionService.GetTransactionDataForChart(userId);
 
-        //        return Ok(result);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return BadRequest(new { msg = e.Message });
-        //    }
-        //}
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { msg = e.Message });
+            }
+        }
     }
 }
