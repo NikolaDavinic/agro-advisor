@@ -83,10 +83,12 @@ const Chart = (props: any) => {
     const labels: Array<any> = [];
     const podaci: Array<any> = [];
 
-    data?.forEach((el: any) => {
-      labels.push(el.date);
-      podaci.push(el.suma);
-    });
+    data
+      ?.sort((a: any, b: any) => a.date - b.date)
+      .forEach((el: any) => {
+        labels.push(el.date);
+        podaci.push(el.suma);
+      });
     const data1 = {
       labels,
       datasets: [
