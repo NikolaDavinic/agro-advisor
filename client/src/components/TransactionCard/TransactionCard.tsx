@@ -27,12 +27,21 @@ const TransactionCard = ({ transaction }: TransactionCardProps) => {
             {shortenText(transaction.description, 30)}
           </Typography>
           <Typography fontSize="0.8em" color="var(--secondary-gray)">
-            {new Date(transaction.date).toISOString().split("T")[0]}
+            {new Date(transaction.date).toLocaleDateString()}
           </Typography>
         </Box>
-        <Typography style={{ alignSelf: "flex-start" }}>
-          {FormatCurrency(transaction.value, "RSD")}
-        </Typography>
+        <Box>
+          <Typography
+            style={{ alignSelf: "flex-start" }}
+            textAlign="right"
+            color={transaction.value < 0 ? "error" : "var(--primary)"}
+          >
+            {FormatCurrency(transaction.value, "RSD")}
+          </Typography>
+          <Typography textAlign="right" sx={{ fontWeight: "bold" }}>
+            {transaction.categoryName}
+          </Typography>
+        </Box>
       </Stack>
     </Box>
   );

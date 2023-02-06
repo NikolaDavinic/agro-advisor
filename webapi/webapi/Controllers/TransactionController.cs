@@ -55,9 +55,16 @@ namespace webapi.Controllers
                     Date = tDTO.Date
                 };
 
-                await _transactionService.AddTransactionForUser(userId, transaction);
+                var t = await _transactionService.AddTransactionForUser(userId, transaction);
 
-                return Ok();
+                return Ok(new
+                {
+                    Id = t.Id.Value.ToString(),
+                    t.Date,
+                    t.CategoryName,
+                    t.Description,
+                    t.Value
+                });
             }
             catch (Exception e)
             {

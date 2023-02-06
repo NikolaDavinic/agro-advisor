@@ -1,27 +1,17 @@
-import { useEffect } from "react";
+import { Box } from "@mui/material";
 import Chart from "../components/Chart/Chart";
 import TransactionList from "../components/TransactionList/TransactionList";
-// import {
-//   categoriesSelector,
-//   getCategories,
-// } from "../features/categories/categorySlice";
-// import { useAppDispatch, useAppSelector } from "../hooks/app-redux";
 
 const Dashboard = () => {
-  // const dispatch = useAppDispatch();
-  // const { status } = useAppSelector(categoriesSelector);
-
-  // useEffect(() => {
-  //   if (status === "idle") {
-  //     dispatch(getCategories());
-  //   }
-  // }, [dispatch, status]);
-
   return (
-    <>
-      <Chart></Chart>
-      <TransactionList title="Istorija transakcija"></TransactionList>
-    </>
+    <Box className="lg:flex w-full">
+      <Box className="w-full">
+        <Chart></Chart>
+      </Box>
+      <Box className="w-full py-10">
+        <TransactionList title="Istorija transakcija"></TransactionList>
+      </Box>
+    </Box>
   );
 };
 

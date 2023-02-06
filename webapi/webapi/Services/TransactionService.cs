@@ -26,13 +26,13 @@ public class TransactionService
         _logger = logger;
     }
 
-    public async Task AddTransactionForUser(string userId, Transaction transaction)
+    public async Task<Transaction> AddTransactionForUser(string userId, Transaction transaction)
     {
         var filter = Builders<User>.Filter.Eq((u) => u.Id, userId);
         var update = Builders<User>.Update.Push(e => e.Transactions, transaction);
 
         var result = await _context.Users.FindOneAndUpdateAsync(filter, update);
-        //return transaction;
+        return transaction;
     }
 
     public async Task<List<Transaction>> FilterTransactions(string userId, DateTime? before, int? skip, int? take)
@@ -48,9 +48,9 @@ public class TransactionService
         }
 
         var result = await query
+            .OrderByDescending(t => t.Date)
             .Skip(skip ?? 0)
             .Take(take ?? 10)
-            .OrderByDescending(t => t.Date)
             .ToAsyncEnumerable()
             .ToListAsync();
 

@@ -26,11 +26,11 @@ export const options = {
   responsive: true,
   plugins: {
     legend: {
-      position: 'top' as const,
+      position: "top" as const,
     },
     title: {
       display: true,
-      text: 'Chart.js Line Chart',
+      text: "Chart.js Line Chart",
     },
   },
 };
@@ -59,9 +59,9 @@ export const data = {
   ],
 };
 
-const Chart = (props:any) => {
+const Chart = (props: any) => {
   return (
-    <div style={{ width: 600, height: 300 }}>
+    <div className="w-full" style={{ width: "100%" }}>
       <Line options={options} data={data} />
     </div>
   );
