@@ -5,6 +5,7 @@ using webapi.Models;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.OpenApi.Models;
+using webapi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -66,6 +67,7 @@ builder.Services.AddSingleton<IDbContext, DbContext>();
 builder.Services.AddSingleton<UserService>();
 builder.Services.AddSingleton<CategoryService>();
 builder.Services.AddSingleton<TransactionService>();
+builder.Services.AddSingleton<PlotService>();
 
 var DevelopmentOrigins = "CORSDevelopment";
 var ProductionOrigins = "CORSProduction";
