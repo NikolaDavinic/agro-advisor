@@ -3,7 +3,6 @@ import {
   Box,
   Button,
   Icon,
-  List,
   ListItem,
   Modal,
   Paper,

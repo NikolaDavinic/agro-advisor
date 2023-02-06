@@ -3,6 +3,7 @@ import Icon from "@mui/material/Icon";
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useAuthContext } from "../../contexts/auth.context";
+import MatIcon from "../MatIcon/MatIcon";
 import "./Sidebar.scss";
 
 const Sidebar = (props: any) => {
@@ -53,6 +54,18 @@ const Sidebar = (props: any) => {
                 >
                   add
                 </Icon>
+              )}
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/machines">
+              {({ isActive }) => (
+                <MatIcon
+                  style={{ fontSize: 35 }}
+                  className={`icon ${isActive ? "active" : undefined}`}
+                >
+                  agriculture
+                </MatIcon>
               )}
             </NavLink>
           </li>

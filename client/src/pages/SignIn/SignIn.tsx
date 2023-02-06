@@ -2,10 +2,10 @@ import { Box, Button, Grid, Stack, TextField } from "@mui/material";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuthContext } from "../contexts/auth.context";
-import { useSnackbar } from "../contexts/snackbar.context";
-import { User } from "../models/user.model";
-import { api } from "../utils/api/axios";
+import { useAuthContext } from "../../contexts/auth.context";
+import { useSnackbar } from "../../contexts/snackbar.context";
+import { User } from "../../models/user.model";
+import { api } from "../../utils/api/axios";
 
 const SignIn = () => {
   const {

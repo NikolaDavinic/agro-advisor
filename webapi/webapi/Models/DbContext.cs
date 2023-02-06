@@ -4,12 +4,15 @@ namespace webapi.Models
 {
     public class DbContext : IDbContext
     {
-        private readonly IMongoDatabase _db;
-        private readonly IMongoClient _mongoClient;
+        public readonly IMongoDatabase _db;
+        public readonly IMongoClient _mongoClient;
 
+        public IMongoDatabase DB { get { return _db; } }
+        public IMongoClient MongoClient { get { return _mongoClient; } }
         public IMongoCollection<User> Users { get; set; }
         public IMongoCollection<Plot> Plots { get; set; }
         public IMongoCollection<TransactionCategory> TCategories { get; set; }
+        public IMongoCollection<Machinery> Machines { get; set; }
         public DbContext(IMongoClient mongoClient)
         {
             _mongoClient = mongoClient;
@@ -17,6 +20,7 @@ namespace webapi.Models
 
             Users = GetCollection<User>("Users");
             Plots = GetCollection<Plot>("Plots");
+            Machines = GetCollection<Machinery>("Machines");
             TCategories = GetCollection<TransactionCategory>("TCategories");
         }
 

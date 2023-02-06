@@ -11,10 +11,14 @@
   justify-content: space-between;
   flex-direction: column;
   height: 100vh;
-  min-width: 100px;
-  width: 5%;
-  padding: 3vh 3vw;
+  min-width: 80px;
+  width: 30px;
+  padding: 3vh 0 3vh 0;
   color: var(--secondary-gray);
+}
+
+.sidebar ul li {
+  margin: 0.4em 0;
 }
 
 .content {
