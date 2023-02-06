@@ -86,7 +86,7 @@ const TransactionCard = ({
               }}
             >
               <MatIcon color="error">delete</MatIcon>
-              &nbsp;Delete
+              &nbsp;Obriši
             </MenuItem>
             <MenuItem
               onClick={() => {
@@ -94,7 +94,7 @@ const TransactionCard = ({
                 onEditClick(transaction);
               }}
             >
-              <MatIcon color="primary">edit</MatIcon>&nbsp;Edit
+              <MatIcon color="primary">edit</MatIcon>&nbsp;Izmeni
             </MenuItem>
           </Menu>
         </Box>
