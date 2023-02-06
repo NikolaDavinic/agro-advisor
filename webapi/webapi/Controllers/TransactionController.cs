@@ -148,6 +148,28 @@ namespace webapi.Controllers
             }
         }
 
+        [Authorize]
+        [HttpDelete("id")]
+        public async Task<ActionResult> DeleteTransaction(string id)
+        {
+            try
+            {
+                var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("Id"))?.Value;
+
+                var res = await _transactionService.DeleteTransactionForUser(userId, id);
+
+                if (res == false)
+                {
+                    return BadRequest(new { msg = "Transakcija ne postoji" });
+                }
+
+                return Ok(new { msg = "Transakcija obrisana" });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { msg = e.Message });
+            }
+        }
         //[HttpGet("dataforchart")]
         //public async Task<ActionResult> DataForChart()
         //{

@@ -126,6 +126,20 @@ const TransactionList = ({ title }: TransactionListProps) => {
     setFormOpen(true);
   };
 
+  const deleteTransaction = (transaction: Transacation) => {
+    api
+      .delete(`/transaction/${transaction.id}`)
+      .then((res) => {
+        setTransactions((prev) => prev.filter((t) => t.id !== transaction.id));
+        openSnackbar({ message: "Transakcija uspesno obrisana" });
+      })
+      .catch(() => {
+        openSnackbar({
+          message: "Doslo je do greske pri brisanju transakcije",
+        });
+      });
+  };
+
   return (
     <Stack sx={{ p: "0 20px" }} gap={1}>
       <Box>
@@ -188,6 +202,7 @@ const TransactionList = ({ title }: TransactionListProps) => {
                 transaction={t}
                 key={t.id}
                 onEditClick={editTransaction}
+                onDelete={deleteTransaction}
               />
             ))}
           </Stack>
