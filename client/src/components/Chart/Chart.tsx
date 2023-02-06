@@ -42,70 +42,49 @@ export const options = {
 
 const Chart = (props: any) => {
 
-  // const [d, setD] = React.useState<any>([]);
-  // const [labels, setLabels] = React.useState<[]>([]);
+  const [chartData, setChartData] = React.useState<any>([]);
+  const [labelsForChart, setLabelsForChart] = React.useState<any>([]);
+  const [apiData, setAPIData] = React.useState<any>([]);
 
   const {
     result: dataa,
-    loading: loadingDataa,
+    loading: loadingData,
     setResult,
   } = useApi<any[]>("/transaction/dataforchart");
 
-  // const dataForChart = () => {
-  //   const labels: any = [];
-  //   const datase: any = [];
-  //   dataa?.map(el => {
-  //     labels.push(el.date);
-  //     datase.push(el.value);
-  //   })
-  //   console.log(dataa);
-  //   const data = {
-  //     labels,
-  //     datasets: [
-  //       {
-  //         label: "Prihod",
-  //         data: datase,
-  //         backgroundColor: "#2196F3",
-  //         borderColor: "#2196F3",
-  //       },
-  //     ],
-  //   };
-  //   return data;
-  // }
+  React.useEffect(() => {
+    if(loadingData){
+      setAPIData(dataa);
+      console.log(data);
+    }
+    
+  }, [])
 
-  // React.useEffect(() => {
-  //   // setD(dataForChart());
-  // }, [dataa]);
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: "Prihod",
+        data: [12, 53, 3, 61, 52, 12, 63],
+        backgroundColor: "#2196F3",
+        borderColor: "#2196F3",
+      },
+    ],
+  };
 
-  // const dataForChart = {
-  //   labels,
-  //   datasets: [
-  //     {
-  //       label: "Prihod",
-  //       data: [32, 42, 51, 60, 51, 95],
-  //       backgroundColor: "#2196F3",
-  //       borderColor: "#2196F3",
-  //     },
-  //   ],
-  // };
 
-     const data = {
-      labels,
-      datasets: [
-        {
-          label: "Prihod",
-          data: [12,53,3,61,52,12,63],
-          backgroundColor: "#2196F3",
-          borderColor: "#2196F3",
-        },
-      ],
-    };
-
-const Chart = (props:any) => {
   return (
-    <div className="w-full" style={{ width: "100%" }}>
-      <Line options={options} data={data} />
-    </div>
+    <>
+      {loadingData ?
+        <div className="w-full" style={{ width: "100%" }}>
+          <Line options={options} data={data} />
+        </div>
+        :
+        <div>
+          Ucitava se graf...
+        </div>
+      }
+    </>
   );
 };
 
