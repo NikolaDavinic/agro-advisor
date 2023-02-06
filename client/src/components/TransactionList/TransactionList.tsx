@@ -3,6 +3,7 @@ import {
   Button,
   CircularProgress,
   Icon,
+  LinearProgress,
   Stack,
   Typography,
 } from "@mui/material";
@@ -30,41 +31,58 @@ interface TransactionsFilter {
 
 const TransactionList = ({ title }: TransactionListProps) => {
   const [formOpen, setFormOpen] = useState(false);
-  // const [loading, setLoading] = useState<boolean>(false);
   const [transactions, setTransactions] = useState<Transacation[]>([]);
+  const [hasMore, setHasMore] = useState<boolean>(true);
 
   const { openSnackbar } = useSnackbar();
 
-  const skip = 0;
-  const take = 5;
-  const before = null;
-  const categoryId = null;
-  const expense = null;
-
   const fetchMore = () => {
-    // setLoading(true);
     api
-      .get<Transacation[]>("/transactions/q", {
-        params: { skip, take, before, categoryId, expense },
+      .get<Transacation[]>("/transaction/q", {
+        params: {
+          skip: transactions.length,
+          take: 5,
+        },
       })
       .then(({ data }) => {
-        setTransactions((prev) => [...data, ...prev]);
+        if (data.length === 0) {
+          setHasMore(false);
+          return;
+        }
+        setTransactions((prev) => [...prev, ...data]);
+      })
+      .catch(() => {
+        setHasMore(false);
       });
   };
 
   useEffect(() => {
     api
-      .get<Transacation[]>("/transaction/q", { params: { limit: 5 } })
+      .get<Transacation[]>("/transaction/q", {
+        params: {
+          skip: 0,
+          take: 5,
+        },
+      })
       .then(({ data }) => {
+        if (data.length === 0) {
+          setHasMore(false);
+          return;
+        }
         setTransactions((prev) => [...data]);
+      })
+      .catch(() => {
+        setHasMore(false);
       });
   }, []);
 
   const onAddTransaction = (transaction: Transacation) => {
     api
       .post<Transacation>("/transaction", transaction)
-      .then((transaction) => {
+      .then(({ data }) => {
+        setTransactions((prev) => [data, ...prev]);
         openSnackbar({ message: "Uspesno dodata transakcija" });
+        setFormOpen(false);
       })
       .catch((error: AxiosError<ApiMessage>) => {
         let message = "Doslo je do greske";
@@ -101,36 +119,36 @@ const TransactionList = ({ title }: TransactionListProps) => {
       {formOpen && (
         <TransactionForm onSubmit={onAddTransaction}></TransactionForm>
       )}
-      {/* <Stack
-        id="scrollableDiv"
+      <Box
+        id="scrollable-box"
         sx={{
-          maxHeight: "600px",
+          maxHeight: "400px",
           overflow: "auto",
-          display: "flex",
-          flexDirection: "column-reverse",
         }}
       >
         <InfiniteScroll
-          dataLength={transactions.length}
+          dataLength={transactions.length} //This is important field to render the next data
           next={fetchMore}
-          style={{ display: "flex", flexDirection: "column-reverse" }}
-          inverse={true}
-          hasMore={true}
+          hasMore={hasMore}
           loader={
-            <Box className="justify-center w-full flex">
-              <CircularProgress className="mt-20" color="primary" />
+            <Box>
+              <LinearProgress></LinearProgress>
             </Box>
           }
-          scrollableTarget="scrollableDiv"
-          endMessage={""}
+          scrollableTarget="scrollable-box"
+          endMessage={
+            <p style={{ textAlign: "center", color: "gray" }}>
+              Nema više transakcija...
+            </p>
+          }
         >
           <Stack gap="0.6em" padding="1em">
             {transactions.map((t) => (
               <TransactionCard transaction={t} key={t.id} />
             ))}
           </Stack>
-        </InfiniteScroll> */}
-      {/* </Stack> */}
+        </InfiniteScroll>
+      </Box>
     </Stack>
   );
 };

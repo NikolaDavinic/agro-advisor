@@ -55,9 +55,16 @@ namespace webapi.Controllers
                     Date = tDTO.Date
                 };
 
-                await _transactionService.AddTransactionForUser(userId, transaction);
+                var t = await _transactionService.AddTransactionForUser(userId, transaction);
 
-                return Ok();
+                return Ok(new
+                {
+                    Id = t.Id.Value.ToString(),
+                    t.Date,
+                    t.CategoryName,
+                    t.Description,
+                    t.Value
+                });
             }
             catch (Exception e)
             {
@@ -88,6 +95,28 @@ namespace webapi.Controllers
             {
                 return BadRequest(new { msg = e.Message });
             }
-        } 
+        }
+
+        //[HttpGet("dataforchart")]
+        //public async Task<ActionResult> DataForChart()
+        //{
+        //    try
+        //    {
+        //        var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("Id"))?.Value;
+
+        //        //if (userId == null)
+        //        //{
+        //        //    return Unauthorized("Greska pri autentifikaciji");
+        //        //}
+
+        //        var result = await _transactionService.GetTransactionDataForChart(userId);
+
+        //        return Ok(result);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return BadRequest(new { msg = e.Message });
+        //    }
+        //}
     }
 }
