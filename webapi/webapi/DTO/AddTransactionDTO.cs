@@ -6,6 +6,7 @@ namespace webapi.DTO
 {
     public class AddTransactionDTO
     {
+        public string? Id { get; set; } = null!;
         public decimal Value { get; set; }
         public string CategoryId { get; set; } = null!;
         public string CategoryName { get; set; } = null!;
