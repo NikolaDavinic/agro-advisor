@@ -33,6 +33,8 @@ const TransactionList = ({ title }: TransactionListProps) => {
   const [formOpen, setFormOpen] = useState(false);
   const [transactions, setTransactions] = useState<Transacation[]>([]);
   const [hasMore, setHasMore] = useState<boolean>(true);
+  const [editingTransaction, setEditingTransaction] =
+    useState<Transacation | null>();
 
   const { openSnackbar } = useSnackbar();
 
@@ -76,23 +78,52 @@ const TransactionList = ({ title }: TransactionListProps) => {
       });
   }, []);
 
-  const onAddTransaction = (transaction: Transacation) => {
-    api
-      .post<Transacation>("/transaction", transaction)
-      .then(({ data }) => {
-        setTransactions((prev) => [data, ...prev]);
-        openSnackbar({ message: "Uspesno dodata transakcija" });
-        setFormOpen(false);
-      })
-      .catch((error: AxiosError<ApiMessage>) => {
-        let message = "Doslo je do greske";
-        if (axios.isAxiosError(error)) {
-          if (error.response?.data) {
-            message = error.response.data.msg;
+  const onSubmitTransaction = (transaction: Transacation) => {
+    if (editingTransaction) {
+      api
+        .put<Transacation>("/transaction", {
+          ...transaction,
+          id: editingTransaction.id,
+        })
+        .then(({ data }) => {
+          setTransactions((prev) =>
+            prev.map((t) => (t.id !== data.id ? t : data))
+          );
+          openSnackbar({ message: "Transakcija uspesno izmenjena " });
+          setEditingTransaction(null);
+          setFormOpen(false);
+        })
+        .catch(() => {
+          openSnackbar({
+            message: "Doslo je do greske pri izmeni transakcije",
+            severity: "error",
+          });
+        });
+    } else {
+      api
+        .post<Transacation>("/transaction", transaction)
+        .then(({ data }) => {
+          setTransactions((prev) => [data, ...prev]);
+          openSnackbar({ message: "Uspesno dodata transakcija" });
+          setFormOpen(false);
+        })
+        .catch((error: AxiosError<ApiMessage>) => {
+          let message = "Doslo je do greske";
+          if (axios.isAxiosError(error)) {
+            if (error.response?.data) {
+              message = error.response.data.msg;
+            }
           }
-        }
-        openSnackbar({ message, severity: "error" });
-      });
+          openSnackbar({ message, severity: "error" });
+        });
+    }
+  };
+
+  const editTransaction = (transaction: Transacation) => {
+    if (editingTransaction) return;
+
+    setEditingTransaction(transaction);
+    setFormOpen(true);
   };
 
   return (
@@ -108,7 +139,10 @@ const TransactionList = ({ title }: TransactionListProps) => {
           <Typography variant="h6">{title}</Typography>
           <Button
             color={formOpen ? "error" : "primary"}
-            onClick={() => setFormOpen((state) => !state)}
+            onClick={() => {
+              setEditingTransaction(null);
+              setFormOpen((state) => !state);
+            }}
             startIcon={<Icon>{formOpen ? "close" : "add"}</Icon>}
             variant="outlined"
           >
@@ -117,7 +151,13 @@ const TransactionList = ({ title }: TransactionListProps) => {
         </Box>
       </Box>
       {formOpen && (
-        <TransactionForm onSubmit={onAddTransaction}></TransactionForm>
+        <TransactionForm
+          onSubmit={onSubmitTransaction}
+          transaction={editingTransaction}
+          buttonText={
+            editingTransaction ? "Sacuvaj izmene" : " Sacuvaj transakciju"
+          }
+        ></TransactionForm>
       )}
       <Box
         id="scrollable-box"
@@ -144,7 +184,11 @@ const TransactionList = ({ title }: TransactionListProps) => {
         >
           <Stack gap="0.6em" padding="1em">
             {transactions.map((t) => (
-              <TransactionCard transaction={t} key={t.id} />
+              <TransactionCard
+                transaction={t}
+                key={t.id}
+                onEditClick={editTransaction}
+              />
             ))}
           </Stack>
         </InfiniteScroll>

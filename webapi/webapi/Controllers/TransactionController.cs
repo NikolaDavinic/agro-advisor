@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.IdGenerators;
 using MongoDB.Driver;
 using webapi.DTO;
@@ -61,6 +62,55 @@ namespace webapi.Controllers
                 {
                     Id = t.Id.Value.ToString(),
                     t.Date,
+                    CategoryId = t.Category.Id.AsString,
+                    t.CategoryName,
+                    t.Description,
+                    t.Value
+                });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { msg = e.Message });
+            }
+        }
+
+        [Authorize]
+        [HttpPut]
+        public async Task<ActionResult> UpdateTransaction([FromBody] AddTransactionDTO tDTO)
+        {
+            try
+            {
+                var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("Id"))?.Value;
+
+                if (userId == null)
+                {
+                    return Unauthorized("Greska pri autentifikaciji");
+                }
+
+                var category = await _categoryService.GetAsync(tDTO.CategoryId);
+
+                if (category == null)
+                {
+                    return BadRequest(new { msg = "Kategorija ne postoji" });
+                }
+
+                var transaction = new Transaction
+                {
+                    Id = ObjectId.Parse(tDTO.Id),
+                    Category = new MongoDBRef("TCategory", category.Id),
+                    CategoryName = category.Name,
+                    Description = tDTO.Description,
+                    Value = tDTO.Value,
+                    Date = tDTO.Date
+                };
+
+                var t = await _transactionService.UpdateUserTransaction(userId, transaction);
+
+                return Ok(new
+                {
+                    Id = t.Id.Value.ToString(),
+                    t.Date,
+                    CategoryId = t.Category.Id.AsString,
                     t.CategoryName,
                     t.Description,
                     t.Value
@@ -85,6 +135,7 @@ namespace webapi.Controllers
                 return Ok(transactions.Select((t) => new
                 {
                     Id = t.Id.Value.ToString(),
+                    CategoryId = t.Category.Id.AsString,
                     t.Date,
                     t.CategoryName,
                     t.Description,

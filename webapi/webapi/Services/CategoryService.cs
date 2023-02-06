@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel;
 
 namespace BookStoreApi.Services;
 
@@ -36,8 +37,13 @@ public class CategoryService
     public async Task CreateAsync(TransactionCategory tc) =>
         await _context.TCategories.InsertOneAsync(tc);
 
-    public async Task<TransactionCategory?> GetUserCategory(string userId, string categoryName) =>
-        await _context.TCategories.Find((c) => c.Name == categoryName || (c.User.Id == userId && c.Name == categoryName)).FirstOrDefaultAsync();
+    public async Task<TransactionCategory?> GetUserCategory(string userId, string categoryName)
+    {
+        var filter = Builders<TransactionCategory>.Filter.Eq(x => x.Name, categoryName);
+        filter &= (!Builders<TransactionCategory>.Filter.Exists(x => x.User) | Builders<TransactionCategory>.Filter.Eq(x => x.User.Id, userId));
+
+        return (await _context.TCategories.FindAsync(filter)).FirstOrDefault();
+    }
 
     public async Task<TransactionCategory?> GetAsync(string id) => 
         await _context.TCategories.Find(x => x.Id == id).FirstOrDefaultAsync();

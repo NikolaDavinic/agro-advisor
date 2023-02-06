@@ -83,7 +83,7 @@ namespace webapi.Controllers
                 return Ok(new
                 {
                     newC.Name,
-                    User = newC.User.Id.AsString,
+                    UserId = newC.User.Id.AsString,
                     newC.Id
                 });
             }

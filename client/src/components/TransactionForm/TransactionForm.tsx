@@ -8,6 +8,7 @@ import {
   Modal,
   Paper,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { Stack } from "@mui/system";
@@ -23,6 +24,8 @@ import "./TransactionForm.scss";
 
 interface TransactionFormProps {
   addingCategoryEn?: boolean;
+  buttonText?: string;
+  transaction?: Transacation | null;
   onSubmit?: (val: Transacation) => void;
 }
 
@@ -35,11 +38,17 @@ interface FormFields {
 
 const TransactionForm = ({
   addingCategoryEn = true,
+  buttonText = "Dodaj",
   onSubmit,
+  transaction,
 }: TransactionFormProps) => {
-  const [formState, setFormState] = useState<boolean>(false);
+  const [formState, setFormState] = useState<boolean>(
+    transaction?.value ? (transaction.value < 0 ? true : false) : false
+  );
   const [addingCategory, setAddingCategory] = useState<boolean>(false);
-  const [categoryFilter, setCategoryFilter] = useState<string>("");
+  const [categoryFilter, setCategoryFilter] = useState<string>(
+    transaction?.categoryName ?? ""
+  );
   const [newCategory, setNewCategory] = useState<string>("");
 
   const {
@@ -49,10 +58,12 @@ const TransactionForm = ({
     formState: { errors },
   } = useForm<FormFields>({
     defaultValues: {
-      category: null,
-      date: new Date().toLocaleDateString("en-US"),
-      description: "",
-      value: 0,
+      category: transaction ? { id: transaction?.categoryId } : null,
+      date: (transaction ? new Date(transaction.date) : new Date())
+        .toISOString()
+        .split("T")[0],
+      description: transaction?.description ?? "",
+      value: transaction?.value ? Math.abs(transaction.value) : 0,
     },
     reValidateMode: "onSubmit",
   });
@@ -145,6 +156,20 @@ const TransactionForm = ({
               inputValue={categoryFilter}
               onChange={(e, val) => onChange(val)}
               value={value}
+              renderOption={(props, option) => (
+                <li {...props}>
+                  <Box className="flex w-full items-center justify-between">
+                    {option.name}
+                    {option.userId && (
+                      <Tooltip title="Kategorija koju ste vi dodali" arrow>
+                        <span>
+                          <MatIcon color="primary">person</MatIcon>
+                        </span>
+                      </Tooltip>
+                    )}
+                  </Box>
+                </li>
+              )}
               onInputChange={(e, newvalue) => setCategoryFilter(newvalue)}
               noOptionsText={
                 addingCategoryEn && (
@@ -211,7 +236,7 @@ const TransactionForm = ({
             type="submit"
             startIcon={<MatIcon>check</MatIcon>}
           >
-            Sacuvaj transakciju
+            {buttonText}
           </Button>
         </Box>
       </Stack>
