@@ -19,7 +19,8 @@ const PlotPolygon = ({ plot, navigate }: PolygonClickEventProps) => {
     const eventHandlers = useMemo(
         () => ({
             click() {
-                navigate(`/plot/${plot.id}`);
+                //TODO:navigate(`/plot/${plot.id}`);
+                navigate(`/plot/${plot.id}/edit`);
             },
         }),
         [],

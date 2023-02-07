@@ -67,6 +67,8 @@ const EditPlot: React.FC = ({ }: EditPlotProps) => {
             .then(res => {
                 setShowSpinner(false);
                 setPlot(res.data);
+                //@ts-ignore
+                setStartPosition([res.data.borderPoints[0].coordinates.values[0], res.data.borderPoints[0].coordinates.values[1]])
                 setMunicipality(res.data.municipality);
                 setArea(res.data.area);
                 setPlotNumber(res.data.plotNumber);
@@ -220,15 +222,15 @@ const EditPlot: React.FC = ({ }: EditPlotProps) => {
             </Typography>
             <div className="w-full h-full">
                 <div style={{ minHeight: "450px" }} className="w-full h-3/4 py-4">
-                    <MapContainer className="h-full w-full cursor-crosshair" center={startPosition} zoom={15} scrollWheelZoom={true}>
+                    {plot && <MapContainer className="h-full w-full cursor-crosshair" center={startPosition} zoom={16.5} scrollWheelZoom={true}>
                         <TileLayer
                             url="https://api.maptiler.com/maps/hybrid/{z}/{x}/{y}.jpg?key=v4YRbPNezQckuRrQ6AGT"
                         />
                         <Polygon pathOptions={redOptions} positions={borderPoints} />
                         <MapEvents setPositions={setBorderPoints} startPos={startPosition} />
-                        <Marker icon={homeIcon} position={startPosition}>
-                        </Marker>
-                    </MapContainer>
+                        {/* <Marker icon={homeIcon} position={startPosition}>
+                        </Marker> */}
+                    </MapContainer>}
                 </div>
                 <Button onClick={() => removePoints()} variant="contained">
                     Clear Points
