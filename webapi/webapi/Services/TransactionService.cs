@@ -54,7 +54,7 @@ public class TransactionService
     public async Task<bool> DeleteTransactionForUser(string userId, string transactionId)
     {
         var filter = Builders<User>.Filter.Where(u => u.Id == userId);
-        var update = Builders<User>.Update.PullFilter(u => u.Transactions, Builders<Transaction>.Filter.Where(t => t.Id == ObjectId.Parse(transactionId))));
+        var update = Builders<User>.Update.PullFilter(u => u.Transactions, Builders<Transaction>.Filter.Where(t => t.Id == ObjectId.Parse(transactionId)));
 
         var result = await _context.Users.UpdateOneAsync(filter, update);
         return result.ModifiedCount > 0;

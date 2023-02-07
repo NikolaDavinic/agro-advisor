@@ -57,6 +57,18 @@ const Sidebar = (props: any) => {
             </NavLink>
           </li>
           <li>
+            <NavLink to="/map">
+              {({ isActive }) => (
+                <Icon
+                  sx={{ fontSize: 35 }}
+                  className={`icon ${isActive ? "active" : undefined}`}
+                >
+                  map
+                </Icon>
+              )}
+            </NavLink>
+          </li>
+          <li>
             <NavLink to="/analytics">
               {({ isActive }) => (
                 <Icon
