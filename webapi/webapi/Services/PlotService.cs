@@ -2,6 +2,7 @@
 using MongoDB.Driver;
 using MongoDB.Driver.GeoJsonObjectModel;
 using System.Data.Common;
+using System.Threading;
 using System.Transactions;
 using webapi.DTO;
 using webapi.Models;
@@ -55,7 +56,7 @@ namespace webapi.Services
             var result = await _context.Users.FindOneAndUpdateAsync(filter, update);
 
         }
-        public async Task<Plot?> GetPlotAsync(string userId,string plotId)
+        public async Task<Plot?> GetAsync(string userId,string plotId)
         {
             var filter = Builders<Plot>.Filter.Eq(x => x.Id, plotId);
             filter &= Builders<Plot>.Filter.Eq(x => x.User.Id, userId);
@@ -68,6 +69,13 @@ namespace webapi.Services
 
             return (await _context.Plots.Find(filter).ToListAsync());
         }
+        public async Task<Plot> UpdateAsync(string userId, Plot plot)
+        {
+            var filter = Builders<Plot>.Filter.Eq(x => x.Id, plot.Id);
+            filter &= Builders<Plot>.Filter.Eq(x => x.User.Id, userId);
+            var result = await _context.Plots.ReplaceOneAsync(filter, plot);
 
+            return plot;
+        }
     }
 }

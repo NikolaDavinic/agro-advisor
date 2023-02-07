@@ -47,7 +47,7 @@ namespace webapi.Controllers
                     return Unauthorized("Greska pri autentifikaciji");
                 }
 
-                var result = await _plotService.GetPlotAsync(userId, plotId);
+                var result = await _plotService.GetAsync(userId, plotId);
                 if (result == null)
                     return BadRequest("Ne postoji plot za trazeni ID");
 
@@ -74,6 +74,25 @@ namespace webapi.Controllers
                     return BadRequest("Korisnik nema registrovanog zemljista!");
 
                 return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("edit")]
+        public async Task<ActionResult> EditPlot([FromBody] Plot plot)
+        {
+            try
+            {
+                var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("Id"))?.Value;
+                if (userId == null)
+                {
+                    return Unauthorized("Greska pri autentifikaciji");
+                }
+                await _plotService.UpdateAsync(userId, plot);
+                return Ok("Plot updated successfully!");
             }
             catch (Exception ex)
             {

@@ -8,15 +8,17 @@ import {
     TextField,
     Typography
 } from "@mui/material";
+import { Point } from "geojson";
 import L, { LatLngExpression, PathOptions } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { SetStateAction, useEffect, useState } from "react";
 import { MapContainer, Marker, Polygon, TileLayer, useMapEvents } from "react-leaflet";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuthContext } from "../../contexts/auth.context";
+import { Harvest } from "../../models/harvest.model";
 import { Plot } from "../../models/plot.model";
 import axios, { api } from "../../utils/api/axios";
-import { PlotDTO } from "../NewPlot/NewPlot";
+import { homeIcon, PlotDTO } from "../NewPlot/NewPlot";
 
 interface MapEventsProps {
     setPositions: React.Dispatch<SetStateAction<LatLngExpression[]>>;
@@ -33,12 +35,7 @@ const MapEvents = (props: MapEventsProps) => {
     });
     return <></>;
 };
-const homeIcon = L.icon({
-    iconUrl: 'https://cdn1.iconfinder.com/data/icons/engineers7/102/Untitled-28-512.png',
-    iconSize: [50, 50],
-    iconAnchor: [25, 50],
-    popupAnchor: [-3, -76],
-});
+
 interface EditPlotProps {
 
 }
@@ -46,11 +43,6 @@ interface EditPlotProps {
 const EditPlot: React.FC = ({ }: EditPlotProps) => {
     const { user } = useAuthContext();
     const { plotId } = useParams();
-    // const {
-    //     result: plotRes,
-    //     loading: loadingPlot,
-    //     setResult,
-    // } = useApi<Plot>(`/plot/${plotId}`);
 
     const [startPosition, setStartPosition] = useState<[number, number]>([43.331456, 21.892134]);
     const [borderPoints, setBorderPoints] = useState<LatLngExpression[]>([]);
@@ -73,15 +65,16 @@ const EditPlot: React.FC = ({ }: EditPlotProps) => {
         // }
         api.get<Plot>(`/plot/${plotId}`)
             .then(res => {
-                console.log(res.data);
                 setShowSpinner(false);
                 setPlot(res.data);
                 setMunicipality(res.data.municipality);
                 setArea(res.data.area);
                 setPlotNumber(res.data.plotNumber);
                 setCulture(res.data.currentCulture);
-                // setBorderPoints(plotRes.BorderPoints)
-
+                setBorderPoints(res.data.borderPoints.map(point =>
+                    //@ts-ignore
+                    [point.coordinates.values[0], point.coordinates.values[1]]
+                ))
             })
             .catch(err => {
                 setSnackbarMessage(err);
@@ -89,7 +82,6 @@ const EditPlot: React.FC = ({ }: EditPlotProps) => {
                 setShowSpinner(false);
             })
     }, []);
-
     const [showSpinner, setShowSpinner] = useState<boolean>(true);
     const [showSnackbar, setShowSnackbar] = useState<boolean>(false);
     const [snackbarMessage, setSnackbarMessage] = useState<string>("");
@@ -128,32 +120,36 @@ const EditPlot: React.FC = ({ }: EditPlotProps) => {
             setShowSpinner(false);
             return;
         }
-        const data: PlotDTO = {
+        const data: Plot = {
             municipality: municipality,
             area: area,
-            borderPoints: [],
+            borderPoints: plot?.borderPoints as Point[],
             currentCulture: culture,
             plotNumber: plotNumber,
-            userId: user?.id
+            userId: user?.id as string,
+            id: plot?.id as string,
+            harvests: plot?.harvests as Harvest[]
         };
-        data.borderPoints = borderPoints.map(p => {
-            var point: string = p.toString();
-            var latlngStr = point.toString();
-            var substr = latlngStr.substring(
-                latlngStr.indexOf("(") + 1,
-                latlngStr.lastIndexOf(")")
-            );
-            var cords = substr.split(",");
-            return {
-                x: Number(cords[0]), y: Number(cords[1])
-            };
-        })
+        // data.borderPoints = borderPoints.map(p => {
+        //     var point: string = p.toString();
+        //     var latlngStr = point.toString();
+        //     var substr = latlngStr.substring(
+        //         latlngStr.indexOf("(") + 1,
+        //         latlngStr.lastIndexOf(")")
+        //     );
+        //     var cords = substr.split(",");
+        //     return {
+        //         // x: Number(cords[0]), y: Number(cords[1])
+        //         ...plot?.borderPoints[plot.borderPoints.indexOf(p)],
+        //         coordinates: [Number(cords[0]), Number(cords[1])]
+        //     };
+        // })
         api
-            .post("/plot/add", data)
+            .post("/plot/edit", data)
             .then((response) => {
                 // return navigate("/listing/" + response.data[0].id);
                 setSnackbarSeverity("success");
-                setSnackbarMessage("Plot added successfully!");
+                setSnackbarMessage("Plot updated successfully!");
                 setShowSnackbar(true);
             })
             .catch((error) => {

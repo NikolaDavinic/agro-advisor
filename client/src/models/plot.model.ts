@@ -2,7 +2,7 @@ import { Point } from "geojson";
 import { Harvest } from "./harvest.model";
 
 export interface Plot {
-    id: string | null;
+    id: string;
     area: number;
     plotNumber: number;
     // BorderPoints: GeoJsonPoint<GeoJson2DGeographicCoordinates>[];

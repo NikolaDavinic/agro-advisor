@@ -1,26 +1,44 @@
-import { Alert, AlertColor, CircularProgress, Snackbar } from "@mui/material";
+import { Alert, AlertColor, CircularProgress, Snackbar, Typography } from "@mui/material";
 import { LatLngExpression, PathOptions } from "leaflet";
-import { SetStateAction, useEffect, useState } from "react";
+import { SetStateAction, useEffect, useMemo, useState } from "react";
 import { MapContainer, Marker, Polygon, TileLayer, Tooltip, useMapEvents } from "react-leaflet";
+import { NavigateFunction, useNavigate } from "react-router";
 import { homeIcon, Point } from "../../components/NewPlot/NewPlot";
 import { useAuthContext } from "../../contexts/auth.context";
 import { Plot } from "../../models/plot.model";
 import axios, { api } from "../../utils/api/axios";
-interface MapEventsProps {
-    setPositions: React.Dispatch<SetStateAction<LatLngExpression[]>>;
-    startPos: [number, number]
+import randomColor from "randomcolor";
+
+interface PolygonClickEventProps {
+    plot: Plot;
+    navigate: NavigateFunction;
 }
-const MapEvents = (props: MapEventsProps) => {
-    const map = useMapEvents({
-        click(e: any) {
-            props.setPositions((prevPos) => [...prevPos, e.latlng]);
-        },
-        load() {
-            map.panTo(props.startPos);
-        }
-    });
-    return <></>;
-};
+const bluePathOptions: PathOptions = { color: "blue", weight: 0.5, fillOpacity: 0.6 };
+
+const PlotPolygon = ({ plot, navigate }: PolygonClickEventProps) => {
+    const eventHandlers = useMemo(
+        () => ({
+            click() {
+                navigate(`/plot/${plot.id}`);
+            },
+        }),
+        [],
+    )
+
+    return (
+        //@ts-ignore
+        <Polygon eventHandlers={eventHandlers} pathOptions={{ ...bluePathOptions, color: randomColor() }} positions={plot.borderPoints.map(point => [point.coordinates.values[0], point.coordinates.values[1]])}>
+            <Tooltip sticky={true}>{
+                <>
+                    <p>{`Plot number: ${plot.plotNumber}`}</p>
+                    <p>{`Area: ${plot.area} m`}<sup>2 </sup></p>
+                    <p>{`Culture: ${plot.currentCulture}`}</p>
+                </>}
+            </Tooltip>
+        </Polygon>
+    )
+}
+
 const PlotMap: React.FC = () => {
     const [showSpinner, setShowSpinner] = useState<boolean>(true);
     const [showSnackbar, setShowSnackbar] = useState<boolean>(false);
@@ -29,7 +47,7 @@ const PlotMap: React.FC = () => {
     const { user } = useAuthContext();
     const [startPosition, setStartPosition] = useState<[number, number]>([43.331456, 21.892134]);
     const [plots, setPlots] = useState<Plot[]>([]);
-    const blueOptions: PathOptions = { color: "blue", weight: 0.5, fillOpacity: 0.6 };
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (user && user.address && user.address?.length > 0) {
@@ -43,7 +61,6 @@ const PlotMap: React.FC = () => {
             .then(res => {
                 setShowSpinner(false);
                 setPlots(res.data);
-                // setBorderPoints(plotRes.BorderPoints)
             })
             .catch(err => {
                 setSnackbarMessage(err);
@@ -56,6 +73,9 @@ const PlotMap: React.FC = () => {
             {showSpinner && <CircularProgress className="absolute top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />}
 
             {!showSpinner && <div className="w-full h-full">
+                <Typography gutterBottom variant="h5">
+                    Click on any plot to view further details
+                </Typography>
                 <div style={{ minHeight: "450px" }} className="w-full h-full py-4">
                     <MapContainer className="h-full w-full cursor-crosshair" center={startPosition} zoom={15} scrollWheelZoom={true}>
                         <TileLayer
@@ -63,19 +83,9 @@ const PlotMap: React.FC = () => {
                         />
                         <>
                             {plots.length > 0 && plots.map(plot =>
-                                // console.log(plot.borderPoints[0].coordinates.values)
-                                //@ts-ignore
-                                <Polygon pathOptions={blueOptions} positions={plot.borderPoints.map(point => [point.coordinates.values[0], point.coordinates.values[1]])}>
-                                    <Tooltip sticky={true}>{<>
-                                        <p>{`Plot number: ${plot.plotNumber}`}</p>
-                                        <p>{`Area: ${plot.area} m`}<sup>2 </sup></p>
-                                        <p>{`Culture: ${plot.currentCulture}`}</p>
-                                    </>}</Tooltip>
-                                </Polygon>
-                            
+                                <PlotPolygon navigate={navigate} plot={plot} key={plot.id} />
                             )}
                         </>
-                        {/* <MapEvents setPositions={setBorderPoints} startPos={startPosition} /> */}
                         <Marker icon={homeIcon} position={startPosition}>
                         </Marker>
                     </MapContainer>
