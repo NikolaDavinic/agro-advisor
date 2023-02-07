@@ -69,10 +69,30 @@ namespace webapi.Controllers
                 }
 
                 var result = await _plotService.GetUserPlotsAsync(userId);
-                if (result == null)
-                    return BadRequest("Korisnik nema registrovanog zemljista!");
+                //if (result == null)
+                //    return BadRequest("Korisnik nema registrovanog zemljista!");
 
                 return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("plotsSum")]
+        public async Task<ActionResult> GetUserPlotSummaries()
+        {
+            try
+            {
+                var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("Id"))?.Value;
+                if (userId == null)
+                {
+                    return Unauthorized("Greska pri autentifikaciji");
+                }
+
+                var plots = await _plotService.GetUserPlotSummariesAsync(userId);
+
+                return Ok(plots.Select((p) => new { Id = p.Id.Id.AsString, p.PlotNumber, p.Area, p.Municipality }));
             }
             catch (Exception ex)
             {

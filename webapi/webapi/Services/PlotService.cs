@@ -1,4 +1,5 @@
 ﻿using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 using MongoDB.Driver.GeoJsonObjectModel;
 using System.Data.Common;
 using System.Threading;
@@ -68,6 +69,17 @@ namespace webapi.Services
 
             return (await _context.Plots.Find(filter).ToListAsync());
         }
+        public async Task<List<PlotSummary>> GetUserPlotSummariesAsync(string userId)
+        {
+            //var filter = Builders<User>.Filter.Eq(x => x.Id, userId);
+            var result = await _context.Users.AsQueryable()
+                .Where(u => u.Id == userId)
+                .Select(u => u.Plots)
+                .SingleAsync();
+
+            return result;
+
+        }
         //TODO:Combine Create and Update to CreateUpdate
         public async Task<Plot> UpdateAsync(string userId, PlotDTO plotDTO)
         {
@@ -93,7 +105,7 @@ namespace webapi.Services
             });
 
             var plotResult = await _context.Plots.ReplaceOneAsync(filter, plot);
-
+            //TODO: Sredi update summary-a, izgleda da ne funkcionise
             var plotSum = new PlotSummary
             {
                 Id = new MongoDBRef("Plots", plot.Id),

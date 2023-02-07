@@ -9,6 +9,7 @@ import { SnackbarProvider } from "./contexts/snackbar.context";
 import NewPlot from "./components/NewPlot/NewPlot";
 import EditPlot from "./components/EditPlot/EditPlot";
 import PlotMap from "./pages/PlotMap/PlotMap";
+import Plots from "./pages/Plots/Plots";
 
 const theme = createTheme({
   palette: {
@@ -42,6 +43,7 @@ function App() {
                 <Route path="/analytics" element={<Analytics />}></Route>
                 <Route path="/newplot" element={<NewPlot />}></Route>
                 <Route path="/machines" element={<Machinery />}></Route>
+                <Route path="/plots" element={<Plots />}></Route>
                 <Route path="/plot/:plotId/edit" element={<EditPlot />}></Route>
                 <Route path="/map" element={<PlotMap />}></Route>
               </Route>
