@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Driver;
 using MongoDB.Driver.GeoJsonObjectModel;
 using System.Text.Json.Serialization;
 
@@ -24,12 +25,13 @@ namespace webapi.Models
         public int Area { get; set; } = 0;
         [BsonRequired]
         public int PlotNumber { get; set; }
-        [JsonIgnore]
+        //[JsonIgnore]
         [BsonRequired]
         public List<GeoJsonPoint<GeoJson2DGeographicCoordinates>> BorderPoints { get; set; } = new();
         public string Municipality { get; set; } = null!;
+        [JsonIgnore]
         [BsonRequired]
-        public string UserId { get; set; } = null!;
+        public MongoDBRef User{ get; set; } = null!;
         public string CurrentCulture { get; set; } = null!;
         public List<Harvest> Harvests { get; set; } = new();
     }

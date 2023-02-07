@@ -55,7 +55,9 @@ namespace webapi.Models
         public string PasswordHash { get; set; } = null!;
         public string ImageUrl { get; set; } = null!;
         public string Address { get; set; } = null!;
+        [JsonIgnore]
         public List<PlotSummary> Plots { get; set; } = new();
+        [JsonIgnore]
         public List<Transaction> Transactions { get; set; } = new();
         public List<MachinerySummary> Machines { get; set; } = new();
     }

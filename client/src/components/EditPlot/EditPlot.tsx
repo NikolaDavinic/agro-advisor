@@ -8,27 +8,18 @@ import {
     TextField,
     Typography
 } from "@mui/material";
+import { Point } from "geojson";
 import L, { LatLngExpression, PathOptions } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { SetStateAction, useEffect, useState } from "react";
 import { MapContainer, Marker, Polygon, TileLayer, useMapEvents } from "react-leaflet";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAuthContext } from "../../contexts/auth.context";
+import { Harvest } from "../../models/harvest.model";
+import { Plot } from "../../models/plot.model";
 import axios, { api } from "../../utils/api/axios";
+import { homeIcon, PlotDTO } from "../NewPlot/NewPlot";
 
-export interface Point {
-    x: number;
-    y: number;
-}
-export interface PlotDTO {
-    // id?: string;
-    area: number;
-    plotNumber: number;
-    municipality: string;
-    userId?: string;
-    currentCulture: string;
-    borderPoints: Point[];
-}
 interface MapEventsProps {
     setPositions: React.Dispatch<SetStateAction<LatLngExpression[]>>;
     startPos: [number, number]
@@ -44,42 +35,60 @@ const MapEvents = (props: MapEventsProps) => {
     });
     return <></>;
 };
-export const homeIcon = L.icon({
-    // iconUrl: 'https://cdn1.iconfinder.com/data/icons/engineers7/102/Untitled-28-512.png',
-    iconUrl: 'https://cdn1.iconfinder.com/data/icons/real-estate-building-flat-vol-3/104/house__location__home__map__Pin-512.png',
-    iconSize: [50, 50],
-    iconAnchor: [25, 50],
-    popupAnchor: [-3, -76],
-});
 
-const NewPlot: React.FC = () => {
+interface EditPlotProps {
+
+}
+
+const EditPlot: React.FC = ({ }: EditPlotProps) => {
     const { user } = useAuthContext();
-    const [startPosition, setStartPosition] = useState<[number, number]>([43.331456, 21.892134]);
-    useEffect(() => {
-        if (user && user.address && user.address?.length > 0) {
-            axios.get(`https://api.maptiler.com/geocoding/${user.address}.json?key=eIgS48TpQ70m77qKYrsx`)
-                .then(res => {
-                    if (res.data.features.length > 0)
-                        setStartPosition([res.data.features[0].geometry.coordinates[1], res.data.features[0].geometry.coordinates[0]]);
-                })
-        }
-    }, [user]);
+    const { plotId } = useParams();
 
-    const [showSpinner, setShowSpinner] = useState<boolean>(false);
+    const [startPosition, setStartPosition] = useState<[number, number]>([43.331456, 21.892134]);
+    const [borderPoints, setBorderPoints] = useState<LatLngExpression[]>([]);
+    const removePoints = () => {
+        setBorderPoints([]);
+    };
+    const [plot, setPlot] = useState<Plot>();
+    const [municipality, setMunicipality] = useState<string>("");
+    const [culture, setCulture] = useState<string>("");
+    const [plotNumber, setPlotNumber] = useState<number>(1);
+    const [area, setArea] = useState<number>(1);
+
+    useEffect(() => {
+        // if (user && user.address && user.address?.length > 0) {
+        //     axios.get(`https://api.maptiler.com/geocoding/${user.address}.json?key=eIgS48TpQ70m77qKYrsx`)
+        //         .then(res => {
+        //             if (res.data.features.length > 0)
+        //                 setStartPosition([res.data.features[0].geometry.coordinates[1], res.data.features[0].geometry.coordinates[0]]);
+        //         })
+        // }
+        api.get<Plot>(`/plot/${plotId}`)
+            .then(res => {
+                setShowSpinner(false);
+                setPlot(res.data);
+                setMunicipality(res.data.municipality);
+                setArea(res.data.area);
+                setPlotNumber(res.data.plotNumber);
+                setCulture(res.data.currentCulture);
+                setBorderPoints(res.data.borderPoints.map(point =>
+                    //@ts-ignore
+                    [point.coordinates.values[0], point.coordinates.values[1]]
+                ))
+            })
+            .catch(err => {
+                setSnackbarMessage(err);
+                setShowSnackbar(true);
+                setShowSpinner(false);
+            })
+    }, []);
+    const [showSpinner, setShowSpinner] = useState<boolean>(true);
     const [showSnackbar, setShowSnackbar] = useState<boolean>(false);
     const [snackbarMessage, setSnackbarMessage] = useState<string>("");
     const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>("success");
 
     const redOptions: PathOptions = { color: "blue", weight: 0.5 };
-    const [borderPoints, setBorderPoints] = useState<LatLngExpression[]>([]);
-    const removePoints = () => {
-        setBorderPoints([]);
-    };
 
-    const [municipality, setMunicipality] = useState<string>("");
-    const [culture, setCulture] = useState<string>("");
-    const [plotNumber, setPlotNumber] = useState<number>(1);
-    const [area, setArea] = useState<number>(1);
 
 
     const navigate = useNavigate();
@@ -111,32 +120,36 @@ const NewPlot: React.FC = () => {
             setShowSpinner(false);
             return;
         }
-        const data: PlotDTO = {
+        const data: Plot = {
             municipality: municipality,
             area: area,
-            borderPoints: [],
+            borderPoints: plot?.borderPoints as Point[],
             currentCulture: culture,
             plotNumber: plotNumber,
-            userId: user?.id
+            userId: user?.id as string,
+            id: plot?.id as string,
+            harvests: plot?.harvests as Harvest[]
         };
-        data.borderPoints = borderPoints.map(p => {
-            var point: string = p.toString();
-            var latlngStr = point.toString();
-            var substr = latlngStr.substring(
-                latlngStr.indexOf("(") + 1,
-                latlngStr.lastIndexOf(")")
-            );
-            var cords = substr.split(",");
-            return {
-                x: Number(cords[0]), y: Number(cords[1])
-            };
-        })
+        // data.borderPoints = borderPoints.map(p => {
+        //     var point: string = p.toString();
+        //     var latlngStr = point.toString();
+        //     var substr = latlngStr.substring(
+        //         latlngStr.indexOf("(") + 1,
+        //         latlngStr.lastIndexOf(")")
+        //     );
+        //     var cords = substr.split(",");
+        //     return {
+        //         // x: Number(cords[0]), y: Number(cords[1])
+        //         ...plot?.borderPoints[plot.borderPoints.indexOf(p)],
+        //         coordinates: [Number(cords[0]), Number(cords[1])]
+        //     };
+        // })
         api
-            .post("/plot/add", data)
+            .post("/plot/edit", data)
             .then((response) => {
                 // return navigate("/listing/" + response.data[0].id);
                 setSnackbarSeverity("success");
-                setSnackbarMessage("Plot added successfully!");
+                setSnackbarMessage("Plot updated successfully!");
                 setShowSnackbar(true);
             })
             .catch((error) => {
@@ -145,13 +158,12 @@ const NewPlot: React.FC = () => {
                 setSnackbarMessage(error);
                 setShowSnackbar(true);
             });
-        console.log(data);
     };
     return (
         <div className="w-full h-full flex flex-col p-10">
             {showSpinner && <CircularProgress className="absolute top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />}
             <Typography gutterBottom variant="h5">
-                New plot
+                Edit plot
             </Typography>
             <TextField
                 autoFocus
@@ -242,4 +254,4 @@ const NewPlot: React.FC = () => {
     );
 };
 
-export default NewPlot;
+export default EditPlot;
