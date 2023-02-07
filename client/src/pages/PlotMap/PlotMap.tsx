@@ -1,9 +1,9 @@
 import { Alert, AlertColor, CircularProgress, Snackbar, Typography } from "@mui/material";
-import { LatLngExpression, PathOptions } from "leaflet";
-import { SetStateAction, useEffect, useMemo, useState } from "react";
-import { MapContainer, Marker, Polygon, TileLayer, Tooltip, useMapEvents } from "react-leaflet";
+import { PathOptions } from "leaflet";
+import { useEffect, useMemo, useState } from "react";
+import { MapContainer, Marker, Polygon, TileLayer, Tooltip } from "react-leaflet";
 import { NavigateFunction, useNavigate } from "react-router";
-import { homeIcon, Point } from "../../components/NewPlot/NewPlot";
+import { homeIcon } from "../../components/NewPlot/NewPlot";
 import { useAuthContext } from "../../contexts/auth.context";
 import { Plot } from "../../models/plot.model";
 import axios, { api } from "../../utils/api/axios";
@@ -19,7 +19,8 @@ const PlotPolygon = ({ plot, navigate }: PolygonClickEventProps) => {
     const eventHandlers = useMemo(
         () => ({
             click() {
-                navigate(`/plot/${plot.id}`);
+                //TODO:navigate(`/plot/${plot.id}`);
+                navigate(`/plot/${plot.id}/edit`);
             },
         }),
         [],

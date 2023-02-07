@@ -68,11 +68,44 @@ namespace webapi.Services
 
             return (await _context.Plots.Find(filter).ToListAsync());
         }
-        public async Task<Plot> UpdateAsync(string userId, Plot plot)
+        //TODO:Combine Create and Update to CreateUpdate
+        public async Task<Plot> UpdateAsync(string userId, PlotDTO plotDTO)
         {
-            var filter = Builders<Plot>.Filter.Eq(x => x.Id, plot.Id);
+            var filter = Builders<Plot>.Filter.Eq(x => x.Id, plotDTO.Id);
             filter &= Builders<Plot>.Filter.Eq(x => x.User.Id, userId);
-            var result = await _context.Plots.ReplaceOneAsync(filter, plot);
+            var userdbRef = new MongoDBRef("Users", userId);
+
+            var plot = new Plot
+            {
+                Id = plotDTO.Id,
+                Area = plotDTO.Area,
+                CurrentCulture = plotDTO.CurrentCulture,
+                Harvests = new List<Harvest>(),
+                Municipality = plotDTO.Municipality,
+                PlotNumber = plotDTO.PlotNumber,
+                User = userdbRef,
+                BorderPoints = new List<GeoJsonPoint<GeoJson2DGeographicCoordinates>>()
+            };
+            plotDTO.BorderPoints.ForEach(point =>
+            {
+                var loc = GeoJson.Point(new GeoJson2DGeographicCoordinates(point.X, point.Y));
+                plot.BorderPoints.Add(loc);
+            });
+
+            var plotResult = await _context.Plots.ReplaceOneAsync(filter, plot);
+
+            var plotSum = new PlotSummary
+            {
+                Id = new MongoDBRef("Plots", plot.Id),
+                Area = plot.Area,
+                Municipality = plot.Municipality,
+                PlotNumber = plot.PlotNumber
+            };
+
+            var filterSummary = Builders<User>.Filter.Eq((u) => u.Id, userId);
+            var updateSummary = Builders<User>.Update.Push(u => u.Plots, plotSum);
+
+            var result = await _context.Users.UpdateOneAsync(filterSummary, updateSummary);
 
             return plot;
         }

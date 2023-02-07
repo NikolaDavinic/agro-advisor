@@ -80,8 +80,8 @@ namespace webapi.Controllers
             }
         }
 
-        [HttpPost("edit")]
-        public async Task<ActionResult> EditPlot([FromBody] Plot plot)
+        [HttpPut("edit")]
+        public async Task<ActionResult> EditPlot([FromBody] PlotDTO plot)
         {
             try
             {
@@ -90,8 +90,8 @@ namespace webapi.Controllers
                 {
                     return Unauthorized("Greska pri autentifikaciji");
                 }
-                await _plotService.UpdateAsync(userId, plot);
-                return Ok("Plot updated successfully!");
+                var retVal=await _plotService.UpdateAsync(userId, plot);
+                return Ok(retVal);
             }
             catch (Exception ex)
             {
