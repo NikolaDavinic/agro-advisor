@@ -89,12 +89,39 @@ namespace webapi.Controllers
 
                 await _machineryService.CreateAsync(userId, machine);
 
-                return Ok();
+                return Ok(new
+                {
+                    machine.Id,
+                    Type = machine.Type.ToString(),
+                    machine.LicensePlate,
+                    machine.ProductionYear,
+                    machine.RegisteredUntil,
+                    machine.Model,
+                    machine.Images,
+                });
             }
             catch (Exception e)
             {
                 return Ok(new { msg = e.Message });
             } 
+        }
+
+        [Authorize]
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteMachine(string id)
+        {
+            try
+            {
+                var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("Id"))?.Value;
+
+                await _machineryService.DeleteAsync(userId, id);
+
+                return Ok(new { msg = "Masina je obrisana"} );
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { msg = e.Message });
+            }
         }
     }
 }
