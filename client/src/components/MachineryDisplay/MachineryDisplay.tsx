@@ -1,6 +1,8 @@
 import {
   Box,
   IconButton,
+  Menu,
+  MenuItem,
   Paper,
   Stack,
   Table,
@@ -17,10 +19,24 @@ import styles from "./MachineryDisplay.module.scss";
 
 interface MachineryDisplayProps {
   machine: Machinery;
+  onDelete?: (machine: Machinery) => void;
 }
 
-const MachineryDisplay = ({ machine }: MachineryDisplayProps) => {
+const MachineryDisplay = ({
+  machine,
+  onDelete = () => {},
+}: MachineryDisplayProps) => {
   let color: string = "green";
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const dateDiff = moment(machine.registeredUntil).diff(moment(), "days");
 
@@ -33,6 +49,27 @@ const MachineryDisplay = ({ machine }: MachineryDisplayProps) => {
   return (
     <Paper elevation={4} className={`p-2`}>
       <Box className="w-full">
+        <Box className="flex justify-end">
+          <IconButton onClick={handleClick}>
+            <MatIcon style={{ color: "black" }}>more_vert</MatIcon>
+          </IconButton>
+          <Menu
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            transformOrigin={{ horizontal: "left", vertical: "top" }}
+          >
+            <MenuItem
+              onClick={() => {
+                handleClose();
+                onDelete(machine);
+              }}
+            >
+              <MatIcon color="error">delete</MatIcon>
+              &nbsp;Obriši
+            </MenuItem>
+          </Menu>
+        </Box>
         <Table className="w-full" sx={{ fontSize: "1.6rem" }}>
           <TableBody>
             <TableRow>

@@ -18,6 +18,7 @@ import { ApiMessage } from "../../dtos/api-message.dto";
 import { useApi } from "../../hooks/api.hook";
 import { Machinery } from "../../models/machinery.model";
 import { api } from "../../utils/api/axios";
+import { useConfirm } from "material-ui-confirm";
 
 const Machines = () => {
   const navigate = useNavigate();
@@ -26,6 +27,7 @@ const Machines = () => {
     null
   );
 
+  const confirm = useConfirm();
   const { openSnackbar } = useSnackbar();
 
   const {
@@ -66,13 +68,34 @@ const Machines = () => {
       .post<Machinery>("machinery", machine)
       .then(({ data }) => {
         openSnackbar({ message: "Uspesno dodata mašina" });
-        console.log(data);
         setMachineSummaries((prev) => [data, ...(prev ?? [])]);
         setFormOpen(false);
       })
       .catch((err: AxiosError<ApiMessage>) => {
         openSnackbar({ message: err.message, severity: "error" });
       });
+  };
+
+  const deleteMachine = (machine: Machinery) => {
+    confirm({
+      description: "Da li ste sigurni da želite da obrišete mašinu?",
+      title: "Potvrdite akciju",
+    }).then(() => {
+      api
+        .delete(`machinery/${machine.id}`)
+        .then(() => {
+          openSnackbar({
+            message: "Uspešno obrisana mašinu",
+            severity: "success",
+          });
+          setMachineSummaries((prev) =>
+            (prev ?? []).filter((m) => m.id !== machine.id)
+          );
+        })
+        .catch((err: AxiosError<ApiMessage>) => {
+          openSnackbar({ message: err.message, severity: "error" });
+        });
+    });
   };
 
   return (
@@ -92,6 +115,11 @@ const Machines = () => {
             <Paper className="p-2">
               <MachineryForm onSubmit={onAddMachine}></MachineryForm>
             </Paper>
+          )}
+          {!loading && machineSummaries?.length == 0 && (
+            <Typography className="text-gray-500">
+              Dodajte svoju mehanizaciju!
+            </Typography>
           )}
           {loading && (
             <Box className="flex justify-center">
@@ -123,7 +151,10 @@ const Machines = () => {
             {selectedMachineLoading ? (
               <LinearProgress color="primary"></LinearProgress>
             ) : (
-              <MachineryDisplay machine={selectedMachine}></MachineryDisplay>
+              <MachineryDisplay
+                machine={selectedMachine}
+                onDelete={deleteMachine}
+              ></MachineryDisplay>
             )}
           </>
         )}

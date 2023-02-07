@@ -105,5 +105,23 @@ namespace webapi.Controllers
                 return Ok(new { msg = e.Message });
             } 
         }
+
+        [Authorize]
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteMachine(string id)
+        {
+            try
+            {
+                var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("Id"))?.Value;
+
+                await _machineryService.DeleteAsync(userId, id);
+
+                return Ok(new { msg = "Masina je obrisana"} );
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { msg = e.Message });
+            }
+        }
     }
 }

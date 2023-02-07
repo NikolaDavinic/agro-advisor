@@ -5,6 +5,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { AuthStateProvider } from "./contexts/auth.context";
+import { ConfirmProvider } from "material-ui-confirm";
 
 // --primary: #25316d;
 // --secondary: #fef5ac;
@@ -17,9 +18,11 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <AuthStateProvider>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <ConfirmProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </ConfirmProvider>
     </AuthStateProvider>
   </React.StrictMode>
 );

@@ -7,7 +7,8 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
-
+using System.Transactions;
+using MongoDB.Bson;
 
 namespace webapi.Services
 {
@@ -43,6 +44,21 @@ namespace webapi.Services
             _context.Users.FindOneAndUpdate(filter, update);
 
             await session.CommitTransactionAsync();
+        }
+
+        public async Task<bool> DeleteAsync(string userId, string machineId)
+        {
+            var userFilter = Builders<User>.Filter.Where(u => u.Id == userId);
+            var userUpdate = Builders<User>.Update.PullFilter(u => u.Machines, Builders<MachinerySummary>.Filter.Where(m => m.Id.Id == machineId));
+
+            var resultSummary = await _context.Users.UpdateOneAsync(userFilter, userUpdate);
+
+            var machineFilter = Builders<Machinery>.Filter.Eq((m) => m.Id, machineId) &
+                Builders<Machinery>.Filter.Eq((m) => m.User.Id, userId);
+
+            var resultMachine = await _context.Machines.FindOneAndDeleteAsync(machineFilter);
+
+            return resultSummary != null;
         }
 
         public async Task<Machinery?> GetMachineForUser(string userId, string machineId)

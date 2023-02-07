@@ -34,6 +34,7 @@ const MachineryForm = ({ onSubmit = () => {} }: MachineryFormProps) => {
       licensePlate: "",
       registeredUntil: moment().format("yyyy-MM-DD"),
       model: "",
+      productionYear: "2000",
     },
     reValidateMode: "onSubmit",
   });
