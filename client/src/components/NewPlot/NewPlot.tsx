@@ -14,6 +14,7 @@ import { SetStateAction, useEffect, useState } from "react";
 import { MapContainer, Marker, Polygon, TileLayer, useMapEvents } from "react-leaflet";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../contexts/auth.context";
+import { Harvest } from "../../models/harvest.model";
 import axios, { api } from "../../utils/api/axios";
 
 export interface Point {
@@ -21,13 +22,14 @@ export interface Point {
     y: number;
 }
 export interface PlotDTO {
-    // id?: string;
+    id?: string;
     area: number;
     plotNumber: number;
     municipality: string;
     userId?: string;
     currentCulture: string;
     borderPoints: Point[];
+    harvests?: Harvest[];
 }
 interface MapEventsProps {
     setPositions: React.Dispatch<SetStateAction<LatLngExpression[]>>;

@@ -120,10 +120,10 @@ const EditPlot: React.FC = ({ }: EditPlotProps) => {
             setShowSpinner(false);
             return;
         }
-        const data: Plot = {
+        const data: PlotDTO = {
             municipality: municipality,
             area: area,
-            borderPoints: plot?.borderPoints as Point[],
+            borderPoints: [],
             currentCulture: culture,
             plotNumber: plotNumber,
             userId: user?.id as string,
@@ -144,13 +144,26 @@ const EditPlot: React.FC = ({ }: EditPlotProps) => {
         //         coordinates: [Number(cords[0]), Number(cords[1])]
         //     };
         // })
+        data.borderPoints = borderPoints.map(p => {
+            var point: string = p.toString();
+            var latlngStr = point.toString();
+            var substr = latlngStr.substring(
+                latlngStr.indexOf("(") + 1,
+                latlngStr.lastIndexOf(")")
+            );
+            var cords = substr.split(",");
+            return {
+                x: Number(cords[0]), y: Number(cords[1])
+            };
+        })
         api
-            .post("/plot/edit", data)
+            .put("/plot/edit", data)
             .then((response) => {
-                // return navigate("/listing/" + response.data[0].id);
                 setSnackbarSeverity("success");
                 setSnackbarMessage("Plot updated successfully!");
                 setShowSnackbar(true);
+                //TODO:TESTING
+                setPlot(response.data)
             })
             .catch((error) => {
                 console.error(error);
@@ -170,7 +183,6 @@ const EditPlot: React.FC = ({ }: EditPlotProps) => {
                 margin="normal"
                 label="Municipality"
                 type="text"
-                // fullWidth
                 variant="standard"
                 onChange={(e) => setMunicipality(e.target.value)}
                 value={municipality}
@@ -181,7 +193,6 @@ const EditPlot: React.FC = ({ }: EditPlotProps) => {
                 label="Plot Number"
                 type="number"
                 InputProps={{ inputProps: { min: 1 } }}
-                // fullWidth
                 variant="standard"
                 onChange={(e) => setPlotNumber(Number(e.target.value))}
                 value={plotNumber}
@@ -192,7 +203,6 @@ const EditPlot: React.FC = ({ }: EditPlotProps) => {
                 label={<p>Area (m{<sup>2</sup>})</p>}
                 type="number"
                 InputProps={{ inputProps: { min: 1 } }}
-                // fullWidth
                 variant="standard"
                 onChange={(e) => setArea(Number(e.target.value))}
                 value={area}
@@ -201,7 +211,6 @@ const EditPlot: React.FC = ({ }: EditPlotProps) => {
                 margin="normal"
                 label="Current Culture"
                 type="text"
-                // fullWidth
                 variant="standard"
                 onChange={(e) => setCulture(e.target.value)}
                 value={culture}
@@ -230,10 +239,10 @@ const EditPlot: React.FC = ({ }: EditPlotProps) => {
             </div>
             <div className="w-full flex flex-row mb-5 pb-5">
                 <Button fullWidth onClick={() => onCancel()}>
-                    Cancel
+                    DISCARD
                 </Button>
                 <Button fullWidth variant="contained" onClick={() => onSubmit()}>
-                    Add
+                    SAVE
                 </Button>
             </div>
             <Snackbar
