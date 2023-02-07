@@ -7,7 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BookStoreApi.Services;
+namespace webapi.Services;
 
 public class UserService
 {

@@ -1,5 +1,4 @@
-﻿using BookStoreApi.Services;
-using MongoDB.Driver;
+﻿using MongoDB.Driver;
 using MongoDB.Driver.GeoJsonObjectModel;
 using System.Data.Common;
 using System.Threading;

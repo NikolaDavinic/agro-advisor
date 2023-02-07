@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using BookStoreApi.Services;
 using MongoDB.Driver;
 using webapi.Models;
 using Microsoft.IdentityModel.Tokens;
@@ -61,14 +60,15 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.AddSingleton<IMongoClient>((settings) =>
 {
-    return new MongoClient(builder.Configuration.GetConnectionString("mongodb"));
+    return new MongoClient(builder.Configuration.GetConnectionString("Mongodb"));
 });
 builder.Services.AddSingleton<IDbContext, DbContext>();
-builder.Services.AddSingleton<UserService>();
-builder.Services.AddSingleton<CategoryService>();
 builder.Services.AddSingleton<TransactionService>();
 builder.Services.AddSingleton<MachineryService>();
+builder.Services.AddSingleton<CategoryService>();
+builder.Services.AddSingleton<UserService>();
 builder.Services.AddSingleton<PlotService>();
+builder.Services.AddSingleton<FileService>();
 
 var DevelopmentOrigins = "CORSDevelopment";
 var ProductionOrigins = "CORSProduction";

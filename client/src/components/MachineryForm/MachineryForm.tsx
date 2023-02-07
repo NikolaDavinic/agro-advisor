@@ -41,7 +41,7 @@ const MachineryForm = ({ onSubmit = () => {} }: MachineryFormProps) => {
   const formSubmit = (data: FormFields) => {
     onSubmit({
       licensePlate: data.licensePlate,
-      machineType: data.machineType,
+      type: data.machineType,
       productionYear: data.productionYear,
       registeredUntil: new Date(data.registeredUntil).toISOString(),
       model: data.model,

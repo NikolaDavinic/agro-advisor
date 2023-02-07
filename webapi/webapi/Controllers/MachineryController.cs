@@ -35,7 +35,9 @@ namespace webapi.Controllers
                     return Unauthorized("Greska pri autentifikaciji");
                 }
 
-                return Ok(await _machineryService.GetUserMachineSummaries(userId));
+                var machines = await _machineryService.GetUserMachineSummaries(userId);
+
+                return Ok(machines.Select((m) => new { Id = m.Id.Id.AsString, m.Model, m.RegisteredUntil, Type = m.Type.ToString() }));
             }
             catch (Exception e)
             {

@@ -1,0 +1,48 @@
+﻿using webapi.Models;
+using Microsoft.WindowsAzure.Storage;
+
+namespace webapi.Services;
+
+public class FileService
+{
+    private readonly string _ContainerName = "agro-container";
+    private readonly CloudStorageAccount _cloudStorageAccount;
+    private readonly ILogger<FileService> _logger;
+    private readonly IConfiguration _config;
+    public FileService(
+        IConfiguration config,
+        ILogger<FileService> logger)
+    {
+        _config = config;
+        _logger = logger;
+        _cloudStorageAccount = CloudStorageAccount.Parse(_config["ConnectionStrings:BlobStorage"]);
+    }
+
+    public async Task<string> SaveFile(IFormFile file)
+    {
+        string newFileName = new PasswordGenerator.Password(
+                includeLowercase: true,
+                includeUppercase: true,
+                passwordLength: 20,
+                includeSpecial: false,
+                includeNumeric: true).Next() + DateTime.Now.ToString("yyyyMMddHHmmss");
+
+        var blobClient = _cloudStorageAccount.CreateCloudBlobClient();
+        var blobContainer = blobClient.GetContainerReference(containerName: _ContainerName);
+
+        if (await blobContainer.CreateIfNotExistsAsync())
+        {
+            await blobContainer.SetPermissionsAsync(new Microsoft.WindowsAzure.Storage.Blob.BlobContainerPermissions
+            {
+                PublicAccess = Microsoft.WindowsAzure.Storage.Blob.BlobContainerPublicAccessType.Container
+            });
+        }
+
+        var blobBlock = blobContainer.GetBlockBlobReference(newFileName);
+        blobBlock.Properties.ContentType = file.ContentType;
+
+        await blobBlock.UploadFromStreamAsync(file.OpenReadStream());
+
+        return $"{blobClient.BaseUri.AbsoluteUri}{blobContainer.Name}/{newFileName}";
+    }
+}

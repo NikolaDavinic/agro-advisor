@@ -30,7 +30,7 @@ const Machines = () => {
         openSnackbar({ message: err.message, severity: "error" });
       });
   };
-
+  console.log(machineSummaries);
   return (
     <Box>
       <Stack className="p-2 gap-2">
@@ -48,9 +48,15 @@ const Machines = () => {
             <MachineryForm onSubmit={onAddMachine}></MachineryForm>
           </Paper>
         )}
-        {/* <Box>{machineSummaries?.map((m) => {
-          <MachineryCard machine={m}></MachineryCard>
-        })}</Box> */}
+        <Box>
+          {machineSummaries?.map((m) => (
+            <MachineryCard
+              machine={m}
+              key={m.id}
+              className="cursor-pointer"
+            ></MachineryCard>
+          ))}
+        </Box>
       </Stack>
     </Box>
   );

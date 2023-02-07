@@ -8,7 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
 
-namespace BookStoreApi.Services;
+namespace webapi.Services;
 
 public class CategoryService
 {
