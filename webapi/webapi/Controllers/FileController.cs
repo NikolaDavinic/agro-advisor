@@ -16,11 +16,19 @@ namespace e_citaonica_api.Controllers
         }
 
         [HttpPost("upload")]
-        public async Task<IActionResult> UploadFile(IFormFile file)
+        public async Task<ActionResult> UploadFile(IFormFile file)
         {
             string path = await _fileService.SaveFile(file);
 
             return Ok(new { path });
+        }
+
+        [HttpPost("upload-multiple")]
+        public async Task<ActionResult> UploadFiles(IFormFileCollection files)
+        {
+            List<string> paths = await _fileService.SaveFiles(files.ToList());
+
+            return Ok(new { paths = paths.ToList() });
         }
     }
 }

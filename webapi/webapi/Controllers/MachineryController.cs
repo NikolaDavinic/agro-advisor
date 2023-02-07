@@ -46,6 +46,24 @@ namespace webapi.Controllers
         }
 
         [Authorize]
+        [HttpGet("{id}")]
+        public async Task<ActionResult> GetMachineById(string id)
+        {
+            try
+            {
+                var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("Id"))?.Value;
+
+                var machine = await _machineryService.GetMachineForUser(userId, id);
+
+                return Ok(machine);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { msg = e.Message });
+            }
+        }
+
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult> CreateMachine([FromBody] AddMachineDTO newMachine)
         {
@@ -65,7 +83,8 @@ namespace webapi.Controllers
                     RegisteredUntil = newMachine.RegisteredUntil,
                     Model = newMachine.Model,
                     Type = newMachine.Type,
-                    UserId = new MongoDBRef("User", userId)
+                    Images = newMachine.Images,
+                    User = new MongoDBRef("Users", userId)
                 };
 
                 await _machineryService.CreateAsync(userId, machine);

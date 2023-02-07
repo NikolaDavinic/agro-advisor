@@ -1,20 +1,26 @@
-import { Button } from "@mui/material";
-import React, { useRef } from "react";
+import { Box, Button, Chip, Stack } from "@mui/material";
+import React, { useRef, useState } from "react";
 import MatIcon from "../MatIcon/MatIcon";
 
 interface UploadProps {
   text: string;
-  onChange: (file: File) => void;
+  value: File[];
+  onChange: (file: File[]) => void;
 }
 
-const Upload = ({ text, onChange }: UploadProps) => {
+const Upload = ({ text, onChange: setValue, value }: UploadProps) => {
   const input = useRef(null);
 
-  const fileSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const filesSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files;
 
     if (file) {
-      onChange(file[0]);
+      setValue(
+        [...value, ...Array.from(file)].filter(
+          (val, index, self) =>
+            index === self.findIndex((t) => t.name === val.name)
+        )
+      );
     }
   };
 
@@ -24,23 +30,36 @@ const Upload = ({ text, onChange }: UploadProps) => {
   };
 
   return (
-    <div style={{ width: "100%" }}>
-      <Button
-        variant="outlined"
-        onClick={handleClick}
-        style={{ width: "100%" }}
-      >
-        <MatIcon color="primary">attach_file</MatIcon>
-        {text}
-      </Button>
+    <Stack style={{ width: "100%" }} className="gap-1">
+      <Box className="flex gap-1 flex-wrap">
+        {value.map((v) => (
+          <Chip
+            onDelete={() => setValue(value.filter((f) => f.name !== v.name))}
+            label={v.name}
+            key={v.name}
+            color="primary"
+          />
+        ))}
+      </Box>
+      <Box>
+        <Button
+          variant="outlined"
+          onClick={handleClick}
+          style={{ width: "100%" }}
+        >
+          <MatIcon color="primary">attach_file</MatIcon>
+          {text}
+        </Button>
+      </Box>
       <input
         ref={input}
         id="file"
+        multiple={true}
         type="file"
         style={{ display: "none" }}
-        onChange={(e) => fileSelected(e)}
+        onChange={(e) => filesSelected(e)}
       />
-    </div>
+    </Stack>
   );
 };
 

@@ -16,6 +16,8 @@ export function useApi<T>(path: string, initialValue?: T) {
     setLoading(true);
 
     if (path.length === 0) {
+      setResult(null);
+      setLoading(false);
       return;
     }
 

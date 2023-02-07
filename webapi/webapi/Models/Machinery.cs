@@ -20,8 +20,9 @@ namespace webapi.Models
         public List<string> Images { get; set; } = new();
         public string? LicensePlate { get; set; }
         public DateTime? RegisteredUntil { get; set; }
+        [JsonIgnore]
         [BsonRequired]
-        public MongoDBRef UserId { get; set; } = null!;
+        public MongoDBRef User { get; set; } = null!;
     }
 
     public enum MachineType

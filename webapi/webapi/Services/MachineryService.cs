@@ -45,6 +45,15 @@ namespace webapi.Services
             await session.CommitTransactionAsync();
         }
 
+        public async Task<Machinery?> GetMachineForUser(string userId, string machineId)
+        {
+            var machine = await _context.Machines.AsQueryable()
+                .Where((m) => m.Id == machineId && m.User.Id == userId)
+                .SingleAsync();
+
+            return machine;
+        }
+
         public async Task<List<MachinerySummary>> GetUserMachineSummaries(string userId)
         {
             var result = await _context.Users.AsQueryable()

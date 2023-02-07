@@ -6,11 +6,12 @@ import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import moment from "moment";
 import { Machinery } from "../../models/machinery.model";
 import MatIcon from "../MatIcon/MatIcon";
+import Upload from "../Upload/Upload";
 
 interface FormFields {
-  machineType: number;
+  type: number;
   productionYear: string;
-  images: string[];
+  images: File[];
   licensePlate: string;
   registeredUntil: string;
   model: string;
@@ -28,8 +29,7 @@ const MachineryForm = ({ onSubmit = () => {} }: MachineryFormProps) => {
     formState: { errors },
   } = useForm<FormFields>({
     defaultValues: {
-      machineType: 0,
-      productionYear: "1990",
+      type: 0,
       images: [],
       licensePlate: "",
       registeredUntil: moment().format("yyyy-MM-DD"),
@@ -39,12 +39,14 @@ const MachineryForm = ({ onSubmit = () => {} }: MachineryFormProps) => {
   });
 
   const formSubmit = (data: FormFields) => {
+    console.log(data);
     onSubmit({
       licensePlate: data.licensePlate,
-      type: data.machineType,
+      type: data.type,
       productionYear: data.productionYear,
       registeredUntil: new Date(data.registeredUntil).toISOString(),
       model: data.model,
+      images: data.images,
     });
   };
 
@@ -54,7 +56,12 @@ const MachineryForm = ({ onSubmit = () => {} }: MachineryFormProps) => {
       onSubmit={handleSubmit(formSubmit)}
       className="gap-2"
     >
-      <Select {...register("machineType")} defaultValue={0} label="Tip mašine">
+      <Select
+        {...register("type", { required: true })}
+        defaultValue={0}
+        size="small"
+        label="Tip mašine"
+      >
         <MenuItem value={0}>Kombi</MenuItem>
         <MenuItem value={1}>Traktor</MenuItem>
         <MenuItem value={2}>Kamion</MenuItem>
@@ -63,9 +70,10 @@ const MachineryForm = ({ onSubmit = () => {} }: MachineryFormProps) => {
         <MenuItem value={5}>Ostalo</MenuItem>
       </Select>
       <TextField
+        size="small"
         label="Model"
         placeholder="Model mašine"
-        {...register("model")}
+        {...register("model", { required: true })}
       ></TextField>
       <Controller
         control={control}
@@ -78,20 +86,31 @@ const MachineryForm = ({ onSubmit = () => {} }: MachineryFormProps) => {
               openTo="year"
               onChange={(val) => onChange(val?.get("year").toString())}
               value={moment(value)}
-              renderInput={(props) => <TextField {...props}></TextField>}
+              renderInput={(props) => (
+                <TextField size="small" {...props}></TextField>
+              )}
             ></DatePicker>
           </LocalizationProvider>
         )}
       />
       <TextField
+        size="small"
         label="Registraciona oznaka"
         placeholder="XX-NNNN-XX"
       ></TextField>
       <TextField
+        size="small"
         label="Registrovan do"
         type="date"
         {...register("registeredUntil")}
       ></TextField>
+      <Controller
+        render={({ field: { onChange, value } }) => (
+          <Upload text="Otpremi" value={value} onChange={onChange}></Upload>
+        )}
+        control={control}
+        name="images"
+      ></Controller>
       <Box className="flex justify-end">
         <Button
           color="primary"

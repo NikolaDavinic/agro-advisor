@@ -1,13 +1,12 @@
-import { Box, ListItem, Paper, Stack, Typography } from "@mui/material";
+import { Box, Paper, Typography } from "@mui/material";
 import moment from "moment";
 import { Machinery } from "../../models/machinery.model";
 
-export interface MachineryCardProps {
+interface MachineryDisplayProps {
   machine: Machinery;
-  [key: string]: any;
 }
 
-const MachineryCard = ({ machine, ...props }: MachineryCardProps) => {
+const MachineryDisplay = ({ machine }: MachineryDisplayProps) => {
   let color: string = "green";
 
   const dateDiff = moment(machine.registeredUntil).diff(moment(), "days");
@@ -19,11 +18,7 @@ const MachineryCard = ({ machine, ...props }: MachineryCardProps) => {
   }
 
   return (
-    <Paper
-      elevation={4}
-      {...props}
-      className={`p-2 flex justify-between ${props.className}`}
-    >
+    <Paper elevation={4} className={`p-2 flex justify-between`}>
       <Box>
         <Typography className="text-gray-400">{machine.type}</Typography>
         <Typography fontWeight="bold">{machine.model}</Typography>
@@ -45,7 +40,7 @@ const MachineryCard = ({ machine, ...props }: MachineryCardProps) => {
               "Istekla registracija"
             ) : (
               <span>
-                Registracija ističe za{" "}
+                Registracija ističe za
                 <span style={{ color: color }}>{dateDiff}</span> dana
               </span>
             )}
@@ -56,4 +51,4 @@ const MachineryCard = ({ machine, ...props }: MachineryCardProps) => {
   );
 };
 
-export default MachineryCard;
+export default MachineryDisplay;

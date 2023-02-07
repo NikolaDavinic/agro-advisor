@@ -25,7 +25,7 @@ public class FileService
                 includeUppercase: true,
                 passwordLength: 20,
                 includeSpecial: false,
-                includeNumeric: true).Next() + DateTime.Now.ToString("yyyyMMddHHmmss");
+                includeNumeric: true).Next() + "." + file.Name;
 
         var blobClient = _cloudStorageAccount.CreateCloudBlobClient();
         var blobContainer = blobClient.GetContainerReference(containerName: _ContainerName);
@@ -44,5 +44,47 @@ public class FileService
         await blobBlock.UploadFromStreamAsync(file.OpenReadStream());
 
         return $"{blobClient.BaseUri.AbsoluteUri}{blobContainer.Name}/{newFileName}";
+    }
+
+    public async Task<List<string>> SaveFiles(List<IFormFile> files)
+    {
+        var blobClient = _cloudStorageAccount.CreateCloudBlobClient();
+        var blobContainer = blobClient.GetContainerReference(containerName: _ContainerName);
+
+        if (await blobContainer.CreateIfNotExistsAsync())
+        {
+            await blobContainer.SetPermissionsAsync(new Microsoft.WindowsAzure.Storage.Blob.BlobContainerPermissions
+            {
+                PublicAccess = Microsoft.WindowsAzure.Storage.Blob.BlobContainerPublicAccessType.Container
+            });
+        }
+
+        List<string> paths = new();
+
+        foreach(var file in files)
+        {
+            try
+            {
+                string newFileName = new PasswordGenerator.Password(
+                    includeLowercase: true,
+                    includeUppercase: true,
+                    passwordLength: 20,
+                    includeSpecial: false,
+                    includeNumeric: true).Next() + "." + file.FileName;
+
+                var blobBlock = blobContainer.GetBlockBlobReference(newFileName);
+                blobBlock.Properties.ContentType = file.ContentType;
+
+                await blobBlock.UploadFromStreamAsync(file.OpenReadStream());
+
+                paths.Add($"{blobClient.BaseUri.AbsoluteUri}{blobContainer.Name}/{newFileName}");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+            }
+        }
+
+        return paths;
     }
 }
