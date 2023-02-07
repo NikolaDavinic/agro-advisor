@@ -1,32 +1,39 @@
 import {
+  Autocomplete,
   Box,
   Button,
   CircularProgress,
   Icon,
+  IconButton,
   LinearProgress,
+  MenuItem,
+  Paper,
+  Select,
   Stack,
+  TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { useState, useEffect } from "react";
 import TransactionCard from "../TransactionCard/TransactionCard";
-import { TransactionForm } from "..";
+import { MatIcon, TransactionForm } from "..";
 import { Transacation } from "../../models/transaction.model";
 import { api } from "../../utils/api/axios";
 import { useSnackbar } from "../../contexts/snackbar.context";
 import axios, { AxiosError } from "axios";
 import { ApiMessage } from "../../dtos/api-message.dto";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { Category } from "../../models/category.model";
+import { useApi } from "../../hooks/api.hook";
 
 interface TransactionListProps {
   title?: string;
 }
 
 interface TransactionsFilter {
-  skip?: number;
-  take?: number;
   before?: string;
-  categoryId?: string;
-  expense?: boolean;
+  categoryIds?: string;
+  type?: "priliv" | "rashod" | string;
 }
 
 const TransactionList = ({ title }: TransactionListProps) => {
@@ -36,7 +43,22 @@ const TransactionList = ({ title }: TransactionListProps) => {
   const [editingTransaction, setEditingTransaction] =
     useState<Transacation | null>();
 
+  const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
+  const [filterDate, setFilterDate] = useState<string>(
+    new Date().toISOString().split("T")[0]
+  );
+  const [filterType, setFilterType] = useState<
+    "priliv" | "rashod" | "prilivrashod" | string
+  >("prilivrashod");
+  const [searchFilter, setSearchFilter] = useState<TransactionsFilter>();
+
   const { openSnackbar } = useSnackbar();
+
+  const {
+    result: categories,
+    loading: loadingCategories,
+    setResult,
+  } = useApi<Category[]>("/category");
 
   const fetchMore = () => {
     api
@@ -47,9 +69,8 @@ const TransactionList = ({ title }: TransactionListProps) => {
         },
       })
       .then(({ data }) => {
-        if (data.length === 0) {
+        if (data.length < 5) {
           setHasMore(false);
-          return;
         }
         setTransactions((prev) => [...prev, ...data]);
       })
@@ -64,19 +85,21 @@ const TransactionList = ({ title }: TransactionListProps) => {
         params: {
           skip: 0,
           take: 5,
+          before: searchFilter?.before,
+          categoryIds: searchFilter?.categoryIds,
+          type: searchFilter?.type,
         },
       })
       .then(({ data }) => {
-        if (data.length === 0) {
+        if (data.length < 5) {
           setHasMore(false);
-          return;
         }
         setTransactions((prev) => [...data]);
       })
       .catch(() => {
         setHasMore(false);
       });
-  }, []);
+  }, [searchFilter]);
 
   const onSubmitTransaction = (transaction: Transacation) => {
     if (editingTransaction) {
@@ -128,7 +151,7 @@ const TransactionList = ({ title }: TransactionListProps) => {
 
   const deleteTransaction = (transaction: Transacation) => {
     api
-      .delete(`/transaction/${transaction.id}`)
+      .delete<ApiMessage>(`/transaction/${transaction.id}`)
       .then((res) => {
         setTransactions((prev) => prev.filter((t) => t.id !== transaction.id));
         openSnackbar({ message: "Transakcija uspesno obrisana" });
@@ -138,6 +161,14 @@ const TransactionList = ({ title }: TransactionListProps) => {
           message: "Doslo je do greske pri brisanju transakcije",
         });
       });
+  };
+
+  const applyFilter = () => {
+    setSearchFilter({
+      before: new Date(filterDate).toISOString(),
+      type: filterType,
+      categoryIds: selectedCategories.map((c) => c.id ?? "").join(","),
+    });
   };
 
   return (
@@ -173,6 +204,73 @@ const TransactionList = ({ title }: TransactionListProps) => {
           }
         ></TransactionForm>
       )}
+      <Paper
+        className="flex gap-2 items-center flex-wrap p-2"
+        sx={{ backgroundColor: "var(--secondary)" }}
+      >
+        <Select
+          value={filterType}
+          onChange={(e) => setFilterType(e.target.value)}
+          size="small"
+          color="secondary"
+          sx={{ background: "white" }}
+        >
+          <MenuItem value="prilivrashod">Prilivi i rashodi</MenuItem>
+          <MenuItem value="priliv">Prilivi</MenuItem>
+          <MenuItem value="rashod">Rashodi</MenuItem>
+        </Select>
+        <Autocomplete
+          sx={{ background: "white" }}
+          className="flex-grow"
+          color="secondary"
+          size="small"
+          limitTags={3}
+          disablePortal
+          getOptionLabel={(o) => o?.name ?? ""}
+          options={categories ?? []}
+          filterSelectedOptions
+          isOptionEqualToValue={(op1, val) => op1.id === val.id}
+          loading={loadingCategories}
+          onChange={(e, val) => setSelectedCategories(val)}
+          value={selectedCategories}
+          multiple
+          renderOption={(props, option) => (
+            <li {...props}>
+              <Box className="flex w-full items-center justify-between">
+                {option.name}
+                {option.userId && (
+                  <Tooltip title="Kategorija koju ste vi dodali" arrow>
+                    <span>
+                      <MatIcon color="primary">person</MatIcon>
+                    </span>
+                  </Tooltip>
+                )}
+              </Box>
+            </li>
+          )}
+          loadingText="Ucitavanje kategorija..."
+          renderInput={(params) => <TextField {...params} label="Kategorija" />}
+        />
+        <TextField
+          sx={{ background: "white" }}
+          type="date"
+          label="Starije od"
+          size="small"
+          value={filterDate}
+          onChange={(e) =>
+            setFilterDate(new Date(e.target.value).toISOString().split("T")[0])
+          }
+        ></TextField>
+        <Button
+          color="primary"
+          startIcon={<MatIcon>search</MatIcon>}
+          variant="contained"
+          sx={{ height: "100%" }}
+          onClick={applyFilter}
+        >
+          Primeni
+        </Button>
+      </Paper>
       <Box
         id="scrollable-box"
         sx={{

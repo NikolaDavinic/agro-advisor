@@ -1,0 +1,776 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+    xmlns:cc="http://creativecommons.org/ns#"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:svg="http://www.w3.org/2000/svg"
+    xmlns:ns1="http://sozi.baierouge.fr"
+    id="svg2"
+    sodipodi:docname="tractor.svg"
+    viewBox="0 0 522 522"
+    sodipodi:version="0.32"
+    version="1.0"
+    inkscape:output_extension="org.inkscape.output.svg.inkscape"
+    inkscape:version="0.46"
+  >
+  <defs
+      id="defs4"
+    >
+    <linearGradient
+        id="linearGradient3224"
+        inkscape:collect="always"
+      >
+      <stop
+          id="stop3226"
+          style="stop-color:#18181a"
+          offset="0"
+      />
+      <stop
+          id="stop3228"
+          style="stop-color:#18181a;stop-opacity:0"
+          offset="1"
+      />
+    </linearGradient
+    >
+    <linearGradient
+        id="linearGradient3217"
+        inkscape:collect="always"
+      >
+      <stop
+          id="stop3219"
+          style="stop-color:#000000"
+          offset="0"
+      />
+      <stop
+          id="stop3221"
+          style="stop-color:#000000;stop-opacity:0"
+          offset="1"
+      />
+    </linearGradient
+    >
+    <linearGradient
+        id="linearGradient3201"
+      >
+      <stop
+          id="stop3203"
+          style="stop-color:#373737"
+          offset="0"
+      />
+      <stop
+          id="stop3205"
+          style="stop-color:#000000;stop-opacity:0"
+          offset="1"
+      />
+    </linearGradient
+    >
+    <radialGradient
+        id="radialGradient3182"
+        gradientUnits="userSpaceOnUse"
+        cy="468.34"
+        cx="182.23"
+        gradientTransform="matrix(.98756 -2.3941 1.229 .50696 -573.31 657.82)"
+        r="120.47"
+        inkscape:collect="always"
+      >
+      <stop
+          id="stop3178"
+          style="stop-color:#000000"
+          offset="0"
+      />
+      <stop
+          id="stop3180"
+          style="stop-color:#1b140f"
+          offset="1"
+      />
+    </radialGradient
+    >
+    <linearGradient
+        id="linearGradient3207"
+        y2="581.96"
+        xlink:href="#linearGradient3201"
+        gradientUnits="userSpaceOnUse"
+        x2="61.156"
+        y1="368.45"
+        x1="199.72"
+        inkscape:collect="always"
+    />
+    <linearGradient
+        id="linearGradient3223"
+        y2="569.56"
+        xlink:href="#linearGradient3217"
+        gradientUnits="userSpaceOnUse"
+        x2="65.72"
+        y1="-37.019"
+        x1="552.73"
+        inkscape:collect="always"
+    />
+    <linearGradient
+        id="linearGradient3227"
+        y2="581.96"
+        xlink:href="#linearGradient3201"
+        gradientUnits="userSpaceOnUse"
+        x2="61.156"
+        y1="85.929"
+        x1="543.66"
+        inkscape:collect="always"
+    />
+    <linearGradient
+        id="linearGradient3237"
+        y2="569.56"
+        xlink:href="#linearGradient3217"
+        gradientUnits="userSpaceOnUse"
+        x2="65.72"
+        y1="283.33"
+        x1="386.53"
+        inkscape:collect="always"
+    />
+    <linearGradient
+        id="linearGradient3247"
+        y2="413.8"
+        xlink:href="#linearGradient3217"
+        gradientUnits="userSpaceOnUse"
+        x2="224.03"
+        y1="617.82"
+        x1="-14.35"
+        inkscape:collect="always"
+    />
+    <linearGradient
+        id="linearGradient3273"
+        y2="491.18"
+        xlink:href="#linearGradient3201"
+        gradientUnits="userSpaceOnUse"
+        x2="243.71"
+        gradientTransform="translate(.14928 -.038994)"
+        y1="206.4"
+        x1="344.55"
+        inkscape:collect="always"
+    />
+    <linearGradient
+        id="linearGradient3301"
+        y2="397.39"
+        gradientUnits="userSpaceOnUse"
+        x2="178.65"
+        y1="225.52"
+        x1="240.32"
+        inkscape:collect="always"
+      >
+      <stop
+          id="stop3297"
+          style="stop-color:#373737"
+          offset="0"
+      />
+      <stop
+          id="stop3299"
+          style="stop-color:#000000;stop-opacity:0"
+          offset="1"
+      />
+    </linearGradient
+    >
+    <linearGradient
+        id="linearGradient3219"
+        y2="293.95"
+        gradientUnits="userSpaceOnUse"
+        x2="149.7"
+        y1="386.27"
+        x1="226.92"
+        inkscape:collect="always"
+      >
+      <stop
+          id="stop3215"
+          style="stop-color:#1a1a1a"
+          offset="0"
+      />
+      <stop
+          id="stop3217"
+          style="stop-color:#1a1a1a;stop-opacity:0"
+          offset="1"
+      />
+    </linearGradient
+    >
+    <linearGradient
+        id="linearGradient3230"
+        y2="251.35"
+        xlink:href="#linearGradient3224"
+        gradientUnits="userSpaceOnUse"
+        x2="161.47"
+        y1="259.73"
+        x1="163.39"
+        inkscape:collect="always"
+    />
+    <linearGradient
+        id="linearGradient3234"
+        y2="251.35"
+        xlink:href="#linearGradient3224"
+        gradientUnits="userSpaceOnUse"
+        x2="161.47"
+        gradientTransform="matrix(.65184 0 0 1.0048 44.168 15.502)"
+        y1="259.73"
+        x1="163.39"
+        inkscape:collect="always"
+    />
+    <linearGradient
+        id="linearGradient2459"
+        y2="342.55"
+        gradientUnits="userSpaceOnUse"
+        x2="353.51"
+        y1="342.7"
+        x1="383.59"
+        inkscape:collect="always"
+      >
+      <stop
+          id="stop2455"
+          style="stop-color:#1a1c1a"
+          offset="0"
+      />
+      <stop
+          id="stop2457"
+          style="stop-color:#c3c6c6"
+          offset="1"
+      />
+    </linearGradient
+    >
+  </defs
+  >
+  <sodipodi:namedview
+      id="base"
+      bordercolor="#666666"
+      inkscape:pageshadow="2"
+      guidetolerance="10"
+      pagecolor="#ffffff"
+      gridtolerance="10000"
+      inkscape:window-height="675"
+      inkscape:zoom="0.88505747"
+      objecttolerance="10"
+      inkscape:window-y="-9"
+      showgrid="false"
+      borderopacity="1.0"
+      inkscape:current-layer="layer1"
+      inkscape:cx="261"
+      inkscape:cy="261"
+      showguides="true"
+      inkscape:guide-bbox="true"
+      inkscape:window-x="397"
+      inkscape:window-width="941"
+      inkscape:pageopacity="0.0"
+      inkscape:document-units="px"
+  />
+  <g
+      id="layer3"
+      inkscape:label="Back tyre"
+      inkscape:groupmode="layer"
+      transform="translate(-68.571 -233.5)"
+    >
+    <path
+        id="path2396"
+        sodipodi:rx="90"
+        sodipodi:ry="87.14286"
+        style="fill:#000000"
+        sodipodi:type="arc"
+        d="m562.86 505.22a90 87.143 0 1 1 -180 0 90 87.143 0 1 1 180 0z"
+        inkscape:export-ydpi="90"
+        inkscape:export-filename="C:\Documents and Settings\Yusdi\Desktop\Personal\blog\inkscape tutorial\result_tractor.png"
+        transform="matrix(.89597 0 0 .91819 5.7619 24.852)"
+        sodipodi:cy="505.21933"
+        sodipodi:cx="472.85715"
+        inkscape:export-xdpi="90"
+    />
+  </g
+  >
+  <g
+      id="layer2"
+      inkscape:label="Body"
+      inkscape:groupmode="layer"
+      transform="translate(-68.571 -233.5)"
+    >
+    <path
+        id="path3275"
+        style="fill-rule:evenodd;fill:#666666"
+        d="m188.99 282.9l64.93 1.93 1.28 12.21 54.64-0.64 2.57 119.56h12.86l-4.5-124.7 25.07-16.72v-20.57l-158.78 1.93 1.93 27z"
+        inkscape:export-ydpi="90"
+        sodipodi:nodetypes="ccccccccccc"
+        inkscape:export-filename="C:\Documents and Settings\Yusdi\Desktop\Personal\blog\inkscape tutorial\result_tractor.png"
+        inkscape:export-xdpi="90"
+    />
+    <path
+        id="path3236"
+        style="fill-rule:evenodd;fill:#434345"
+        d="m199.31 347.45c1.72-4.32 14.67-21.57 14.67-21.57l3.02-5.18-5.61-25.02 3.45-8.2 5.18-4.31 20.7-3.89 6.04 6.48v10.35l2.59 9.92-3.88 1.73v4.74l-0.43 4.75-4.75 3.45-2.59 1.72 0.87 12.52 6.9 12.94 10.78 6.47 16.4 10.78 4.31 4.32v10.35l12.51-24.59 3.89-3.45 3.88 1.29 1.29 3.46-4.74 10.35-0.43 9.06 2.58 2.16 5.61 4.74 9.92 17.26 9.5 0.43 10.35-15.96 9.49 6.04-7.33 12.94 2.58 1.29 17.26-11.21 3.45 48.31-59.1-0.43-47.02-73.77-52.2-13.8 0.86-6.47z"
+        inkscape:export-ydpi="90"
+        inkscape:export-filename="C:\Documents and Settings\Yusdi\Desktop\Personal\blog\inkscape tutorial\result_tractor.png"
+        inkscape:export-xdpi="90"
+    />
+    <path
+        id="path2390"
+        style="fill-rule:evenodd;fill:#008000"
+        d="m221.51 490.58l76.33 29.59 160.5 0.74 47.35-71.41s12.08-41.54-0.66-66.8c-4.35-8.63-11.91-11.35-21.51-12.5-22.01-2.66-80.06-6.94-130.27-6.69 1.09 17.41 4.33 51.38 4.41 77.87-16.26 0.77-43.05 1.23-49.86 0.9-11.71-23.74-36.17-71.23-51.3-83.26-22.55-3.22-67.78-8.5-89.95-7.74-20.3 0.7-55.9-4.57-66.8 11.09-5.976 8.58-0.866 15.1-5.136 24.65-4.195 9.38-22.826 25.54-22.826 25.54l39.862 21.43 109.86 56.59z"
+        inkscape:export-ydpi="90"
+        sodipodi:nodetypes="ccccssccccsscccc"
+        inkscape:export-filename="C:\Documents and Settings\Yusdi\Desktop\Personal\blog\inkscape tutorial\result_tractor.png"
+        inkscape:export-xdpi="90"
+    />
+    <path
+        id="path3312"
+        style="fill-rule:evenodd;stroke:#000000;stroke-width:1px;fill:#ffff00"
+        d="m357.21 384.99l149.73 3.56s1.13 1.98 1.76 6.94c-6.78 0-151.09-0.94-151.09-0.94l-0.4-9.56z"
+        inkscape:export-ydpi="90"
+        sodipodi:nodetypes="ccccc"
+        inkscape:export-filename="C:\Documents and Settings\Yusdi\Desktop\Personal\blog\inkscape tutorial\result_tractor.png"
+        inkscape:export-xdpi="90"
+    />
+    <path
+        id="path2400"
+        style="fill-rule:evenodd;fill:#1a1a1a"
+        d="m290.12 235.91c-41.86-0.08-85.7 1.61-98.4 5.21-8.46 2.41-11.68 17.17-11.68 17.17l-8.66 94.25c31.25 2.49 81.67 5.26 86.96 9.62 18.85 15.51 50.04 83.34 50.04 83.34h53.4l-8.9-173.44 9.87-7.68 2.94-10.8s-13.2-13.07-18.76-13.5c-16.54-1.27-31.69-4.13-56.81-4.17zm-96.46 28l57.78 0.65s0.52 8.13 1.44 92.63c-5.79-2.5-34.52-5.1-62.82-7.6l3.6-85.68zm149.72 0.43l10.71 175.91-47.31 0.06s-22.5-52.98-47.19-79.75l-1.71-95.62 85.5-0.6z"
+        inkscape:export-ydpi="90"
+        sodipodi:nodetypes="csccscccccscccccccccccc"
+        inkscape:export-filename="C:\Documents and Settings\Yusdi\Desktop\Personal\blog\inkscape tutorial\result_tractor.png"
+        inkscape:export-xdpi="90"
+    />
+    <path
+        id="path2404"
+        style="fill-rule:evenodd;fill:url(#radialGradient3182)"
+        d="m69.69 415.2c1.05-4.82 8.424-13.02 16.082-21.45 7.659-8.42 30.058-32.46 52.838-36.76 30.85-5.82 80.5 1.04 105.69 3.83 4.04 0.45 9.91 1.2 13.02 3.83 14.77 12.5 39.04 56.82 50.54 83.48 6.96 16.13-9.19 72.75-9.19 72.75l-76.58-29.19-124.06-63.48-16.092-11.47s-4.086 2.22-5.97 2.04c-2.159-0.21-6.74-1.47-6.278-3.58z"
+        inkscape:export-ydpi="90"
+        sodipodi:nodetypes="csssssccccss"
+        inkscape:export-filename="C:\Documents and Settings\Yusdi\Desktop\Personal\blog\inkscape tutorial\result_tractor.png"
+        inkscape:export-xdpi="90"
+    />
+    <path
+        id="path3314"
+        style="stroke:#000000;stroke-width:1px;fill:none"
+        d="m358.01 397.15h151.29"
+        inkscape:export-ydpi="90"
+        sodipodi:nodetypes="cc"
+        inkscape:export-filename="C:\Documents and Settings\Yusdi\Desktop\Personal\blog\inkscape tutorial\result_tractor.png"
+        inkscape:export-xdpi="90"
+    />
+    <path
+        id="path3316"
+        style="fill-rule:evenodd;fill:#000080"
+        d="m402.26 521.53c0-7.17-0.47-32.85 2.21-43.59 3.82-15.31 16.94-35.08 28.14-47.46 5.06-5.59 23.85-17.18 30.8-20.13 18.96-8.03 47.07-4.4 49.19-3.87 0 0 1.17-3.58-5.5-4.69-10.4-1.72-34.66-0.62-49.11 2.21-9.45 1.86-31.15 12.78-41.67 22.33-14.42 13.09-28.05 36.18-32.03 50.55-1.49 5.37-4.18 24.18-3.55 40.79 6.34 1.09 22.07 7.73 22.07 7.73"
+        inkscape:export-ydpi="90"
+        sodipodi:nodetypes="cssscsssscc"
+        inkscape:export-filename="C:\Documents and Settings\Yusdi\Desktop\Personal\blog\inkscape tutorial\result_tractor.png"
+        inkscape:export-xdpi="90"
+    />
+    <path
+        id="path3318"
+        style="fill-rule:evenodd;fill:#008000"
+        d="m180.23 259.57l186.22-4.9s-5.42-8.52-8.17-10.89c-4.32-3.72-11.19-8.46-16.88-8.71-36.05-1.6-86.67-2.76-123.6 0.54-9.42 0.84-23.82-0.66-31.04 5.45-4.49 3.8-6.53 18.51-6.53 18.51z"
+        inkscape:export-ydpi="90"
+        sodipodi:nodetypes="ccssssc"
+        inkscape:export-filename="C:\Documents and Settings\Yusdi\Desktop\Personal\blog\inkscape tutorial\result_tractor.png"
+        inkscape:export-xdpi="90"
+    />
+    <path
+        id="path2437"
+        style="fill-rule:evenodd;stroke:#000000;stroke-width:1px;fill:#18181a"
+        d="m154.01 351.76l7.34-76.36 20.7-15.96 0.87-12.94-16.4-0.87-0.86 12.52 1.73-1.3-9.5 5.61-4.74 0.22-0.43 10.78 4.74 0.65"
+        inkscape:export-ydpi="90"
+        sodipodi:nodetypes="ccccccccccc"
+        inkscape:export-filename="C:\Documents and Settings\Yusdi\Desktop\Personal\blog\inkscape tutorial\result_tractor.png"
+        inkscape:export-xdpi="90"
+    />
+    <path
+        id="path2451"
+        style="fill-rule:evenodd;fill:url(#linearGradient2459)"
+        d="m371.87 281.01l-2.16 4.75-3.02 163.5s1.01 3.78 2.59 4.74c2.22 1.35 6.44 1.81 8.63 0.43 1.37-0.86 2.59-4.74 2.59-4.74l2.59-163.07-1.73-4.75v-15.96s-2.5-2.35-3.88-2.59c-1.58-0.27-5.18 1.3-5.18 1.3l-0.43 16.39z"
+        inkscape:export-ydpi="90"
+        sodipodi:nodetypes="cccssccccscc"
+        inkscape:export-filename="C:\Documents and Settings\Yusdi\Desktop\Personal\blog\inkscape tutorial\result_tractor.png"
+        inkscape:export-xdpi="90"
+    />
+  </g
+  >
+  <g
+      id="layer4"
+      inkscape:label="Cover"
+      inkscape:groupmode="layer"
+      transform="translate(-68.571 -233.5)"
+    >
+    <path
+        id="path2392"
+        style="fill-rule:evenodd;fill:url(#linearGradient3301)"
+        d="m190.07 349.65l3.61-85.68 57.78 0.67s0.5 8.09 1.42 92.59c-5.78-2.49-34.51-5.08-62.81-7.58z"
+        inkscape:export-ydpi="90"
+        sodipodi:nodetypes="ccccc"
+        inkscape:export-filename="C:\Documents and Settings\Yusdi\Desktop\Personal\blog\inkscape tutorial\result_tractor.png"
+        inkscape:export-xdpi="90"
+    />
+    <path
+        id="path2402"
+        style="fill-rule:evenodd;fill:url(#linearGradient3273)"
+        d="m259.72 360.59l-1.72-95.61 85.49-0.58 10.71 175.88-47.32 0.06s-22.47-52.98-47.16-79.75z"
+        inkscape:export-ydpi="90"
+        sodipodi:nodetypes="cccccc"
+        inkscape:export-filename="C:\Documents and Settings\Yusdi\Desktop\Personal\blog\inkscape tutorial\result_tractor.png"
+        inkscape:export-xdpi="90"
+    />
+    <path
+        id="path3210"
+        style="fill-rule:evenodd;stroke:#000000;stroke-width:1px;fill:url(#linearGradient3219)"
+        d="m161.78 275.4l-7.77 75.5 17.69 0.43 8.63-89.73"
+        inkscape:export-ydpi="90"
+        inkscape:export-filename="C:\Documents and Settings\Yusdi\Desktop\Personal\blog\inkscape tutorial\result_tractor.png"
+        inkscape:export-xdpi="90"
+    />
+    <path
+        id="path3221"
+        style="fill-rule:evenodd;stroke:#cccccc;stroke-width:0.3;fill:url(#linearGradient3230)"
+        d="m165.23 257.28s-4.89 0.32-4.53-3.23c0.4-3.97-0.25-3.95 0.21-5.61 0.87-3.11 5.18-3.02 5.18-3.02l-0.86 11.86z"
+        inkscape:export-ydpi="90"
+        sodipodi:nodetypes="csscc"
+        inkscape:export-filename="C:\Documents and Settings\Yusdi\Desktop\Personal\blog\inkscape tutorial\result_tractor.png"
+        inkscape:export-xdpi="90"
+    />
+    <path
+        id="path3232"
+        style="fill-rule:evenodd;stroke:#cccccc;stroke-width:.24279;fill:url(#linearGradient3234)"
+        d="m152.3 273.81s-3.62 0.54-3.38-3.04c0.26-3.98-0.16-3.96 0.14-5.63 0.56-3.13 3.37-3.04 3.37-3.04l-0.13 11.71z"
+        inkscape:export-ydpi="90"
+        sodipodi:nodetypes="csscc"
+        inkscape:export-filename="C:\Documents and Settings\Yusdi\Desktop\Personal\blog\inkscape tutorial\result_tractor.png"
+        inkscape:export-xdpi="90"
+    />
+  </g
+  >
+  <g
+      id="layer1"
+      inkscape:label="Tyres"
+      inkscape:groupmode="layer"
+      transform="translate(-68.571 -233.5)"
+    >
+    <path
+        id="path2383"
+        sodipodi:rx="112.85714"
+        sodipodi:ry="112.85714"
+        style="fill:#1a1a1a"
+        sodipodi:type="arc"
+        d="m262.86 482.36a112.86 112.86 0 1 1 -225.72 0 112.86 112.86 0 1 1 225.72 0z"
+        inkscape:export-ydpi="90"
+        inkscape:export-filename="C:\Documents and Settings\Yusdi\Desktop\Personal\blog\inkscape tutorial\result_tractor.png"
+        transform="translate(31.429)"
+        sodipodi:cy="482.36218"
+        sodipodi:cx="150"
+        inkscape:export-xdpi="90"
+    />
+    <path
+        id="path2387"
+        sodipodi:rx="90"
+        sodipodi:ry="87.14286"
+        style="fill:#1a1a1a"
+        sodipodi:type="arc"
+        d="m562.86 505.22a90 87.143 0 1 1 -180 0 90 87.143 0 1 1 180 0z"
+        inkscape:export-ydpi="90"
+        inkscape:export-filename="C:\Documents and Settings\Yusdi\Desktop\Personal\blog\inkscape tutorial\result_tractor.png"
+        transform="matrix(1 0 0 1.0328 27.714 -19.422)"
+        sodipodi:cy="505.21933"
+        sodipodi:cx="472.85715"
+        inkscape:export-xdpi="90"
+    />
+    <path
+        id="path3204"
+        sodipodi:rx="112.85714"
+        sodipodi:ry="112.85714"
+        style="fill:#ffff00"
+        sodipodi:type="arc"
+        d="m262.86 482.36a112.86 112.86 0 1 1 -225.72 0 112.86 112.86 0 1 1 225.72 0z"
+        inkscape:export-ydpi="90"
+        inkscape:export-filename="C:\Documents and Settings\Yusdi\Desktop\Personal\blog\inkscape tutorial\result_tractor.png"
+        transform="matrix(.57615 0 0 .57615 94.666 204.99)"
+        sodipodi:cy="482.36218"
+        sodipodi:cx="150"
+        inkscape:export-xdpi="90"
+    />
+    <path
+        id="path3206"
+        sodipodi:rx="90"
+        sodipodi:ry="87.14286"
+        style="fill:#ffff00"
+        sodipodi:type="arc"
+        d="m562.86 505.22a90 87.143 0 1 1 -180 0 90 87.143 0 1 1 180 0z"
+        inkscape:export-ydpi="90"
+        inkscape:export-filename="C:\Documents and Settings\Yusdi\Desktop\Personal\blog\inkscape tutorial\result_tractor.png"
+        transform="matrix(.55709 0 0 .57535 238.56 212.45)"
+        sodipodi:cy="505.21933"
+        sodipodi:cx="472.85715"
+        inkscape:export-xdpi="90"
+    />
+    <path
+        id="path2403"
+        sodipodi:rx="112.85714"
+        sodipodi:ry="112.85714"
+        style="fill:#000000"
+        sodipodi:type="arc"
+        d="m262.86 482.36a112.86 112.86 0 1 1 -225.72 0 112.86 112.86 0 1 1 225.72 0z"
+        inkscape:export-ydpi="90"
+        inkscape:export-filename="C:\Documents and Settings\Yusdi\Desktop\Personal\blog\inkscape tutorial\result_tractor.png"
+        transform="matrix(.47523 0 0 .47523 109.8 252.53)"
+        sodipodi:cy="482.36218"
+        sodipodi:cx="150"
+        inkscape:export-xdpi="90"
+    />
+    <path
+        id="path2405"
+        sodipodi:rx="90"
+        sodipodi:ry="87.14286"
+        style="fill:#000000"
+        sodipodi:type="arc"
+        d="m562.86 505.22a90 87.143 0 1 1 -180 0 90 87.143 0 1 1 180 0z"
+        inkscape:export-ydpi="90"
+        inkscape:export-filename="C:\Documents and Settings\Yusdi\Desktop\Personal\blog\inkscape tutorial\result_tractor.png"
+        transform="matrix(.44952 0 0 .48386 282.3 260.08)"
+        sodipodi:cy="505.21933"
+        sodipodi:cx="472.85715"
+        inkscape:export-xdpi="90"
+    />
+    <path
+        id="path2407"
+        style="fill-rule:evenodd;fill:#ffff00"
+        d="m152.62 430.51s-0.69 7.52 6.15 7.52c6.83 0 53.3 5.24 53.3 5.24l7.74-5.46 11.39 21.17-5.01 4.79-5.93 48.06 4.11 6.38-9.11 9.11-9.12-4.56-58.53-6.14-8.66 2.73-9.11-11.39 7.06-6.16 6.38-49.65-5.7-9.8 15.04-11.84z"
+        inkscape:export-ydpi="90"
+        sodipodi:nodetypes="csccccccccccccccc"
+        inkscape:export-filename="C:\Documents and Settings\Yusdi\Desktop\Personal\blog\inkscape tutorial\result_tractor.png"
+        inkscape:export-xdpi="90"
+    />
+    <path
+        id="path3199"
+        sodipodi:rx="112.85714"
+        sodipodi:ry="112.85714"
+        style="stroke:url(#linearGradient3207);stroke-width:2.1042;fill:none"
+        sodipodi:type="arc"
+        d="m262.86 482.36a112.86 112.86 0 1 1 -225.72 0 112.86 112.86 0 1 1 225.72 0z"
+        inkscape:export-ydpi="90"
+        inkscape:export-filename="C:\Documents and Settings\Yusdi\Desktop\Personal\blog\inkscape tutorial\result_tractor.png"
+        transform="matrix(.51115 0 0 .51115 104.69 235.35)"
+        sodipodi:cy="482.36218"
+        sodipodi:cx="150"
+        inkscape:export-xdpi="90"
+    />
+    <path
+        id="path3209"
+        sodipodi:rx="112.85714"
+        sodipodi:ry="112.85714"
+        style="stroke:url(#linearGradient3207);stroke-width:2.1042;fill:none"
+        sodipodi:type="arc"
+        d="m262.86 482.36a112.86 112.86 0 1 1 -225.72 0 112.86 112.86 0 1 1 225.72 0z"
+        inkscape:export-ydpi="90"
+        inkscape:export-filename="C:\Documents and Settings\Yusdi\Desktop\Personal\blog\inkscape tutorial\result_tractor.png"
+        transform="matrix(.53509 0 0 .53509 100.83 224.07)"
+        sodipodi:cy="482.36218"
+        sodipodi:cx="150"
+        inkscape:export-xdpi="90"
+    />
+    <path
+        id="path3213"
+        sodipodi:rx="112.85714"
+        sodipodi:ry="112.85714"
+        style="fill:url(#linearGradient3223)"
+        sodipodi:type="arc"
+        d="m262.86 482.36a112.86 112.86 0 1 1 -225.72 0 112.86 112.86 0 1 1 225.72 0z"
+        inkscape:export-ydpi="90"
+        inkscape:export-filename="C:\Documents and Settings\Yusdi\Desktop\Personal\blog\inkscape tutorial\result_tractor.png"
+        transform="matrix(.23980 0 0 .23980 145.85 363.06)"
+        sodipodi:cy="482.36218"
+        sodipodi:cx="150"
+        inkscape:export-xdpi="90"
+    />
+    <path
+        id="path3225"
+        sodipodi:rx="112.85714"
+        sodipodi:ry="112.85714"
+        style="stroke:url(#linearGradient3227);stroke-width:20.268;fill:none"
+        sodipodi:type="arc"
+        d="m262.86 482.36a112.86 112.86 0 1 1 -225.72 0 112.86 112.86 0 1 1 225.72 0z"
+        inkscape:export-ydpi="90"
+        inkscape:export-filename="C:\Documents and Settings\Yusdi\Desktop\Personal\blog\inkscape tutorial\result_tractor.png"
+        transform="matrix(.14802 0 0 .14802 159.16 407.25)"
+        sodipodi:cy="482.36218"
+        sodipodi:cx="150"
+        inkscape:export-xdpi="90"
+    />
+    <path
+        id="path3233"
+        style="fill-rule:evenodd;fill:#ffff00"
+        d="m481.92 470.75l32.43 5.3 9.27-3.97 9.93 11.25-8.61 7.28-5.29 33.76 5.95 10.59-7.28 8.61-7.94-3.98-37.73-5.29-5.96 4.63-9.27-13.24 1.99-6.62 7.28-39.71-3.97-4.63 13.9-9.93 5.3 5.95z"
+        inkscape:export-ydpi="90"
+        inkscape:export-filename="C:\Documents and Settings\Yusdi\Desktop\Personal\blog\inkscape tutorial\result_tractor.png"
+        inkscape:export-xdpi="90"
+    />
+    <path
+        id="path3231"
+        sodipodi:rx="90"
+        sodipodi:ry="87.14286"
+        style="stroke:#000000;stroke-width:2.1442;fill:none"
+        sodipodi:type="arc"
+        d="m562.86 505.22a90 87.143 0 1 1 -180 0 90 87.143 0 1 1 180 0z"
+        inkscape:export-ydpi="90"
+        inkscape:export-filename="C:\Documents and Settings\Yusdi\Desktop\Personal\blog\inkscape tutorial\result_tractor.png"
+        transform="matrix(.47785 0 0 .49514 271.91 254.2)"
+        sodipodi:cy="505.21933"
+        sodipodi:cx="472.85715"
+        inkscape:export-xdpi="90"
+    />
+    <path
+        id="path3229"
+        sodipodi:rx="90"
+        sodipodi:ry="87.14286"
+        style="stroke:#000000;stroke-width:2.1442;fill:none"
+        sodipodi:type="arc"
+        d="m562.86 505.22a90 87.143 0 1 1 -180 0 90 87.143 0 1 1 180 0z"
+        inkscape:export-ydpi="90"
+        inkscape:export-filename="C:\Documents and Settings\Yusdi\Desktop\Personal\blog\inkscape tutorial\result_tractor.png"
+        transform="matrix(.49550 0 0 .51337 264.86 244.63)"
+        sodipodi:cy="505.21933"
+        sodipodi:cx="472.85715"
+        inkscape:export-xdpi="90"
+    />
+    <path
+        id="path3235"
+        sodipodi:rx="112.85714"
+        sodipodi:ry="112.85714"
+        style="fill:url(#linearGradient3237)"
+        sodipodi:type="arc"
+        d="m262.86 482.36a112.86 112.86 0 1 1 -225.72 0 112.86 112.86 0 1 1 225.72 0z"
+        inkscape:export-ydpi="90"
+        inkscape:export-filename="C:\Documents and Settings\Yusdi\Desktop\Personal\blog\inkscape tutorial\result_tractor.png"
+        transform="matrix(.23980 0 0 .23980 456.11 388.36)"
+        sodipodi:cy="482.36218"
+        sodipodi:cx="150"
+        inkscape:export-xdpi="90"
+    />
+    <path
+        id="path3239"
+        sodipodi:rx="112.85714"
+        sodipodi:ry="112.85714"
+        style="fill:#ffff00"
+        sodipodi:type="arc"
+        d="m262.86 482.36a112.86 112.86 0 1 1 -225.72 0 112.86 112.86 0 1 1 225.72 0z"
+        inkscape:export-ydpi="90"
+        inkscape:export-filename="C:\Documents and Settings\Yusdi\Desktop\Personal\blog\inkscape tutorial\result_tractor.png"
+        transform="matrix(.19850 0 0 .19850 459.25 409.41)"
+        sodipodi:cy="482.36218"
+        sodipodi:cx="150"
+        inkscape:export-xdpi="90"
+    />
+    <path
+        id="path3245"
+        sodipodi:rx="112.85714"
+        sodipodi:ry="112.85714"
+        style="fill:url(#linearGradient3247)"
+        sodipodi:type="arc"
+        d="m262.86 482.36a112.86 112.86 0 1 1 -225.72 0 112.86 112.86 0 1 1 225.72 0z"
+        inkscape:export-ydpi="90"
+        inkscape:export-filename="C:\Documents and Settings\Yusdi\Desktop\Personal\blog\inkscape tutorial\result_tractor.png"
+        transform="matrix(.12588 0 0 .12588 469.67 444.6)"
+        sodipodi:cy="482.36218"
+        sodipodi:cx="150"
+        inkscape:export-xdpi="90"
+    />
+    <path
+        id="path3249"
+        sodipodi:rx="112.85714"
+        sodipodi:ry="112.85714"
+        style="fill:#ffff00"
+        sodipodi:type="arc"
+        d="m262.86 482.36a112.86 112.86 0 1 1 -225.72 0 112.86 112.86 0 1 1 225.72 0z"
+        inkscape:export-ydpi="90"
+        inkscape:export-filename="C:\Documents and Settings\Yusdi\Desktop\Personal\blog\inkscape tutorial\result_tractor.png"
+        transform="matrix(.11876 0 0 .11876 472.66 445.78)"
+        sodipodi:cy="482.36218"
+        sodipodi:cx="150"
+        inkscape:export-xdpi="90"
+    />
+  </g
+  >
+  <metadata
+    >
+    <rdf:RDF
+      >
+      <cc:Work
+        >
+        <dc:format
+          >image/svg+xml</dc:format
+        >
+        <dc:type
+            rdf:resource="http://purl.org/dc/dcmitype/StillImage"
+        />
+        <cc:license
+            rdf:resource="http://creativecommons.org/licenses/publicdomain/"
+        />
+        <dc:publisher
+          >
+          <cc:Agent
+              rdf:about="http://openclipart.org/"
+            >
+            <dc:title
+              >Openclipart</dc:title
+            >
+          </cc:Agent
+          >
+        </dc:publisher
+        >
+        <dc:title
+          >Little Green Tractor</dc:title
+        >
+        <dc:date
+          >2008-10-15T21:48:45</dc:date
+        >
+        <dc:description
+          >Little green tractor...nuf said.</dc:description
+        >
+        <dc:source
+          >https://openclipart.org/detail/19589/little-green-tractor-by-yman</dc:source
+        >
+        <dc:creator
+          >
+          <cc:Agent
+            >
+            <dc:title
+              >yman</dc:title
+            >
+          </cc:Agent
+          >
+        </dc:creator
+        >
+        <dc:subject
+          >
+          <rdf:Bag
+            >
+            <rdf:li
+              >tractor</rdf:li
+            >
+            <rdf:li
+              >vehicle</rdf:li
+            >
+          </rdf:Bag
+          >
+        </dc:subject
+        >
+      </cc:Work
+      >
+      <cc:License
+          rdf:about="http://creativecommons.org/licenses/publicdomain/"
+        >
+        <cc:permits
+            rdf:resource="http://creativecommons.org/ns#Reproduction"
+        />
+        <cc:permits
+            rdf:resource="http://creativecommons.org/ns#Distribution"
+        />
+        <cc:permits
+            rdf:resource="http://creativecommons.org/ns#DerivativeWorks"
+        />
+      </cc:License
+      >
+    </rdf:RDF
+    >
+  </metadata
+  >
+</svg
+>

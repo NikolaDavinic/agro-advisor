@@ -3,9 +3,9 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import { useSnackbar } from "../contexts/snackbar.context";
-import { ApiMessage } from "../dtos/api-message.dto";
-import { api } from "../utils/api/axios";
+import { useSnackbar } from "../../contexts/snackbar.context";
+import { ApiMessage } from "../../dtos/api-message.dto";
+import { api } from "../../utils/api/axios";
 
 interface FormInputs {
   name: string;

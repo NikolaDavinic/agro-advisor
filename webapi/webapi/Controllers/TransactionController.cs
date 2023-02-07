@@ -124,13 +124,18 @@ namespace webapi.Controllers
 
         [Authorize]
         [HttpGet("q")]
-        public async Task<ActionResult> GetTransactions([FromQuery] DateTime? before, [FromQuery] int? skip, [FromQuery] int? take)
+        public async Task<ActionResult> GetTransactions(
+            [FromQuery] DateTime? before, 
+            [FromQuery] int? skip, 
+            [FromQuery] int? take, 
+            [FromQuery] string? type,
+            [FromQuery] string? categoryIds)
         {
             try
             {
                 var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("Id"))?.Value;
 
-                var transactions = await _transactionService.FilterTransactions(userId, before, skip, take);
+                var transactions = await _transactionService.FilterTransactions(userId, before, skip, take, type, categoryIds);
 
                 return Ok(transactions.Select((t) => new
                 {
@@ -149,7 +154,7 @@ namespace webapi.Controllers
         }
 
         [Authorize]
-        [HttpDelete("id")]
+        [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteTransaction(string id)
         {
             try
@@ -170,26 +175,27 @@ namespace webapi.Controllers
                 return BadRequest(new { msg = e.Message });
             }
         }
-        //[HttpGet("dataforchart")]
-        //public async Task<ActionResult> DataForChart()
-        //{
-        //    try
-        //    {
-        //        var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("Id"))?.Value;
 
-        //        //if (userId == null)
-        //        //{
-        //        //    return Unauthorized("Greska pri autentifikaciji");
-        //        //}
+        [HttpGet("dataforchart")]
+        public async Task<ActionResult> DataForChart()
+        {
+            try
+            {
+                var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("Id"))?.Value;
 
-        //        var result = await _transactionService.GetTransactionDataForChart(userId);
+                if (userId == null)
+                {
+                    return Unauthorized("Greska pri autentifikaciji");
+                }
 
-        //        return Ok(result);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return BadRequest(new { msg = e.Message });
-        //    }
-        //}
+                var result = await _transactionService.GetTransactionDataForChart(userId);
+
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { msg = e.Message });
+            }
+        }
     }
 }

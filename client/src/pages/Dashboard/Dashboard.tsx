@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
-import Chart from "../components/Chart/Chart";
-import TransactionList from "../components/TransactionList/TransactionList";
+import Chart from "../../components/Chart/Chart";
+import TransactionList from "../../components/TransactionList/TransactionList";
 
 const Dashboard = () => {
   return (

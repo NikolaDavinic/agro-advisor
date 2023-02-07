@@ -1,11 +1,9 @@
 import "./App.scss";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Home from "./pages/Home/Home";
-import Dashboard from "./pages/Dashboard";
-import Analytics from "./pages/Analytics/Analytics";
 import Navigation from "./components/Navigation/Navigation";
 import { Box, createTheme, ThemeProvider } from "@mui/material";
-import { SignIn, SignUp } from "./pages";
+import { Machinery, SignIn, SignUp, Dashboard, Analytics } from "./pages";
 import ProtectedRoutes from "./utils/ProtectedRoutes";
 import { SnackbarProvider } from "./contexts/snackbar.context";
 import NewPlot from "./components/NewPlot/NewPlot";
@@ -43,6 +41,7 @@ function App() {
                 <Route path="/dashboard" element={<Dashboard />}></Route>
                 <Route path="/analytics" element={<Analytics />}></Route>
                 <Route path="/newplot" element={<NewPlot />}></Route>
+                <Route path="/machines" element={<Machinery />}></Route>
                 <Route path="/plot/:plotId/edit" element={<EditPlot />}></Route>
                 <Route path="/map" element={<PlotMap />}></Route>
               </Route>

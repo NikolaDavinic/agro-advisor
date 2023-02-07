@@ -3,7 +3,6 @@ import {
   Box,
   Button,
   Icon,
-  List,
   ListItem,
   Modal,
   Paper,
@@ -107,7 +106,7 @@ const TransactionForm = ({
   };
 
   return (
-    <>
+    <Paper className="p-2" elevation={3}>
       <Modal
         open={addingCategory}
         onClose={() => setAddingCategory(false)}
@@ -240,7 +239,7 @@ const TransactionForm = ({
           </Button>
         </Box>
       </Stack>
-    </>
+    </Paper>
   );
 };
 

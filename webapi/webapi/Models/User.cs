@@ -15,8 +15,11 @@ namespace webapi.Models
 
     public class MachinerySummary
     {
+        [JsonIgnore]
         public MongoDBRef Id { get; set; } = null!;
-        public int? Type { get; set; }
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        [BsonRepresentation(BsonType.String)]
+        public MachineType? Type { get; set; }
         public string? Model { get; set; }
     }
 
@@ -55,5 +58,6 @@ namespace webapi.Models
         public List<PlotSummary> Plots { get; set; } = new();
         [JsonIgnore]
         public List<Transaction> Transactions { get; set; } = new();
+        public List<MachinerySummary> Machines { get; set; } = new();
     }
 }
