@@ -98,6 +98,7 @@ const MachineryForm = ({ onSubmit = () => {} }: MachineryFormProps) => {
         size="small"
         label="Registraciona oznaka"
         placeholder="XX-NNNN-XX"
+        {...register("licensePlate")}
       ></TextField>
       <TextField
         size="small"
