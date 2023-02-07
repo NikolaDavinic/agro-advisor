@@ -1,6 +1,6 @@
 export interface Machinery {
   id?: string;
-  type: number;
+  type: number | string;
   machineTypeValue?: string;
   productionYear: string;
   images?: string[] | File[];

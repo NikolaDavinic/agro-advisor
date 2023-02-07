@@ -89,7 +89,16 @@ namespace webapi.Controllers
 
                 await _machineryService.CreateAsync(userId, machine);
 
-                return Ok();
+                return Ok(new
+                {
+                    machine.Id,
+                    Type = machine.Type.ToString(),
+                    machine.LicensePlate,
+                    machine.ProductionYear,
+                    machine.RegisteredUntil,
+                    machine.Model,
+                    machine.Images,
+                });
             }
             catch (Exception e)
             {

@@ -1,4 +1,12 @@
-import { Box, Button, CircularProgress, Paper, Stack } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  LinearProgress,
+  Paper,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -20,8 +28,11 @@ const Machines = () => {
 
   const { openSnackbar } = useSnackbar();
 
-  const { result: machineSummaries, loading } =
-    useApi<Machinery[]>("machinery");
+  const {
+    result: machineSummaries,
+    loading,
+    setResult: setMachineSummaries,
+  } = useApi<Machinery[]>("machinery");
 
   const { result: selectedMachine, loading: selectedMachineLoading } =
     useApi<Machinery | null>(
@@ -37,8 +48,6 @@ const Machines = () => {
     let images: string[] = [];
 
     if (machine.images && machine.images?.length > 0) {
-      console.log(machine.images);
-
       const formData = new FormData();
       machine.images.forEach((img) => formData.append("files", img));
 
@@ -57,6 +66,8 @@ const Machines = () => {
       .post<Machinery>("machinery", machine)
       .then(({ data }) => {
         openSnackbar({ message: "Uspesno dodata mašina" });
+        console.log(data);
+        setMachineSummaries((prev) => [data, ...(prev ?? [])]);
         setFormOpen(false);
       })
       .catch((err: AxiosError<ApiMessage>) => {
@@ -65,8 +76,8 @@ const Machines = () => {
   };
 
   return (
-    <Box>
-      <Box>
+    <Box className="flex flex-wrap">
+      <Box sx={{ flexGrow: 1 }}>
         <Stack className="p-2 gap-2">
           <Box>
             <Button
@@ -88,7 +99,7 @@ const Machines = () => {
             </Box>
           )}
           {!loading && (
-            <Box>
+            <Stack maxHeight="80%" overflow="auto" className="p-2 gap-2">
               {machineSummaries?.map((m) => (
                 <MachineryCard
                   onClick={() => setSelectedMachineId(m.id ?? null)}
@@ -97,15 +108,26 @@ const Machines = () => {
                   className="cursor-pointer"
                 ></MachineryCard>
               ))}
-            </Box>
+            </Stack>
           )}
         </Stack>
       </Box>
-      {/* <Box>
+      <Box sx={{ flexGrow: 5 }} className="p-10">
         {selectedMachine && (
-          <MachineryDisplay machine={selectedMachine}></MachineryDisplay>
+          <>
+            <Box>
+              <Typography gutterBottom variant="h6" className="text-gray-400">
+                Odabrana mašina
+              </Typography>
+            </Box>
+            {selectedMachineLoading ? (
+              <LinearProgress color="primary"></LinearProgress>
+            ) : (
+              <MachineryDisplay machine={selectedMachine}></MachineryDisplay>
+            )}
+          </>
         )}
-      </Box> */}
+      </Box>
     </Box>
   );
 };
