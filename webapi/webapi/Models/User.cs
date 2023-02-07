@@ -21,6 +21,7 @@ namespace webapi.Models
         [BsonRepresentation(BsonType.String)]
         public MachineType? Type { get; set; }
         public string? Model { get; set; }
+        public DateTime? RegisteredUntil { get; set; }
     }
 
     public class Transaction

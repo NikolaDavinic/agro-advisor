@@ -75,7 +75,7 @@ namespace webapi.Controllers
                 TransactionCategory newC = new() 
                 {
                     Name = newCategory.Name,
-                    User = new MongoDBRef("User", userId),
+                    User = new MongoDBRef("Users", userId),
                 };
 
                 await _categoryService.CreateAsync(newC);

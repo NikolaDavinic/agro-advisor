@@ -35,6 +35,7 @@ namespace webapi.Services
             var update = Builders<User>.Update.Push(u => u.Machines, new MachinerySummary
             {
                 Id = new MongoDBRef("Machines", machine.Id),
+                RegisteredUntil = machine.RegisteredUntil,
                 Model = machine.Model,
                 Type = machine.Type
             });
@@ -42,6 +43,16 @@ namespace webapi.Services
             _context.Users.FindOneAndUpdate(filter, update);
 
             await session.CommitTransactionAsync();
+        }
+
+        public async Task<List<MachinerySummary>> GetUserMachineSummaries(string userId)
+        {
+            var result = await _context.Users.AsQueryable()
+                .Where(u => u.Id == userId)
+                .Select(u => u.Machines)
+                .SingleAsync();
+
+            return result;
         }
     }
 }

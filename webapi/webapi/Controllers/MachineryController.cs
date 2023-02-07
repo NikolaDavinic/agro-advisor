@@ -23,6 +23,27 @@ namespace webapi.Controllers
         }
 
         [Authorize]
+        [HttpGet]
+        public async Task<ActionResult> GetMachines()
+        {
+            try
+            {
+                var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("Id"))?.Value;
+
+                if (userId == null)
+                {
+                    return Unauthorized("Greska pri autentifikaciji");
+                }
+
+                return Ok(await _machineryService.GetUserMachineSummaries(userId));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { msg = e.Message });
+            }
+        }
+
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult> CreateMachine([FromBody] AddMachineDTO newMachine)
         {

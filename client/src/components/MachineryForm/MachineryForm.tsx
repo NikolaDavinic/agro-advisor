@@ -5,6 +5,7 @@ import { Controller, useForm } from "react-hook-form";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import moment from "moment";
 import { Machinery } from "../../models/machinery.model";
+import MatIcon from "../MatIcon/MatIcon";
 
 interface FormFields {
   machineType: number;
@@ -92,8 +93,13 @@ const MachineryForm = ({ onSubmit = () => {} }: MachineryFormProps) => {
         {...register("registeredUntil")}
       ></TextField>
       <Box className="flex justify-end">
-        <Button color="primary" type="submit" variant="outlined">
-          Dodaj mašinu
+        <Button
+          color="primary"
+          type="submit"
+          variant="outlined"
+          startIcon={<MatIcon>check</MatIcon>}
+        >
+          Dodaj
         </Button>
       </Box>
     </Stack>

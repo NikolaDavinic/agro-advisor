@@ -112,6 +112,7 @@ public class TransactionService
                     Date = el.Date
                 }).ToList()
             });
+
         return groupedElements;
         //var pipline = new BsonDocument[]
         //{
