@@ -1,6 +1,7 @@
 import { Box, ListItem, Paper, Stack, Typography } from "@mui/material";
 import moment from "moment";
 import { Machinery } from "../../models/machinery.model";
+import "./MachineryCard.scss";
 
 export interface MachineryCardProps {
   machine: Machinery;

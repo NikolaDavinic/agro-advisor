@@ -11,7 +11,8 @@ import {
   Typography,
 } from "@mui/material";
 import { Stack } from "@mui/system";
-import { useState } from "react";
+import moment from "moment";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useSnackbar } from "../../contexts/snackbar.context";
 import { useApi } from "../../hooks/api.hook";
@@ -50,11 +51,15 @@ const TransactionForm = ({
   );
   const [newCategory, setNewCategory] = useState<string>("");
 
+  const { openSnackbar } = useSnackbar();
+
   const {
     register,
     handleSubmit,
     control,
     formState: { errors },
+    setValue,
+    reset,
   } = useForm<FormFields>({
     defaultValues: {
       category: transaction ? { id: transaction?.categoryId } : null,
@@ -67,13 +72,22 @@ const TransactionForm = ({
     reValidateMode: "onSubmit",
   });
 
-  const { openSnackbar } = useSnackbar();
-
   const {
     result: categories,
     loading: loadingCategories,
     setResult,
   } = useApi<Category[]>("/category");
+
+  useEffect(() => {
+    if (transaction != null) {
+      reset({
+        category: transaction ? { id: transaction?.categoryId } : null,
+        date: moment(transaction.date).format("yyyy-MM-DD"),
+        description: transaction?.description ?? "",
+        value: transaction?.value ? Math.abs(transaction.value) : 0,
+      });
+    }
+  }, [transaction, reset]);
 
   const onSubmitForm = (data: FormFields) => {
     if (!onSubmit) return;
@@ -94,6 +108,7 @@ const TransactionForm = ({
       .post<Category>("/category", { name: newCategory })
       .then(({ data }) => {
         setResult((prev) => [data, ...(prev ?? [])]);
+        setValue("category", data);
         openSnackbar({
           message: `Korisnicka kategorija ${newCategory} uspesno dodata`,
         });
@@ -190,7 +205,11 @@ const TransactionForm = ({
               }
               loadingText="Ucitavanje kategorija..."
               renderInput={(params) => (
-                <TextField {...params} label="Kategorija" />
+                <TextField
+                  {...params}
+                  label="Kategorija"
+                  placeholder="Dodajte svoju kategoriju ukoliko je nema u ovoj listi"
+                />
               )}
             />
           )}
