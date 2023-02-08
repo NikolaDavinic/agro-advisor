@@ -20,14 +20,17 @@ import styles from "./MachineryDisplay.module.scss";
 interface MachineryDisplayProps {
   machine: Machinery;
   onDelete?: (machine: Machinery) => void;
+  onEditClick?: (machine: Machinery) => void;
 }
 
 const MachineryDisplay = ({
   machine,
   onDelete = () => {},
+  onEditClick = () => {},
 }: MachineryDisplayProps) => {
   let color: string = "green";
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
   const open = Boolean(anchorEl);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -59,6 +62,15 @@ const MachineryDisplay = ({
             onClose={handleClose}
             transformOrigin={{ horizontal: "left", vertical: "top" }}
           >
+            <MenuItem
+              onClick={() => {
+                handleClose();
+                onEditClick(machine);
+              }}
+            >
+              <MatIcon color="primary">edit</MatIcon>
+              &nbsp;Izmeni
+            </MenuItem>
             <MenuItem
               onClick={() => {
                 handleClose();

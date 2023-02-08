@@ -59,6 +59,7 @@ namespace webapi.Models
         public List<PlotSummary> Plots { get; set; } = new();
         [JsonIgnore]
         public List<Transaction> Transactions { get; set; } = new();
+        [JsonIgnore]
         public List<MachinerySummary> Machines { get; set; } = new();
     }
 }

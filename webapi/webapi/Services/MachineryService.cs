@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
 using System.Transactions;
 using MongoDB.Bson;
+using MongoDB.Driver.GeoJsonObjectModel;
+using System.Data.Common;
 
 namespace webapi.Services
 {
@@ -16,12 +18,15 @@ namespace webapi.Services
     {
         private readonly IDbContext _context;
         private readonly ILogger<MachineryService> _logger;
+        private readonly FileService _fileService;
         public MachineryService(
             IDbContext context,
-            ILogger<MachineryService> logger)
+            ILogger<MachineryService> logger,
+            FileService fileService)
         {
             _context = context;
             _logger = logger;
+            _fileService = fileService;
         }
 
         public async Task CreateAsync(string userId, Machinery machine)
@@ -78,6 +83,37 @@ namespace webapi.Services
                 .SingleAsync();
 
             return result;
+        }
+
+        public async Task<Machinery?> UpdateMachineForUser(string userId, Machinery machine)
+        {
+            var filter = Builders<Machinery>.Filter.Eq(x => x.Id, machine.Id);
+            filter &= Builders<Machinery>.Filter.Eq(x => x.User.Id, userId);
+
+            var updatingMachine = (await _context.Machines.FindAsync(filter)).Single();
+
+            if (updatingMachine == null)
+            {
+                return null;
+            }
+
+            List<string> imagesToDelete = updatingMachine.Images.Where((i) => !machine.Images.Contains(i)).ToList();
+
+            var result = await _context.Machines.ReplaceOneAsync(filter, machine);
+
+            var filterUser = Builders<User>.Filter.Eq((u) => u.Id, userId);
+            filterUser &= Builders<User>.Filter.ElemMatch(u => u.Machines, Builders<MachinerySummary>.Filter.Eq((m) => m.Id.Id, machine.Id));
+
+            var update = Builders<User>.Update
+                .Set(x => x.Machines.First().Model, machine.Model)
+                .Set(x => x.Machines.First().RegisteredUntil, machine.RegisteredUntil)
+                .Set(x => x.Machines.First().Type, machine.Type);
+
+            await _context.Users.FindOneAndUpdateAsync(filterUser, update);
+            
+            _fileService.DeleteFiles(imagesToDelete);
+
+            return machine;
         }
     }
 }

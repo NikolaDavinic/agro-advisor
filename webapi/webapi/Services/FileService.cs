@@ -1,5 +1,6 @@
 ﻿using webapi.Models;
 using Microsoft.WindowsAzure.Storage;
+using System.Reflection.Metadata.Ecma335;
 
 namespace webapi.Services;
 
@@ -44,6 +45,26 @@ public class FileService
         await blobBlock.UploadFromStreamAsync(file.OpenReadStream());
 
         return $"{blobClient.BaseUri.AbsoluteUri}{blobContainer.Name}/{newFileName}";
+    }
+
+    public bool DeleteFiles(List<string> paths)
+    {
+        var blobClient = _cloudStorageAccount.CreateCloudBlobClient();
+        var blobContainer = blobClient.GetContainerReference(containerName: _ContainerName);
+
+        var allDeleted = true;
+        foreach(string file in paths)
+        {
+            var path = Path.GetFileName(file);
+
+            if (String.IsNullOrEmpty(path))
+                continue;
+
+            var res = blobContainer.GetBlockBlobReference(path).DeleteIfExistsAsync().Result;
+            allDeleted &= res;
+        }
+
+        return allDeleted;
     }
 
     public async Task<List<string>> SaveFiles(List<IFormFile> files)

@@ -123,5 +123,49 @@ namespace webapi.Controllers
                 return BadRequest(new { msg = e.Message });
             }
         }
+
+        [Authorize]
+        [HttpPut]
+        public async Task<ActionResult> UpdateMachine([FromBody] UpdateMachineDTO updatingMachine)
+        {
+            try
+            {
+                var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("Id"))?.Value;
+
+                if (userId == null)
+                {
+                    return Unauthorized("Greska pri autentifikaciji");
+                }
+
+                var machine = new Machinery
+                {
+                    Id = updatingMachine.Id,
+                    LicensePlate = updatingMachine.LicensePlate,
+                    ProductionYear = updatingMachine.ProductionYear,
+                    RegisteredUntil = updatingMachine.RegisteredUntil,
+                    Model = updatingMachine.Model,
+                    Type = updatingMachine.Type,
+                    Images = updatingMachine.Images,
+                    User = new MongoDBRef("Users", userId)
+                };
+
+                await _machineryService.UpdateMachineForUser(userId, machine);
+
+                return Ok(new
+                {
+                    machine.Id,
+                    Type = machine.Type.ToString(),
+                    machine.LicensePlate,
+                    machine.ProductionYear,
+                    machine.RegisteredUntil,
+                    machine.Model,
+                    machine.Images,
+                });
+            }
+            catch (Exception e)
+            {
+                return Ok(new { msg = e.Message });
+            }
+        }
     }
 }

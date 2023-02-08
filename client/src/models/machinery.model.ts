@@ -3,7 +3,7 @@ export interface Machinery {
   type: number | string;
   machineTypeValue?: string;
   productionYear: string;
-  images?: string[] | File[];
+  images?: string[];
   model: string;
   licensePlate: string;
   registeredUntil: string;

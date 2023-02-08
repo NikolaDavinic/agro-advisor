@@ -7,49 +7,104 @@ import moment from "moment";
 import { Machinery } from "../../models/machinery.model";
 import MatIcon from "../MatIcon/MatIcon";
 import Upload from "../Upload/Upload";
+import { useEffect } from "react";
+import { getFileName } from "../../utils/Formatting";
 
 interface FormFields {
   type: number;
   productionYear: string;
-  images: File[];
+  images: (File | string)[];
   licensePlate: string;
   registeredUntil: string;
   model: string;
 }
 
+const nameToValue: { [key: string]: number } = {
+  Kombi: 0,
+  Traktor: 1,
+  Kamion: 2,
+  Kombajn: 3,
+  Motokultivator: 4,
+  Ostalo: 5,
+};
+
 interface MachineryFormProps {
-  onSubmit: (machine: Machinery) => void;
+  machine?: Machinery | null;
+  onSubmit: (
+    machine: Machinery,
+    addedPhotos?: File[],
+    removedPhotos?: string[]
+  ) => void;
+  buttonText?: string;
 }
 
-const MachineryForm = ({ onSubmit = () => {} }: MachineryFormProps) => {
+const MachineryForm = ({
+  onSubmit = () => {},
+  machine,
+  buttonText = "Dodaj",
+}: MachineryFormProps) => {
   const {
     register,
     handleSubmit,
     control,
+    reset,
     formState: { errors },
   } = useForm<FormFields>({
     defaultValues: {
-      type: 0,
-      images: [],
-      licensePlate: "",
-      registeredUntil: moment().format("yyyy-MM-DD"),
-      model: "",
-      productionYear: "2000",
+      type: machine?.type
+        ? typeof machine.type === "string"
+          ? nameToValue[machine.type]
+          : machine.type
+        : 0,
+      images: machine?.images ? [...machine.images] : [],
+      licensePlate: machine?.licensePlate ?? "",
+      registeredUntil: moment(
+        machine?.registeredUntil ? machine.registeredUntil : new Date()
+      ).format("yyyy-MM-DD"),
+      model: machine?.model ?? "",
+      productionYear: machine?.productionYear
+        ? machine.productionYear + ""
+        : "2000",
     },
     reValidateMode: "onSubmit",
   });
 
   const formSubmit = (data: FormFields) => {
-    console.log(data);
-    onSubmit({
-      licensePlate: data.licensePlate,
-      type: data.type,
-      productionYear: data.productionYear,
-      registeredUntil: new Date(data.registeredUntil).toISOString(),
-      model: data.model,
-      images: data.images,
-    });
+    onSubmit(
+      {
+        licensePlate: data.licensePlate,
+        type: data.type,
+        productionYear: data.productionYear,
+        registeredUntil: new Date(data.registeredUntil).toISOString(),
+        model: data.model,
+      },
+      data.images.filter((v) => v instanceof File) as File[],
+      machine?.images?.filter(
+        (i) => !data.images.find((e) => typeof e === "string" && i === e)
+      ) as string[]
+    );
   };
+
+  useEffect(() => {
+    if (machine) {
+      reset({
+        type: machine?.type
+          ? typeof machine.type === "string"
+            ? nameToValue[machine.type]
+            : machine.type
+          : 0,
+        images: machine?.images ?? [],
+        licensePlate: machine?.licensePlate ?? "",
+        registeredUntil: moment(
+          machine?.registeredUntil ? machine.registeredUntil : new Date()
+        ).format("yyyy-MM-DD"),
+        model: machine?.model ?? "",
+        productionYear: machine?.productionYear
+          ? machine.productionYear + ""
+          : "2000",
+      });
+    }
+  }, [machine, reset]);
 
   return (
     <Stack
@@ -59,7 +114,7 @@ const MachineryForm = ({ onSubmit = () => {} }: MachineryFormProps) => {
     >
       <Select
         {...register("type", { required: true })}
-        defaultValue={0}
+        defaultValue={machine?.type ? nameToValue[machine.type] : 0}
         size="small"
         label="Tip mašine"
       >
@@ -108,7 +163,13 @@ const MachineryForm = ({ onSubmit = () => {} }: MachineryFormProps) => {
       ></TextField>
       <Controller
         render={({ field: { onChange, value } }) => (
-          <Upload text="Otpremi" value={value} onChange={onChange}></Upload>
+          <Upload
+            text="Otpremi"
+            value={value.map((val) =>
+              typeof val === "string" ? new File([], getFileName(val)) : val
+            )}
+            onChange={onChange}
+          ></Upload>
         )}
         control={control}
         name="images"
@@ -120,7 +181,7 @@ const MachineryForm = ({ onSubmit = () => {} }: MachineryFormProps) => {
           variant="outlined"
           startIcon={<MatIcon>check</MatIcon>}
         >
-          Dodaj
+          {buttonText}
         </Button>
       </Box>
     </Stack>
