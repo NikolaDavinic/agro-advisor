@@ -69,6 +69,7 @@ builder.Services.AddSingleton<CategoryService>();
 builder.Services.AddSingleton<UserService>();
 builder.Services.AddSingleton<PlotService>();
 builder.Services.AddSingleton<FileService>();
+builder.Services.AddSingleton<HarvestService>();
 
 var DevelopmentOrigins = "CORSDevelopment";
 var ProductionOrigins = "CORSProduction";

@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   IconButton,
   Menu,
   MenuItem,
@@ -10,25 +11,20 @@ import {
   TableBody,
   TableCell,
   TableRow,
-  Tabs,
-  Typography,
+  Tabs
 } from "@mui/material";
-import moment from "moment";
-import { Machinery } from "../../models/machinery.model";
-import ImageGallery from "react-image-gallery";
-import { useState } from "react";
-import MatIcon from "../MatIcon/MatIcon";
-import styles from "./MachineryDisplay.module.scss";
-import { Plot } from "../../models/plot.model";
-import { MapContainer, Polygon, TileLayer } from "react-leaflet";
 import { LatLngExpression, PathOptions } from "leaflet";
-import { ClassNames } from "@emotion/react";
+import { useState } from "react";
+import { MapContainer, Polygon, TileLayer } from "react-leaflet";
 import { useNavigate } from "react-router-dom";
+import { useSnackbar } from "../../contexts/snackbar.context";
+import { Harvest } from "../../models/harvest.model";
+import { Plot } from "../../models/plot.model";
+import { api } from "../../utils/api/axios";
+import HarvestCard from "../HarvestCard/HarvestCard";
+import HarvestForm from "../HarvestForm/HarvestForm";
+import MatIcon from "../MatIcon/MatIcon";
 
-interface PlotDisplayProps {
-  plot: Plot;
-  onDelete?: (plot: Plot) => void;
-}
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -58,14 +54,18 @@ function TabPanel(props: TabPanelProps) {
     </div>
   );
 }
+interface PlotDisplayProps {
+  plot: Plot;
+  onDelete?: (plot: Plot) => void;
+}
 const PlotDisplay = ({
-  plot,
-  onDelete = () => { },
+  plot: plotProp,
+  onDelete = () => { }
 }: PlotDisplayProps) => {
-  let color: string = "green";
+  const [plot, setPlot] = useState<Plot>(plotProp);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [formOpen, setFormOpen] = useState<boolean>(false);
   const open = Boolean(anchorEl);
-
   const [borderPoints, setBorderPoints] = useState<LatLngExpression[]>(
     plot.borderPoints.map(point =>
       //@ts-ignore
@@ -75,6 +75,7 @@ const PlotDisplay = ({
   const [startPosition, setStartPosition] = useState<[number, number]>([plot.borderPoints[0].coordinates.values[0], plot.borderPoints[0].coordinates.values[1]]);
 
   const [currentTab, setCurrentTab] = useState<number>(0);
+  const { openSnackbar } = useSnackbar();
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -86,6 +87,39 @@ const PlotDisplay = ({
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setCurrentTab(newValue);
   };
+  const onAddHarvest = (harvest: Harvest) => {
+    api
+      .post(`/harvest/add/${plot.id}`, harvest)
+      .then((response) => {
+        openSnackbar({ message: "Berba uspesno dodata!", severity: "success" });
+        setPlot(prevPlot => ({
+          ...prevPlot,
+          harvests: [...prevPlot.harvests, harvest]
+        }))
+
+      })
+      .catch((error) => {
+        console.error(error);
+        openSnackbar({ message: "Doslo je do greske", severity: "error" });
+      });
+  }
+  const onDeleteHarvest = (harvestId: string | null) => {
+    api
+      .delete(`/harvest/${plot.id}/${harvestId}`)
+      .then((response) => {
+        openSnackbar({ message: "Berba uspesno Obrisana!", severity: "success" });
+        setPlot(prevPlot => ({
+          ...prevPlot,
+          harvests: prevPlot.harvests.filter(h => h.id == harvestId)
+        }))
+
+      })
+      .catch((error) => {
+        console.error(error);
+        openSnackbar({ message: "Doslo je do greske", severity: "error" });
+      });
+  }
+
   return (
     <Paper elevation={4} className={`p-2`}>
       <Box className="w-full">
@@ -178,13 +212,41 @@ const PlotDisplay = ({
           </div>
         </TabPanel>
         <TabPanel value={currentTab} index={1}>
-          Item Two
+          <div className="w-full h-96">
+            <Stack overflow="auto" className="p-2 gap-2 h-full">
+              <Box>
+                <Button
+                  variant="text"
+                  color={formOpen ? "error" : "primary"}
+                  onClick={() => setFormOpen((prev) => !prev)}
+                >
+                  {formOpen ? "Zatvori" : "Dodaj berbu"}
+                </Button>
+              </Box>
+              {formOpen && (
+                <Paper className="p-2">
+                  <HarvestForm
+                    onSubmit={(harvest) => onAddHarvest(harvest)}
+                  ></HarvestForm>
+                </Paper>
+              )}
+              {plot.harvests.length === 0 && "Nemate unetih berbi..."}
+              {plot.harvests.length > 0 && plot.harvests?.map((h) => (
+                <HarvestCard
+                  harvest={h}
+                  key={h.id}
+                  className={`cursor-pointer`}
+                  onDelete={(harvestId) => onDeleteHarvest(harvestId)}
+                ></HarvestCard>
+              ))}
+            </Stack>
+          </div>
         </TabPanel>
         <TabPanel value={currentTab} index={2}>
           Item Three
         </TabPanel>
-      </Box>
-    </Paper>
+      </Box >
+    </Paper >
   );
 };
 

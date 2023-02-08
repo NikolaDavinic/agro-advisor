@@ -14,7 +14,7 @@ import { api } from "../../utils/api/axios";
 
 const Plots = () => {
   const navigate = useNavigate();
-  const [formOpen, setFormOpen] = useState<boolean>();
+  const [formOpen, setFormOpen] = useState<boolean>(false);
   const [selectedPlotId, setSelectedPlotId] = useState<string | null>(
     null
   );
@@ -50,6 +50,10 @@ const Plots = () => {
     }
   }, [plotSummaries]);
 
+  const showHarvestForm = () => {
+    setFormOpen(true);
+    console.log("formOpened");
+  }
   const deletePlot = (plot: Plot) => {
     confirm({
       description: "Da li ste sigurni da želite da obrišete zemljište?",
@@ -78,7 +82,7 @@ const Plots = () => {
           <Box>
             <Button
               variant="outlined"
-              color={formOpen ? "error" : "primary"}
+              color={"primary"}
               onClick={() => navigate("/newplot")}
             >
               Dodaj zemljište

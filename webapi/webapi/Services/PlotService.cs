@@ -12,13 +12,9 @@ namespace webapi.Services
     public class PlotService
     {
         private readonly IDbContext _context;
-        private readonly IConfiguration _config;
-        public PlotService(
-            IDbContext context,
-            IConfiguration config)
+        public PlotService(IDbContext context)
         {
             _context = context;
-            _config = config;
         }
         public async Task CreateAsync(PlotDTO newPlot)
         {
