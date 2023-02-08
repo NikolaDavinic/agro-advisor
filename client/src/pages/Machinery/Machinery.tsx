@@ -133,7 +133,9 @@ const Machines = () => {
                   onClick={() => setSelectedMachineId(m.id ?? null)}
                   machine={m}
                   key={m.id}
-                  className="cursor-pointer"
+                  className={`cursor-pointer ${
+                    m.id === selectedMachineId ? "highlighted" : null
+                  }`}
                 ></MachineryCard>
               ))}
             </Stack>
