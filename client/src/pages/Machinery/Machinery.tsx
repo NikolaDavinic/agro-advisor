@@ -37,10 +37,13 @@ const Machines = () => {
     setResult: setMachineSummaries,
   } = useApi<Machinery[]>("machinery");
 
-  const { result: selectedMachine, loading: selectedMachineLoading } =
-    useApi<Machinery | null>(
-      selectedMachineId ? `machinery/${selectedMachineId}` : ""
-    );
+  const {
+    result: selectedMachine,
+    loading: selectedMachineLoading,
+    setResult: setSelectedMachine,
+  } = useApi<Machinery | null>(
+    selectedMachineId ? `machinery/${selectedMachineId}` : ""
+  );
 
   useEffect(() => {
     if (machineSummaries && machineSummaries?.length > 0)
@@ -93,9 +96,11 @@ const Machines = () => {
             severity: "success",
           });
           setFormOpen(false);
-          setMachineSummaries(
-            (prev) => prev?.map((m) => (m.id !== data.id ? m : data)) ?? []
-          );
+          setSelectedMachineId(null);
+          setMachineSummaries((prev) => [
+            data,
+            ...(prev ?? []).filter((p) => p.id !== data.id),
+          ]);
         })
         .catch((err: AxiosError<ApiMessage>) => {
           openSnackbar({ message: err.message, severity: "error" });
