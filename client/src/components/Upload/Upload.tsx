@@ -1,5 +1,6 @@
 import { Box, Button, Chip, Stack } from "@mui/material";
 import React, { useRef, useState } from "react";
+import { getFileName } from "../../utils/Formatting";
 import MatIcon from "../MatIcon/MatIcon";
 
 interface UploadProps {
@@ -35,7 +36,7 @@ const Upload = ({ text, onChange: setValue, value }: UploadProps) => {
         {value.map((v) => (
           <Chip
             onDelete={() => setValue(value.filter((f) => f.name !== v.name))}
-            label={v.name}
+            label={getFileName(v.name)}
             key={v.name}
             color="primary"
           />

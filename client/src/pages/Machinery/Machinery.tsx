@@ -75,8 +75,6 @@ const Machines = () => {
       images = res.data.paths;
     }
 
-    console.log(machine);
-
     if (isEditing) {
       machine.images = [
         ...(selectedMachine?.images?.filter(

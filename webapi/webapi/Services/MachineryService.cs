@@ -63,6 +63,8 @@ namespace webapi.Services
 
             var resultMachine = await _context.Machines.FindOneAndDeleteAsync(machineFilter);
 
+            _fileService.DeleteFiles(resultMachine.Images);
+
             return resultSummary != null;
         }
 
