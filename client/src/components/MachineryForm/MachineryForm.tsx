@@ -9,11 +9,12 @@ import MatIcon from "../MatIcon/MatIcon";
 import Upload from "../Upload/Upload";
 import { useEffect } from "react";
 import { getFileName } from "../../utils/Formatting";
+import { options } from "../Chart/Chart";
 
 interface FormFields {
   type: number;
   productionYear: string;
-  images: (File | string)[];
+  images: File[];
   licensePlate: string;
   registeredUntil: string;
   model: string;
@@ -26,6 +27,11 @@ const nameToValue: { [key: string]: number } = {
   Kombajn: 3,
   Motokultivator: 4,
   Ostalo: 5,
+};
+
+const mapToProxyFile: (v: string) => File = (v: string) => {
+  const file = new File([], v);
+  return file;
 };
 
 interface MachineryFormProps {
@@ -56,7 +62,7 @@ const MachineryForm = ({
           ? nameToValue[machine.type]
           : machine.type
         : 0,
-      images: machine?.images ? [...machine.images] : [],
+      images: machine?.images ? machine.images.map(mapToProxyFile) : [],
       licensePlate: machine?.licensePlate ?? "",
       registeredUntil: moment(
         machine?.registeredUntil ? machine.registeredUntil : new Date()
@@ -70,6 +76,7 @@ const MachineryForm = ({
   });
 
   const formSubmit = (data: FormFields) => {
+    console.log(data.images);
     onSubmit(
       {
         licensePlate: data.licensePlate,
@@ -78,10 +85,10 @@ const MachineryForm = ({
         registeredUntil: new Date(data.registeredUntil).toISOString(),
         model: data.model,
       },
-      data.images.filter((v) => v instanceof File) as File[],
+      data.images.filter((v) => v.size > 0),
       machine?.images?.filter(
-        (i) => !data.images.find((e) => typeof e === "string" && i === e)
-      ) as string[]
+        (i) => data.images.find((di) => di.name === i) === undefined
+      )
     );
   };
 
@@ -93,7 +100,7 @@ const MachineryForm = ({
             ? nameToValue[machine.type]
             : machine.type
           : 0,
-        images: machine?.images ?? [],
+        images: machine?.images ? machine.images.map(mapToProxyFile) : [],
         licensePlate: machine?.licensePlate ?? "",
         registeredUntil: moment(
           machine?.registeredUntil ? machine.registeredUntil : new Date()
@@ -163,13 +170,7 @@ const MachineryForm = ({
       ></TextField>
       <Controller
         render={({ field: { onChange, value } }) => (
-          <Upload
-            text="Otpremi"
-            value={value.map((val) =>
-              typeof val === "string" ? new File([], getFileName(val)) : val
-            )}
-            onChange={onChange}
-          ></Upload>
+          <Upload text="Otpremi" value={value} onChange={onChange}></Upload>
         )}
         control={control}
         name="images"

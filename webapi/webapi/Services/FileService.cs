@@ -49,6 +49,11 @@ public class FileService
 
     public bool DeleteFiles(List<string> paths)
     {
+        if (paths.Count == 0)
+        {
+            return true;
+        }
+
         var blobClient = _cloudStorageAccount.CreateCloudBlobClient();
         var blobContainer = blobClient.GetContainerReference(containerName: _ContainerName);
 
