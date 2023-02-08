@@ -55,6 +55,7 @@ export function SnackbarProvider({ children }: SnackBarProviderProps) {
         open={state.open}
         autoHideDuration={state?.autoHideDuration}
         onClose={closeSnackbar}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
         <Alert severity={state?.severity} onClose={closeSnackbar}>
           {state.message}

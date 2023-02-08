@@ -18,7 +18,13 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <AuthStateProvider>
-      <ConfirmProvider>
+      <ConfirmProvider
+        defaultOptions={{
+          cancellationText: "Otkaži",
+          confirmationText: "Potvrdi",
+          title: "Potvrdite akciju",
+        }}
+      >
         <BrowserRouter>
           <App />
         </BrowserRouter>
