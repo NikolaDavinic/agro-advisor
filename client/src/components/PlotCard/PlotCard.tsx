@@ -20,7 +20,7 @@ const PlotCard = ({ plot, ...props }: PlotCardProps) => {
         <Typography className="text-gray-600">{plot.municipality}</Typography>
         <Typography fontWeight="bold">
           <>
-            <p>
+            <span>
               <MatIcon style={{ fontSize: 12 }}>
                 numbers
               </MatIcon>
@@ -29,7 +29,7 @@ const PlotCard = ({ plot, ...props }: PlotCardProps) => {
                 straighten
               </MatIcon>
               {`${plot.area}`}m<sup>2</sup>
-            </p>
+            </span>
           </>
         </Typography>
       </Box>

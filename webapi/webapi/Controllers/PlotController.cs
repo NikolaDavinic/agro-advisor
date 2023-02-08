@@ -118,6 +118,23 @@ namespace webapi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [Authorize]
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeletePlot(string id)
+        {
+            try
+            {
+                var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("Id"))?.Value;
+
+                await _plotService.DeleteAsync(userId, id);
+
+                return Ok(new { msg = "Zemljiste je je obrisano" });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { msg = e.Message });
+            }
+        }
 
     }
 }

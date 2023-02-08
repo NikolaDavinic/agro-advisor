@@ -121,5 +121,20 @@ namespace webapi.Services
 
             return plot;
         }
+
+        public async Task<bool> DeleteAsync(string userId, string plotId)
+        {
+            var userFilter = Builders<User>.Filter.Where(u => u.Id == userId);
+            var userUpdate = Builders<User>.Update.PullFilter(u => u.Plots, Builders<PlotSummary>.Filter.Where(m => m.Id.Id == plotId));
+
+            var resultSummary = await _context.Users.UpdateOneAsync(userFilter, userUpdate);
+
+            var plotFilter = Builders<Plot>.Filter.Eq((m) => m.Id, plotId) &
+                Builders<Plot>.Filter.Eq((m) => m.User.Id, userId);
+
+            var resultPlot = await _context.Plots.FindOneAndDeleteAsync(plotFilter);
+
+            return resultSummary != null;
+        }
     }
 }
