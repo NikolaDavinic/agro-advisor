@@ -17,7 +17,7 @@ const PlotCard = ({ plot, ...props }: PlotCardProps) => {
       className={`p-2 flex justify-between ${props.className}`}
     >
       <Box>
-        <Typography className="text-gray-400">{plot.municipality}</Typography>
+        <Typography className="text-gray-600">{plot.municipality}</Typography>
         <Typography fontWeight="bold">
           <>
             <p>

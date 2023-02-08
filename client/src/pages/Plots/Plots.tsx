@@ -95,7 +95,7 @@ const Plots = () => {
                   onClick={() => setSelectedPlotId(p.id ?? null)}
                   plot={p}
                   key={p.id}
-                  className="cursor-pointer"
+                  className="cursor-pointer m-1"
                 ></PlotCard>
               ))}
             </Box>
