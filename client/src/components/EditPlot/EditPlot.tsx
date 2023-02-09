@@ -27,7 +27,13 @@ interface MapEventsProps {
 const MapEvents = (props: MapEventsProps) => {
     const map = useMapEvents({
         click(e: any) {
-            props.setPositions((prevPos) => [...prevPos, e.latlng]);
+            // console.log(e.latlng);
+            const newPoint = [
+                Number(e?.latlng?.lat), Number(e?.latlng?.lng)
+            ]
+            //@ts-ignore
+            // props.setPositions((prevPos) => [...prevPos, newPoint]);
+            props.setPositions((prevPos) => [...prevPos, newPoint]);
         },
         load() {
             map.panTo(props.startPos);
@@ -146,7 +152,6 @@ const EditPlot: React.FC = ({ }: EditPlotProps) => {
         //         coordinates: [Number(cords[0]), Number(cords[1])]
         //     };
         // })
-        
         data.borderPoints = borderPoints.map(p => {
             // var point: string = p.toString();
             // var latlngStr = point.toString();
@@ -168,12 +173,14 @@ const EditPlot: React.FC = ({ }: EditPlotProps) => {
                 setShowSnackbar(true);
                 //TODO:TESTING
                 setPlot(response.data)
+                setShowSpinner(false);
             })
             .catch((error) => {
                 console.error(error);
                 setSnackbarSeverity("error");
                 setSnackbarMessage(error);
                 setShowSnackbar(true);
+                setShowSpinner(false);
             });
     };
     return (

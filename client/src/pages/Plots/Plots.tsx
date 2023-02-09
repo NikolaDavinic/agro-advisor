@@ -1,14 +1,13 @@
-import { Box, Button, CircularProgress, LinearProgress, Paper, Stack, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, LinearProgress, Stack, Typography } from "@mui/material";
 import { AxiosError } from "axios";
 import { useConfirm } from "material-ui-confirm";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import PlotCard from "../../components/PlotCard/PlotCard";
 import PlotDisplay from "../../components/PlotDisplay/PlotDisplay";
 import { useSnackbar } from "../../contexts/snackbar.context";
 import { ApiMessage } from "../../dtos/api-message.dto";
 import { useApi } from "../../hooks/api.hook";
-import { Machinery } from "../../models/machinery.model";
 import { Plot } from "../../models/plot.model";
 import { api } from "../../utils/api/axios";
 
@@ -18,6 +17,7 @@ const Plots = () => {
   const [selectedPlotId, setSelectedPlotId] = useState<string | null>(
     null
   );
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const confirm = useConfirm();
   const { openSnackbar } = useSnackbar();
@@ -39,16 +39,15 @@ const Plots = () => {
     window.history.pushState({ path: newurl }, '', newurl);
   }
 
-  const queryParams = new URLSearchParams()
   useEffect(() => {
     if (plotSummaries && plotSummaries?.length > 0) {
-      const plotId = queryParams.get("plot")
+      const plotId = searchParams.get("plot")
       if (plotId != null)
         onPlotSelect(plotId);
       else
         onPlotSelect(plotSummaries[0].id ?? null);
     }
-  }, [plotSummaries]);
+  }, [plotSummaries, searchParams]);
 
   const showHarvestForm = () => {
     setFormOpen(true);

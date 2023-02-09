@@ -19,8 +19,7 @@ const PlotPolygon = ({ plot, navigate }: PolygonClickEventProps) => {
     const eventHandlers = useMemo(
         () => ({
             click() {
-                //TODO:navigate(`/plot/${plot.id}`);
-                navigate(`/plot/${plot.id}/edit`);
+                navigate(`/plots?plot=${plot.id}`);
             },
         }),
         [],
@@ -75,7 +74,7 @@ const PlotMap: React.FC = () => {
 
             {!showSpinner && <div className="w-full h-full">
                 <Typography gutterBottom variant="h5">
-                    Click on any plot to view further details
+                    Izaberite parcelu za koju zelite da vidite detalje
                 </Typography>
                 <div style={{ minHeight: "450px" }} className="w-full h-full py-4">
                     <MapContainer className="h-full w-full cursor-crosshair" center={startPosition} zoom={15} scrollWheelZoom={true}>
