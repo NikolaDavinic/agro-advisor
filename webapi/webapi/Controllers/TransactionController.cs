@@ -197,5 +197,28 @@ namespace webapi.Controllers
                 return BadRequest(new { msg = e.Message });
             }
         }
+
+        [HttpGet("numbertransactionbycategories")]
+        public async Task<ActionResult> NumberTransactionByCategories(string positive)
+        {
+            try
+            {
+                var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("Id"))?.Value;
+
+                if (userId == null)
+                {
+                    return Unauthorized("Greska pri autentifikaciji");
+                }
+                //string user = "63e006abbb7ba2d850f0ab98";
+                var result = await _transactionService.GetTransactionGroupedByYearAndCatergoryName(userId, positive);
+
+                return Ok(result);
+
+            }
+            catch(Exception e)
+            {
+                return BadRequest(new { msg = e.Message });
+            }
+        }
     }
 }

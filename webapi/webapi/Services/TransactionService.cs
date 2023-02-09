@@ -114,15 +114,34 @@ public class TransactionService
             });
 
         return groupedElements;
-        //var pipline = new BsonDocument[]
-        //{
-        //    new BsonDocument("$group",
-        //        new BsonDocument
-        //        {
-        //            {"_id", new BsonDocument("$year", "$dateField") },
-        //            { "value", new BsonDocument("$sum",1) }
-        //        }
-        //    )
-        //};
     }
+
+    public async Task<IEnumerable> GetTransactionGroupedByYearAndCatergoryName(string userId, string positive)
+    {
+        var user = await _context.Users.Find(x => x.Id == userId).FirstOrDefaultAsync();
+
+        if(String.Compare(positive, "pozitivan")==0)
+        {
+            var groupedElements = user.Transactions.GroupBy(e => new { e.CategoryName, e.Date.Year })
+                .Select(g => new
+                {
+                    Key = g.Key,
+                    NumberOfTransaction = g.Where(e => e.Value>=0).Count()
+                });
+            return groupedElements;
+        }
+        else
+        {
+            var groupedElements = user.Transactions.GroupBy(e => new { e.CategoryName, e.Date.Year })
+                .Select(g => new
+                {
+                    Key = g.Key,
+                    NumberOfTransaction = g.Where(e => e.Value < 0).Count()
+                });
+            return groupedElements;
+
+        }
+
+    }
+
 }
