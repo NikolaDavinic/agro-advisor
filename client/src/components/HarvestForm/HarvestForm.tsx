@@ -8,7 +8,7 @@ import { Harvest } from "../../models/harvest.model";
 import MatIcon from "../MatIcon/MatIcon";
 
 interface FormFields {
-  cultureName: string | null;
+  cultureName?: string;
   amount: number;
   date: Date;
 }
@@ -40,8 +40,7 @@ const HarvestForm = ({
       {
         amount: data.amount,
         cultureName: data.cultureName,
-        date: data.date,
-        id: null
+        date: data.date
       }
     );
   };

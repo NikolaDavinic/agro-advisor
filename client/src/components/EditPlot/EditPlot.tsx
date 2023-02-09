@@ -146,16 +146,18 @@ const EditPlot: React.FC = ({ }: EditPlotProps) => {
         //         coordinates: [Number(cords[0]), Number(cords[1])]
         //     };
         // })
+        
         data.borderPoints = borderPoints.map(p => {
-            var point: string = p.toString();
-            var latlngStr = point.toString();
-            var substr = latlngStr.substring(
-                latlngStr.indexOf("(") + 1,
-                latlngStr.lastIndexOf(")")
-            );
-            var cords = substr.split(",");
+            // var point: string = p.toString();
+            // var latlngStr = point.toString();
+            // var substr = latlngStr.substring(
+            //     latlngStr.indexOf("(") + 1,
+            //     latlngStr.lastIndexOf(")")
+            // );
+            // var cords = substr.split(",");
             return {
-                x: Number(cords[0]), y: Number(cords[1])
+                //@ts-ignore
+                x: Number(p[0]), y: Number(p[1])
             };
         })
         api

@@ -103,7 +103,8 @@ const PlotDisplay = ({
         openSnackbar({ message: "Doslo je do greske", severity: "error" });
       });
   }
-  const onDeleteHarvest = (harvestId: string | null) => {
+  const onDeleteHarvest = (harvestId?: string) => {
+    console.log(harvestId);
     api
       .delete(`/harvest/${plot.id}/${harvestId}`)
       .then((response) => {
