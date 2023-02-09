@@ -42,11 +42,11 @@ public class TransactionService
         filter &= Builders<User>.Filter.ElemMatch(u => u.Transactions, Builders<Transaction>.Filter.Eq(x => x.Id, transaction.Id));
 
         var update = Builders<User>.Update
-            .Set(x => x.Transactions.First().Value, transaction.Value)
-            .Set(x => x.Transactions.First().Date, transaction.Date)
-            .Set(x => x.Transactions.First().Description, transaction.Description)
-            .Set(x => x.Transactions.First().CategoryName, transaction.CategoryName)
-            .Set(x => x.Transactions.First().Category, transaction.Category);
+            .Set(x => x.Transactions[-1].Value, transaction.Value)
+            .Set(x => x.Transactions[-1].Date, transaction.Date)
+            .Set(x => x.Transactions[-1].Description, transaction.Description)
+            .Set(x => x.Transactions[-1].CategoryName, transaction.CategoryName)
+            .Set(x => x.Transactions[-1].Category, transaction.Category);
 
         await _context.Users.FindOneAndUpdateAsync(filter, update);
         return transaction;

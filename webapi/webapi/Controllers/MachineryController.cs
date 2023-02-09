@@ -164,7 +164,7 @@ namespace webapi.Controllers
             }
             catch (Exception e)
             {
-                return Ok(new { msg = e.Message });
+                return BadRequest(new { msg = e.Message });
             }
         }
     }

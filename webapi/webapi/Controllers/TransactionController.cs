@@ -97,7 +97,7 @@ namespace webapi.Controllers
                 var transaction = new Transaction
                 {
                     Id = ObjectId.Parse(tDTO.Id),
-                    Category = new MongoDBRef("TCategory", category.Id),
+                    Category = new MongoDBRef("TCategories", category.Id),
                     CategoryName = category.Name,
                     Description = tDTO.Description,
                     Value = tDTO.Value,
