@@ -27,6 +27,7 @@ const Machines = () => {
   const [selectedMachineId, setSelectedMachineId] = useState<string | null>(
     null
   );
+  const [changeLoader, setChangeLoader] = useState<boolean>(false);
 
   const confirm = useConfirm();
   const { openSnackbar } = useSnackbar();
@@ -61,6 +62,8 @@ const Machines = () => {
     removedPhotos?: string[]
   ) => {
     let images: string[] = [];
+
+    setChangeLoader(true);
 
     if (addedPhotos && addedPhotos.length > 0) {
       const formData = new FormData();
@@ -104,7 +107,8 @@ const Machines = () => {
         })
         .catch((err: AxiosError<ApiMessage>) => {
           openSnackbar({ message: err.message, severity: "error" });
-        });
+        })
+        .finally(() => setChangeLoader(false));
     } else {
       machine.images = images;
       api
@@ -116,7 +120,8 @@ const Machines = () => {
         })
         .catch((err: AxiosError<ApiMessage>) => {
           openSnackbar({ message: err.message, severity: "error" });
-        });
+        })
+        .finally(() => setChangeLoader(false));
     }
   };
 
@@ -167,6 +172,7 @@ const Machines = () => {
               ></MachineryForm>
             </Paper>
           )}
+          {changeLoader && <LinearProgress></LinearProgress>}
           {!loading && machineSummaries?.length == 0 && (
             <Typography className="text-gray-500">
               Dodajte svoju mehanizaciju!
