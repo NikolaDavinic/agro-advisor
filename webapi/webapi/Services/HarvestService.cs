@@ -14,7 +14,7 @@ namespace webapi.Services
         {
             _context = context;
         }
-        public async Task CreateAsync(HarvestDTO newHarvest,string plotId)
+        public async Task<Harvest> CreateAsync(HarvestDTO newHarvest,string plotId)
         {
             var harvest = new Harvest
             {
@@ -27,6 +27,8 @@ namespace webapi.Services
             var update = Builders<Plot>.Update.Push(u => u.Harvests, harvest);
 
             var result = await _context.Plots.FindOneAndUpdateAsync(filter, update);
+
+            return harvest;
         }
         //public async Task<Harvest?> GetAsync(string plotId, string harvestId)
         //{
