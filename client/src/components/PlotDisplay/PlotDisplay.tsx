@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   IconButton,
   Menu,
   MenuItem,
@@ -11,24 +12,19 @@ import {
   TableCell,
   TableRow,
   Tabs,
-  Typography,
 } from "@mui/material";
-import moment from "moment";
-import { Machinery } from "../../models/machinery.model";
-import ImageGallery from "react-image-gallery";
-import { useState } from "react";
-import MatIcon from "../MatIcon/MatIcon";
-import styles from "./MachineryDisplay.module.scss";
-import { Plot } from "../../models/plot.model";
-import { MapContainer, Polygon, TileLayer } from "react-leaflet";
 import { LatLngExpression, PathOptions } from "leaflet";
-import { ClassNames } from "@emotion/react";
+import { useState } from "react";
+import { MapContainer, Polygon, TileLayer } from "react-leaflet";
 import { useNavigate } from "react-router-dom";
+import { useSnackbar } from "../../contexts/snackbar.context";
+import { Harvest } from "../../models/harvest.model";
+import { Plot } from "../../models/plot.model";
+import { api } from "../../utils/api/axios";
+import HarvestCard from "../HarvestCard/HarvestCard";
+import HarvestForm from "../HarvestForm/HarvestForm";
+import MatIcon from "../MatIcon/MatIcon";
 
-interface PlotDisplayProps {
-  plot: Plot;
-  onDelete?: (plot: Plot) => void;
-}
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -50,31 +46,42 @@ function TabPanel(props: TabPanelProps) {
     >
       {value === index ? (
         // <Box sx={{ p: 3 }}>
-        <div className="min-h-fit">
-          {children}
-        </div>
+        <div className="min-h-fit">{children}</div>
+      ) : (
         // </Box>
-      ) : <></>}
+        <></>
+      )}
     </div>
   );
 }
+interface PlotDisplayProps {
+  plot: Plot;
+  onDelete?: (plot: Plot) => void;
+}
 const PlotDisplay = ({
-  plot,
-  onDelete = () => { },
+  plot: plotProp,
+  onDelete = () => {},
 }: PlotDisplayProps) => {
-  let color: string = "green";
+  const [plot, setPlot] = useState<Plot>(plotProp);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [formOpen, setFormOpen] = useState<boolean>(false);
   const open = Boolean(anchorEl);
-
   const [borderPoints, setBorderPoints] = useState<LatLngExpression[]>(
-    plot.borderPoints.map(point =>
+    plot.borderPoints.map((point) =>
       //@ts-ignore
       [point.coordinates.values[0], point.coordinates.values[1]]
-    ));
-  //@ts-ignore
-  const [startPosition, setStartPosition] = useState<[number, number]>([plot.borderPoints[0].coordinates.values[0], plot.borderPoints[0].coordinates.values[1]]);
+    )
+  );
+
+  const [startPosition, setStartPosition] = useState<[number, number]>([
+    //@ts-ignore
+    plot.borderPoints[0].coordinates.values[0],
+    //@ts-ignore
+    plot.borderPoints[0].coordinates.values[1],
+  ]);
 
   const [currentTab, setCurrentTab] = useState<number>(0);
+  const { openSnackbar } = useSnackbar();
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -86,6 +93,41 @@ const PlotDisplay = ({
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setCurrentTab(newValue);
   };
+  const onAddHarvest = (harvest: Harvest) => {
+    api
+      .post<Harvest>(`/harvest/add/${plot.id}`, harvest)
+      .then(({ data }) => {
+        openSnackbar({ message: "Berba uspesno dodata!", severity: "success" });
+        setPlot((prevPlot) => ({
+          ...prevPlot,
+          harvests: [data, ...prevPlot.harvests],
+        }));
+      })
+      .catch((error) => {
+        console.error(error);
+        openSnackbar({ message: "Doslo je do greske", severity: "error" });
+      });
+  }
+  const onDeleteHarvest = (harvestId?: string) => {
+    console.log(harvestId);
+    api
+      .delete(`/harvest/${plot.id}/${harvestId}`)
+      .then((response) => {
+        openSnackbar({
+          message: "Berba uspesno Obrisana!",
+          severity: "success",
+        });
+        setPlot((prevPlot) => ({
+          ...prevPlot,
+          harvests: prevPlot.harvests.filter((h) => h.id !== harvestId),
+        }));
+      })
+      .catch((error) => {
+        console.error(error);
+        openSnackbar({ message: "Doslo je do greske", severity: "error" });
+      });
+  };
+
   return (
     <Paper elevation={4} className={`p-2`}>
       <Box className="w-full">
@@ -123,9 +165,7 @@ const PlotDisplay = ({
           <TableBody>
             <TableRow>
               <TableCell variant="head">Opština:</TableCell>
-              <TableCell>
-                {plot.municipality ?? "/"}
-              </TableCell>
+              <TableCell>{plot.municipality ?? "/"}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell align="left" variant="head">
@@ -159,26 +199,65 @@ const PlotDisplay = ({
             className="w-full lg:w-3/5 xl:2/5"
             textAlign="center"
           >
-            <Tabs value={currentTab} onChange={handleTabChange} aria-label="basic tabs example">
-              <Tab label="Mapa" />
-              <Tab label="Berbe" />
-              <Tab label="Vremenska prognoza" />
+            <Tabs
+              centered
+              className="w-full justify-between"
+              indicatorColor="secondary"
+              value={currentTab}
+              onChange={handleTabChange}
+              aria-label="basic tabs example"
+            >
+              <Tab label="Mapa" className="w-1/2" />
+              <Tab label="Berbe" className="w-1/2" />
             </Tabs>
           </Box>
         </Box>
         <TabPanel value={currentTab} index={0}>
           <div className="w-full h-96">
-            {plot && <MapContainer className="h-full w-full cursor-crosshair" center={startPosition} zoom={16.5} scrollWheelZoom={true}>
-              <TileLayer
-                url="https://api.maptiler.com/maps/hybrid/{z}/{x}/{y}.jpg?key=v4YRbPNezQckuRrQ6AGT"
-              />
-              <Polygon pathOptions={blueOptions} positions={borderPoints} />
-
-            </MapContainer>}
+            {plot && (
+              <MapContainer
+                className="h-full w-full cursor-crosshair"
+                center={startPosition}
+                zoom={16.5}
+                scrollWheelZoom={true}
+              >
+                <TileLayer url="https://api.maptiler.com/maps/hybrid/{z}/{x}/{y}.jpg?key=v4YRbPNezQckuRrQ6AGT" />
+                <Polygon pathOptions={blueOptions} positions={borderPoints} />
+              </MapContainer>
+            )}
           </div>
         </TabPanel>
         <TabPanel value={currentTab} index={1}>
-          Item Two
+          <div className="w-full h-96">
+            <Stack overflow="auto" className="p-2 gap-2 h-full">
+              <Box>
+                <Button
+                  variant="text"
+                  color={formOpen ? "error" : "primary"}
+                  onClick={() => setFormOpen((prev) => !prev)}
+                >
+                  {formOpen ? "Zatvori" : "Dodaj berbu"}
+                </Button>
+              </Box>
+              {formOpen && (
+                <Paper className="p-2">
+                  <HarvestForm
+                    onSubmit={(harvest) => onAddHarvest(harvest)}
+                  ></HarvestForm>
+                </Paper>
+              )}
+              {plot.harvests.length === 0 && "Nemate unetih berbi..."}
+              {plot.harvests.length > 0 &&
+                plot.harvests?.map((h) => (
+                  <HarvestCard
+                    harvest={h}
+                    key={h.id}
+                    className={`cursor-pointer`}
+                    onDelete={(harvestId) => onDeleteHarvest(harvestId)}
+                  ></HarvestCard>
+                ))}
+            </Stack>
+          </div>
         </TabPanel>
         <TabPanel value={currentTab} index={2}>
           Item Three

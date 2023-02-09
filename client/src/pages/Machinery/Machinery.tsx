@@ -23,9 +23,11 @@ import { useConfirm } from "material-ui-confirm";
 const Machines = () => {
   const navigate = useNavigate();
   const [formOpen, setFormOpen] = useState<boolean>();
+  const [isEditing, setIsEditing] = useState<boolean>(false);
   const [selectedMachineId, setSelectedMachineId] = useState<string | null>(
     null
   );
+  const [changeLoader, setChangeLoader] = useState<boolean>(false);
 
   const confirm = useConfirm();
   const { openSnackbar } = useSnackbar();
@@ -36,44 +38,91 @@ const Machines = () => {
     setResult: setMachineSummaries,
   } = useApi<Machinery[]>("machinery");
 
-  const { result: selectedMachine, loading: selectedMachineLoading } =
-    useApi<Machinery | null>(
-      selectedMachineId ? `machinery/${selectedMachineId}` : ""
-    );
+  const {
+    result: selectedMachine,
+    loading: selectedMachineLoading,
+    setResult: setSelectedMachine,
+  } = useApi<Machinery | null>(
+    selectedMachineId ? `machinery/${selectedMachineId}` : ""
+  );
 
   useEffect(() => {
     if (machineSummaries && machineSummaries?.length > 0)
       setSelectedMachineId(machineSummaries[0].id ?? null);
   }, [machineSummaries]);
 
-  const onAddMachine = async (machine: Machinery) => {
+  const editMachine = () => {
+    setFormOpen(true);
+    setIsEditing(true);
+  };
+
+  const onAddMachine = async (
+    machine: Machinery,
+    addedPhotos?: File[],
+    removedPhotos?: string[]
+  ) => {
     let images: string[] = [];
 
-    if (machine.images && machine.images?.length > 0) {
+    setChangeLoader(true);
+
+    if (addedPhotos && addedPhotos.length > 0) {
       const formData = new FormData();
-      machine.images.forEach((img) => formData.append("files", img));
+      addedPhotos?.forEach((img) => formData.append("files", img));
 
       openSnackbar({ message: "Optremaju se slike...", severity: "info" });
+
       const res = await api({
         method: "post",
         url: "files/upload-multiple",
         data: formData,
         headers: { "Content-Type": "multipart/form-data" },
       });
+
       images = res.data.paths;
     }
 
-    machine.images = images;
-    api
-      .post<Machinery>("machinery", machine)
-      .then(({ data }) => {
-        openSnackbar({ message: "Uspesno dodata mašina" });
-        setMachineSummaries((prev) => [data, ...(prev ?? [])]);
-        setFormOpen(false);
-      })
-      .catch((err: AxiosError<ApiMessage>) => {
-        openSnackbar({ message: err.message, severity: "error" });
-      });
+    if (isEditing) {
+      machine.images = [
+        ...(selectedMachine?.images?.filter(
+          (i) => removedPhotos?.indexOf(i) === -1
+        ) ?? []),
+        ...images,
+      ];
+
+      machine.id = selectedMachineId ?? "";
+
+      api
+        .put<Machinery>("machinery", machine)
+        .then(({ data }) => {
+          openSnackbar({
+            message: "Uspesno izmenjena mašina",
+            severity: "success",
+          });
+          setFormOpen(false);
+          setSelectedMachineId(null);
+          setMachineSummaries((prev) => [
+            data,
+            ...(prev ?? []).filter((p) => p.id !== data.id),
+          ]);
+        })
+        .catch((err: AxiosError<ApiMessage>) => {
+          openSnackbar({ message: err.message, severity: "error" });
+        })
+        .finally(() => setChangeLoader(false));
+    } else {
+      machine.images = images;
+      api
+        .post<Machinery>("machinery", machine)
+        .then(({ data }) => {
+          openSnackbar({ message: "Uspesno dodata mašina" });
+          setMachineSummaries((prev) => [data, ...(prev ?? [])]);
+          setFormOpen(false);
+        })
+        .catch((err: AxiosError<ApiMessage>) => {
+          openSnackbar({ message: err.message, severity: "error" });
+        })
+        .finally(() => setChangeLoader(false));
+    }
   };
 
   const deleteMachine = (machine: Machinery) => {
@@ -85,7 +134,7 @@ const Machines = () => {
         .delete(`machinery/${machine.id}`)
         .then(() => {
           openSnackbar({
-            message: "Uspešno obrisana mašinu",
+            message: "Uspešno obrisana mašina",
             severity: "success",
           });
           setMachineSummaries((prev) =>
@@ -106,16 +155,24 @@ const Machines = () => {
             <Button
               variant="outlined"
               color={formOpen ? "error" : "primary"}
-              onClick={() => setFormOpen((prev) => !prev)}
+              onClick={() => {
+                setFormOpen((prev) => !prev);
+                setIsEditing(false);
+              }}
             >
               {formOpen ? "Zatvori" : "Dodaj mašinu"}
             </Button>
           </Box>
           {formOpen && (
             <Paper className="p-2">
-              <MachineryForm onSubmit={onAddMachine}></MachineryForm>
+              <MachineryForm
+                buttonText={isEditing ? "Sačuvaj izmene" : "Dodaj"}
+                onSubmit={onAddMachine}
+                machine={isEditing ? selectedMachine : null}
+              ></MachineryForm>
             </Paper>
           )}
+          {changeLoader && <LinearProgress></LinearProgress>}
           {!loading && machineSummaries?.length == 0 && (
             <Typography className="text-gray-500">
               Dodajte svoju mehanizaciju!
@@ -130,7 +187,10 @@ const Machines = () => {
             <Stack maxHeight="80%" overflow="auto" className="p-2 gap-2">
               {machineSummaries?.map((m) => (
                 <MachineryCard
-                  onClick={() => setSelectedMachineId(m.id ?? null)}
+                  onClick={() => {
+                    setSelectedMachineId(m.id ?? null);
+                    if (isEditing) setFormOpen(false);
+                  }}
                   machine={m}
                   key={m.id}
                   className={`cursor-pointer ${
@@ -154,6 +214,7 @@ const Machines = () => {
               <LinearProgress color="primary"></LinearProgress>
             ) : (
               <MachineryDisplay
+                onEditClick={editMachine}
                 machine={selectedMachine}
                 onDelete={deleteMachine}
               ></MachineryDisplay>

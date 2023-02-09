@@ -1,6 +1,6 @@
 export interface Harvest {
-    Id: string | null;
-    CultureName: string | null;
-    Amount: number;
-    Date: Date;
+    id?: string;
+    cultureName?: string;
+    amount: number;
+    date: Date;
 }

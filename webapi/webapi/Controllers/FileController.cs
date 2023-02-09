@@ -30,5 +30,17 @@ namespace e_citaonica_api.Controllers
 
             return Ok(new { paths = paths.ToList() });
         }
+
+        [HttpDelete("delete-multiple")]
+        public async Task<ActionResult> DeleteFiles([FromForm] string[] photos)
+        {
+            try
+            {
+                return Ok(new { msg = "Obrisane slike" });
+            } catch (Exception ex)
+            {
+                return BadRequest(new { msg = ex.Message });
+            }
+        }
     }
 }

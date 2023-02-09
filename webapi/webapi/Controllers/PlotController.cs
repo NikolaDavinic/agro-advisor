@@ -32,25 +32,35 @@ namespace webapi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        //TODO:Koristi ID trenutnog korisnika umesto hardkodirani
-        //[Authorize]
+
+        [Authorize]
         [HttpGet("{plotId}")]
         public async Task<ActionResult> GetPlot(string plotId)
         {
             try
             {
                 var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("Id"))?.Value;
-                //userId= "63df951c945d31aa29069e31";
+
                 if (userId == null)
                 {
                     return Unauthorized("Greska pri autentifikaciji");
                 }
 
                 var result = await _plotService.GetAsync(userId, plotId);
+
                 if (result == null)
                     return BadRequest("Ne postoji plot za trazeni ID");
-
-                return Ok(result);
+                
+                return Ok(new
+                {
+                    result.Id,
+                    Harvests = result.Harvests.Select((h) => new { h.Date, Id = h.Id.Value.ToString(), h.CultureName, h.Amount }),
+                    result.Area,
+                    result.CurrentCulture,
+                    result.BorderPoints,
+                    result.Municipality,
+                    result.PlotNumber
+                });
             }
             catch (Exception ex)
             {
