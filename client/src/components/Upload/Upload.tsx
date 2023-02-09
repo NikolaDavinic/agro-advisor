@@ -1,5 +1,5 @@
 import { Box, Button, Chip, Stack } from "@mui/material";
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { getFileName } from "../../utils/Formatting";
 import MatIcon from "../MatIcon/MatIcon";
 

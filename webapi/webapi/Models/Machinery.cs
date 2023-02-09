@@ -28,8 +28,8 @@ namespace webapi.Models
     public enum MachineType
     {
         Kombi,
-        Kamion,
         Traktor, 
+        Kamion,
         Kombajn, //kombajn
         Motokultivator,
         Ostalo

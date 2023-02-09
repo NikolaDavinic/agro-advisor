@@ -11,7 +11,7 @@ import {
   TableBody,
   TableCell,
   TableRow,
-  Tabs
+  Tabs,
 } from "@mui/material";
 import { LatLngExpression, PathOptions } from "leaflet";
 import { useState } from "react";
@@ -46,11 +46,11 @@ function TabPanel(props: TabPanelProps) {
     >
       {value === index ? (
         // <Box sx={{ p: 3 }}>
-        <div className="min-h-fit">
-          {children}
-        </div>
+        <div className="min-h-fit">{children}</div>
+      ) : (
         // </Box>
-      ) : <></>}
+        <></>
+      )}
     </div>
   );
 }
@@ -60,19 +60,25 @@ interface PlotDisplayProps {
 }
 const PlotDisplay = ({
   plot: plotProp,
-  onDelete = () => { }
+  onDelete = () => {},
 }: PlotDisplayProps) => {
   const [plot, setPlot] = useState<Plot>(plotProp);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [formOpen, setFormOpen] = useState<boolean>(false);
   const open = Boolean(anchorEl);
   const [borderPoints, setBorderPoints] = useState<LatLngExpression[]>(
-    plot.borderPoints.map(point =>
+    plot.borderPoints.map((point) =>
       //@ts-ignore
       [point.coordinates.values[0], point.coordinates.values[1]]
-    ));
-  //@ts-ignore
-  const [startPosition, setStartPosition] = useState<[number, number]>([plot.borderPoints[0].coordinates.values[0], plot.borderPoints[0].coordinates.values[1]]);
+    )
+  );
+
+  const [startPosition, setStartPosition] = useState<[number, number]>([
+    //@ts-ignore
+    plot.borderPoints[0].coordinates.values[0],
+    //@ts-ignore
+    plot.borderPoints[0].coordinates.values[1],
+  ]);
 
   const [currentTab, setCurrentTab] = useState<number>(0);
   const { openSnackbar } = useSnackbar();
@@ -89,36 +95,37 @@ const PlotDisplay = ({
   };
   const onAddHarvest = (harvest: Harvest) => {
     api
-      .post(`/harvest/add/${plot.id}`, harvest)
-      .then((response) => {
+      .post<Harvest>(`/harvest/add/${plot.id}`, harvest)
+      .then(({ data }) => {
         openSnackbar({ message: "Berba uspesno dodata!", severity: "success" });
-        setPlot(prevPlot => ({
+        setPlot((prevPlot) => ({
           ...prevPlot,
-          harvests: [...prevPlot.harvests, harvest]
-        }))
-
+          harvests: [data, ...prevPlot.harvests],
+        }));
       })
       .catch((error) => {
         console.error(error);
         openSnackbar({ message: "Doslo je do greske", severity: "error" });
       });
-  }
+  };
   const onDeleteHarvest = (harvestId: string | null) => {
     api
       .delete(`/harvest/${plot.id}/${harvestId}`)
       .then((response) => {
-        openSnackbar({ message: "Berba uspesno Obrisana!", severity: "success" });
-        setPlot(prevPlot => ({
+        openSnackbar({
+          message: "Berba uspesno Obrisana!",
+          severity: "success",
+        });
+        setPlot((prevPlot) => ({
           ...prevPlot,
-          harvests: prevPlot.harvests.filter(h => h.id == harvestId)
-        }))
-
+          harvests: prevPlot.harvests.filter((h) => h.id !== harvestId),
+        }));
       })
       .catch((error) => {
         console.error(error);
         openSnackbar({ message: "Doslo je do greske", severity: "error" });
       });
-  }
+  };
 
   return (
     <Paper elevation={4} className={`p-2`}>
@@ -157,9 +164,7 @@ const PlotDisplay = ({
           <TableBody>
             <TableRow>
               <TableCell variant="head">Opština:</TableCell>
-              <TableCell>
-                {plot.municipality ?? "/"}
-              </TableCell>
+              <TableCell>{plot.municipality ?? "/"}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell align="left" variant="head">
@@ -193,22 +198,32 @@ const PlotDisplay = ({
             className="w-full lg:w-3/5 xl:2/5"
             textAlign="center"
           >
-            <Tabs value={currentTab} onChange={handleTabChange} aria-label="basic tabs example">
-              <Tab label="Mapa" />
-              <Tab label="Berbe" />
-              <Tab label="Vremenska prognoza" />
+            <Tabs
+              centered
+              className="w-full justify-between"
+              indicatorColor="secondary"
+              value={currentTab}
+              onChange={handleTabChange}
+              aria-label="basic tabs example"
+            >
+              <Tab label="Mapa" className="w-1/2" />
+              <Tab label="Berbe" className="w-1/2" />
             </Tabs>
           </Box>
         </Box>
         <TabPanel value={currentTab} index={0}>
           <div className="w-full h-96">
-            {plot && <MapContainer className="h-full w-full cursor-crosshair" center={startPosition} zoom={16.5} scrollWheelZoom={true}>
-              <TileLayer
-                url="https://api.maptiler.com/maps/hybrid/{z}/{x}/{y}.jpg?key=v4YRbPNezQckuRrQ6AGT"
-              />
-              <Polygon pathOptions={blueOptions} positions={borderPoints} />
-
-            </MapContainer>}
+            {plot && (
+              <MapContainer
+                className="h-full w-full cursor-crosshair"
+                center={startPosition}
+                zoom={16.5}
+                scrollWheelZoom={true}
+              >
+                <TileLayer url="https://api.maptiler.com/maps/hybrid/{z}/{x}/{y}.jpg?key=v4YRbPNezQckuRrQ6AGT" />
+                <Polygon pathOptions={blueOptions} positions={borderPoints} />
+              </MapContainer>
+            )}
           </div>
         </TabPanel>
         <TabPanel value={currentTab} index={1}>
@@ -231,22 +246,23 @@ const PlotDisplay = ({
                 </Paper>
               )}
               {plot.harvests.length === 0 && "Nemate unetih berbi..."}
-              {plot.harvests.length > 0 && plot.harvests?.map((h) => (
-                <HarvestCard
-                  harvest={h}
-                  key={h.id}
-                  className={`cursor-pointer`}
-                  onDelete={(harvestId) => onDeleteHarvest(harvestId)}
-                ></HarvestCard>
-              ))}
+              {plot.harvests.length > 0 &&
+                plot.harvests?.map((h) => (
+                  <HarvestCard
+                    harvest={h}
+                    key={h.id}
+                    className={`cursor-pointer`}
+                    onDelete={(harvestId) => onDeleteHarvest(harvestId)}
+                  ></HarvestCard>
+                ))}
             </Stack>
           </div>
         </TabPanel>
         <TabPanel value={currentTab} index={2}>
           Item Three
         </TabPanel>
-      </Box >
-    </Paper >
+      </Box>
+    </Paper>
   );
 };
 

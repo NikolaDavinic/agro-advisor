@@ -89,7 +89,7 @@ const Machines = () => {
         ...images,
       ];
 
-      machine.id = selectedMachine?.id;
+      machine.id = selectedMachineId ?? "";
 
       api
         .put<Machinery>("machinery", machine)
