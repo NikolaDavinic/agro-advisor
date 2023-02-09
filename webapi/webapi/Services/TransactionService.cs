@@ -30,8 +30,14 @@ public class TransactionService
 
     public async Task<Transaction> AddTransactionForUser(string userId, Transaction transaction)
     {
+        //var filter = Builders<User>.Filter.Eq((u) => u.Id, userId);
+        //var update = Builders<User>.Update.Push(e => e.Transactions, transaction);
+
+        //var result = await _context.Users.FindOneAndUpdateAsync(filter, update);
+        //return transaction;
+
         var filter = Builders<User>.Filter.Eq((u) => u.Id, userId);
-        var update = Builders<User>.Update.Push(e => e.Transactions, transaction);
+        var update = Builders<User>.Update.Push(u => u.Transactions, transaction);
 
         var result = await _context.Users.FindOneAndUpdateAsync(filter, update);
         return transaction;
@@ -39,17 +45,20 @@ public class TransactionService
 
     public async Task<Transaction> UpdateUserTransaction(string userId, Transaction transaction)
     {
-        var filter = Builders<User>.Filter.Eq((u) => u.Id, userId);
-        filter &= Builders<User>.Filter.ElemMatch(u => u.Transactions, Builders<Transaction>.Filter.Eq(x => x.Id, transaction.Id));
+        var filterBuilder = Builders<User>.Filter;
+        var filterUser = filterBuilder.Eq(x => x.Id, userId) &
+            filterBuilder.ElemMatch(doc => doc.Transactions, Builders<Transaction>.Filter.Eq(x => x.Id, transaction.Id));
 
-        var update = Builders<User>.Update
-            .Set(x => x.Transactions[-1].Value, transaction.Value)
-            .Set(x => x.Transactions[-1].Date, transaction.Date)
-            .Set(x => x.Transactions[-1].Description, transaction.Description)
-            .Set(x => x.Transactions[-1].CategoryName, transaction.CategoryName)
-            .Set(x => x.Transactions[-1].Category, transaction.Category);
+        var updateBuilder = Builders<User>.Update;
+        var update = updateBuilder
+            .Set(doc => doc.Transactions.FirstMatchingElement().Value, transaction.Value)
+            .Set(doc => doc.Transactions.FirstMatchingElement().Date, transaction.Date)
+            .Set(doc => doc.Transactions.FirstMatchingElement().Description, transaction.Description)
+            .Set(doc => doc.Transactions.FirstMatchingElement().CategoryName, transaction.CategoryName)
+            .Set(doc => doc.Transactions.FirstMatchingElement().Category, transaction.Category);
 
-        await _context.Users.FindOneAndUpdateAsync(filter, update);
+
+        await _context.Users.UpdateOneAsync(filterUser, update);
         return transaction;
     }
 
@@ -119,12 +128,10 @@ public class TransactionService
 
     public async Task<IEnumerable> GetTransactionGroupedByYearAndCatergoryName(string userId)
     {
-        var user = await _context.Users.Find(x => x.Id == userId).FirstOrDefaultAsync();
-
-        var result = _context.Users.AsQueryable()
+        var result = (await _context.Users.AsQueryable()
             .Where(u => u.Id == userId)
             .Select(u => u.Transactions)
-            .First()
+            .FirstAsync())
             .GroupBy(x => x.Date.Year)
             .Select((group) => new
             {

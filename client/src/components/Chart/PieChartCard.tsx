@@ -73,7 +73,7 @@ function PieChartCard() {
   };
 
   if (loading) {
-    <LinearProgress></LinearProgress>;
+    return <LinearProgress></LinearProgress>;
   }
 
   if (years?.length === 0) {

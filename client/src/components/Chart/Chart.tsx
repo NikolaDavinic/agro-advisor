@@ -14,7 +14,7 @@ import { Transacation } from "../../models/transaction.model";
 import React from "react";
 import { api } from "../../utils/api/axios";
 import { Box } from "@mui/system";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, LinearProgress } from "@mui/material";
 
 ChartJS.register(
   CategoryScale,
@@ -107,7 +107,7 @@ const Chart = (props: any) => {
     return (
       <Box>
         Učitava se graf...
-        {/* <CircularProgress color="primary"></CircularProgress> */}
+        {/* <LinearProgress></LinearProgress> */}
       </Box>
     );
   }

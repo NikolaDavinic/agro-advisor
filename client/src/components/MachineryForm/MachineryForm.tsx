@@ -170,7 +170,11 @@ const MachineryForm = ({
       ></TextField>
       <Controller
         render={({ field: { onChange, value } }) => (
-          <Upload text="Otpremi" value={value} onChange={onChange}></Upload>
+          <Upload
+            text="Otpremi fotografije"
+            value={value}
+            onChange={onChange}
+          ></Upload>
         )}
         control={control}
         name="images"

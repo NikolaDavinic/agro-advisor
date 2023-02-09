@@ -107,9 +107,9 @@ namespace webapi.Services
             filterUser &= Builders<User>.Filter.ElemMatch(u => u.Machines, Builders<MachinerySummary>.Filter.Eq((m) => m.Id.Id, machine.Id));
 
             var update = Builders<User>.Update
-                .Set(x => x.Machines.Where((s) => s.Id.Id == machine.Id).First().Model, machine.Model)
-                .Set(x => x.Machines.Where((s) => s.Id.Id == machine.Id).First().RegisteredUntil, machine.RegisteredUntil)
-                .Set(x => x.Machines.Where((s) => s.Id.Id == machine.Id).First().Type, machine.Type);
+                .Set(x => x.Machines.FirstMatchingElement().Model, machine.Model)
+                .Set(x => x.Machines.FirstMatchingElement().RegisteredUntil, machine.RegisteredUntil)
+                .Set(x => x.Machines.FirstMatchingElement().Type, machine.Type);
 
             await _context.Users.UpdateOneAsync(filterUser, update);
             

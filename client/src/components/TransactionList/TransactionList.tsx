@@ -144,8 +144,6 @@ const TransactionList = ({ title }: TransactionListProps) => {
   };
 
   const editTransaction = (transaction: Transacation) => {
-    // if (editingTransaction) return;
-    console.log(transaction);
     setEditingTransaction(transaction);
     setFormOpen(true);
   };

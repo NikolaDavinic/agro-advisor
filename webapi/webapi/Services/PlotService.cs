@@ -6,6 +6,7 @@ using System.Threading;
 using System.Transactions;
 using webapi.DTO;
 using webapi.Models;
+using MongoDB.Libmongocrypt;
 
 namespace webapi.Services
 {
@@ -110,22 +111,46 @@ namespace webapi.Services
                 PlotNumber = plot.PlotNumber
             };
 
+
+            //TODO: Radi ali ne radi
             //var filterSummary = Builders<User>.Filter.Eq((u) => u.Id, userId);
-            //var updateSummary = Builders<User>.Update.Push(u => u.Plots, plotSum);
+            //filterSummary &= Builders<User>.Filter.ElemMatch(u => u.Plots, Builders<PlotSummary>.Filter.Eq(x => x.Id.Id, plot.Id));
 
-            //var result = await _context.Users.UpdateOneAsync(filterSummary, updateSummary);
+            //var update = Builders<User>.Update
+            //    .Set(x => x.Plots.First().PlotNumber, plot.PlotNumber)
+            //    .Set(x => x.Plots.First().Area, plot.Area)
+            //    .Set(x => x.Plots.First().Municipality, plot.Municipality);
 
-            //return plot;
+            //await _context.Users.FindOneAndUpdateAsync(filterSummary, update);
 
-            var filterSummary = Builders<User>.Filter.Eq((u) => u.Id, userId);
-            filterSummary &= Builders<User>.Filter.ElemMatch(u => u.Plots, Builders<PlotSummary>.Filter.Eq(x => x.Id.Id, plot.Id));
+            //2. POKUSAJ ISTO DAJE MENJA PRVI UVEK
+            //var filterUser = Builders<User>.Filter;
+            //var userIdAndPlotIdFilter = filterUser.And(
+            //    filterUser.Eq(x => x.Id, userId),
+            //    filterUser.ElemMatch(x => x.Plots, c => c.Id.Id == plot.Id));
+            //// find user with id and plot id
+            //var user = _context.Users.Find(userIdAndPlotIdFilter).SingleOrDefault();
 
-            var update = Builders<User>.Update
-                .Set(x => x.Plots.First().PlotNumber, plot.PlotNumber)
-                .Set(x => x.Plots.First().Area, plot.Area)
-                .Set(x => x.Plots.First().Municipality, plot.Municipality);
+            //// update with positional operator
+            //var update = Builders<User>.Update;
+            //var plotSetter = update
+            //    .Set(x => x.Plots.First().PlotNumber, plot.PlotNumber)
+            //    .Set(x => x.Plots.First().Area, plot.Area)
+            //    .Set(x => x.Plots.First().Municipality, plot.Municipality);
 
-            await _context.Users.FindOneAndUpdateAsync(filterSummary, update);
+            //_context.Users.UpdateOne(userIdAndPlotIdFilter, plotSetter);
+
+            var filterBuilder = Builders<User>.Filter;
+            var filterUser = filterBuilder.Eq(x => x.Id, userId) &
+                filterBuilder.ElemMatch(doc => doc.Plots, el => el.Id.Id == plotDTO.Id);
+
+            var updateBuilder = Builders<User>.Update;
+            var update = updateBuilder.Set(doc => doc.Plots.FirstMatchingElement().PlotNumber, plot.PlotNumber)
+                                        .Set(doc => doc.Plots.FirstMatchingElement().Area, plot.Area)
+                                        .Set(doc => doc.Plots.FirstMatchingElement().Municipality, plot.Municipality);
+
+            _context.Users.UpdateOne(filterUser, update);
+
             return plot;
         }
 
