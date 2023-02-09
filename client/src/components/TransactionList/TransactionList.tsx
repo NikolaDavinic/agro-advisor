@@ -102,7 +102,8 @@ const TransactionList = ({ title }: TransactionListProps) => {
   }, [searchFilter]);
 
   const onSubmitTransaction = (transaction: Transacation) => {
-    if (editingTransaction) {
+    console.log(editingTransaction);
+    if (editingTransaction != null) {
       api
         .put<Transacation>("/transaction", {
           ...transaction,
@@ -144,7 +145,7 @@ const TransactionList = ({ title }: TransactionListProps) => {
 
   const editTransaction = (transaction: Transacation) => {
     // if (editingTransaction) return;
-
+    console.log(transaction);
     setEditingTransaction(transaction);
     setFormOpen(true);
   };
@@ -206,7 +207,7 @@ const TransactionList = ({ title }: TransactionListProps) => {
       )}
       <Paper
         className="flex gap-2 items-center flex-wrap p-2"
-        sx={{ backgroundColor: "var(--secondary)" }}
+        sx={{ backgroundColor: "var(--secondary-light)" }}
       >
         <Select
           value={filterType}

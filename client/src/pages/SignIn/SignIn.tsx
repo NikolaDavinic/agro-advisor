@@ -1,5 +1,12 @@
-import { Box, Button, Grid, Stack, TextField } from "@mui/material";
-import { useEffect } from "react";
+import {
+  Box,
+  Button,
+  Grid,
+  LinearProgress,
+  Stack,
+  TextField,
+} from "@mui/material";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../contexts/auth.context";
@@ -16,11 +23,14 @@ const SignIn = () => {
     reValidateMode: "onSubmit",
   });
 
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { signin } = useAuthContext();
   const { openSnackbar } = useSnackbar();
   const navigate = useNavigate();
 
   const onSubmit = handleSubmit((creds: any) => {
+    setIsLoading(true);
+
     api
       .post<{ user: User; authToken: string }>(`/user/signin`, creds)
       .then(({ data }) => {
@@ -32,7 +42,8 @@ const SignIn = () => {
           message: "Pogresan email ili lozinka",
           severity: "error",
         });
-      });
+      })
+      .finally(() => setIsLoading(true));
   });
 
   return (
@@ -69,7 +80,7 @@ const SignIn = () => {
           {...register("password", { required: true })}
           error={Boolean(errors.password)}
         ></TextField>
-        {/* <p style={{ color: "red" }}>{error}</p> */}
+        {isLoading && <LinearProgress></LinearProgress>}
         <Button variant="contained" sx={{ p: 1.2 }} type="submit">
           Sign In
         </Button>

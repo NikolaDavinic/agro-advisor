@@ -14,14 +14,14 @@ import Plots from "./pages/Plots/Plots";
 const theme = createTheme({
   palette: {
     primary: {
-      light: "#fbc02d",
-      main: "#311b92",
-      dark: "#000063",
+      light: "#A6BB8D",
+      main: "#61876E",
+      dark: "#3C6255",
     },
     secondary: {
-      light: "#fbc02d",
-      main: "#ffd54f",
-      dark: "#000063",
+      light: "#FBC252",
+      main: "#FFB100",
+      dark: "#FFB100",
     },
   },
 });

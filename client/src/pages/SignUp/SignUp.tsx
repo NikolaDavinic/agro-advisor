@@ -1,6 +1,13 @@
-import { Box, Button, Grid, Stack, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  LinearProgress,
+  Stack,
+  TextField,
+} from "@mui/material";
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { useSnackbar } from "../../contexts/snackbar.context";
@@ -25,10 +32,13 @@ const SignUp = () => {
     reValidateMode: "onChange",
   });
 
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { openSnackbar, closeSnackbar } = useSnackbar();
   const navigate = useNavigate();
 
   const onSubmit = (data: FormInputs) => {
+    setIsLoading(true);
+
     api
       .post<ApiMessage>("/user/signup", {
         password: data.password,
@@ -48,7 +58,8 @@ const SignUp = () => {
           }
         }
         openSnackbar({ message, severity: "error" });
-      });
+      })
+      .finally(() => setIsLoading(false));
   };
 
   const repeatPasswordValidator = useCallback(
@@ -117,6 +128,7 @@ const SignUp = () => {
           helperText={errors.repeatPassword && "Passwords don't match"}
         ></TextField>
         {/* <p>{error}</p> */}
+        {isLoading && <LinearProgress></LinearProgress>}
         <Button
           type="submit"
           variant="contained"

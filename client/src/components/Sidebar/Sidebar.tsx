@@ -93,16 +93,6 @@ const Sidebar = (props: any) => {
               )}
             </NavLink>
           </li>
-          <li>
-            <NavLink to="/analytics">
-              {({ isActive }) => (
-                <Icon
-                  sx={{ fontSize: 35 }}
-                  className={`icon ${isActive ? "active" : undefined}`}
-                ></Icon>
-              )}
-            </NavLink>
-          </li>
         </ul>
         <Button onClick={(e) => setAnchorEl(e.currentTarget)}>
           <Icon sx={{ fontSize: 35 }} className="icon">
