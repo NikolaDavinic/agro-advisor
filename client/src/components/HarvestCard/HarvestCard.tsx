@@ -5,7 +5,7 @@ import moment from "moment";
 
 export interface HarvestCardProps {
   harvest: Harvest;
-  onDelete: (harvestId: string | null) => void;
+  onDelete: (harvestId?: string) => void;
   [key: string]: any;
 }
 

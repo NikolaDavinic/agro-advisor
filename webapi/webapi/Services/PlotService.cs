@@ -110,11 +110,22 @@ namespace webapi.Services
                 PlotNumber = plot.PlotNumber
             };
 
+            //var filterSummary = Builders<User>.Filter.Eq((u) => u.Id, userId);
+            //var updateSummary = Builders<User>.Update.Push(u => u.Plots, plotSum);
+
+            //var result = await _context.Users.UpdateOneAsync(filterSummary, updateSummary);
+
+            //return plot;
+
             var filterSummary = Builders<User>.Filter.Eq((u) => u.Id, userId);
-            var updateSummary = Builders<User>.Update.Push(u => u.Plots, plotSum);
+            filterSummary &= Builders<User>.Filter.ElemMatch(u => u.Plots, Builders<PlotSummary>.Filter.Eq(x => x.Id.Id, plot.Id));
 
-            var result = await _context.Users.UpdateOneAsync(filterSummary, updateSummary);
+            var update = Builders<User>.Update
+                .Set(x => x.Plots.First().PlotNumber, plot.PlotNumber)
+                .Set(x => x.Plots.First().Area, plot.Area)
+                .Set(x => x.Plots.First().Municipality, plot.Municipality);
 
+            await _context.Users.FindOneAndUpdateAsync(filterSummary, update);
             return plot;
         }
 

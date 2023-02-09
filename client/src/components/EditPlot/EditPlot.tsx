@@ -27,7 +27,13 @@ interface MapEventsProps {
 const MapEvents = (props: MapEventsProps) => {
     const map = useMapEvents({
         click(e: any) {
-            props.setPositions((prevPos) => [...prevPos, e.latlng]);
+            // console.log(e.latlng);
+            const newPoint = [
+                Number(e?.latlng?.lat), Number(e?.latlng?.lng)
+            ]
+            //@ts-ignore
+            // props.setPositions((prevPos) => [...prevPos, newPoint]);
+            props.setPositions((prevPos) => [...prevPos, newPoint]);
         },
         load() {
             map.panTo(props.startPos);
@@ -147,15 +153,16 @@ const EditPlot: React.FC = ({ }: EditPlotProps) => {
         //     };
         // })
         data.borderPoints = borderPoints.map(p => {
-            var point: string = p.toString();
-            var latlngStr = point.toString();
-            var substr = latlngStr.substring(
-                latlngStr.indexOf("(") + 1,
-                latlngStr.lastIndexOf(")")
-            );
-            var cords = substr.split(",");
+            // var point: string = p.toString();
+            // var latlngStr = point.toString();
+            // var substr = latlngStr.substring(
+            //     latlngStr.indexOf("(") + 1,
+            //     latlngStr.lastIndexOf(")")
+            // );
+            // var cords = substr.split(",");
             return {
-                x: Number(cords[0]), y: Number(cords[1])
+                //@ts-ignore
+                x: Number(p[0]), y: Number(p[1])
             };
         })
         api
@@ -166,12 +173,14 @@ const EditPlot: React.FC = ({ }: EditPlotProps) => {
                 setShowSnackbar(true);
                 //TODO:TESTING
                 setPlot(response.data)
+                setShowSpinner(false);
             })
             .catch((error) => {
                 console.error(error);
                 setSnackbarSeverity("error");
                 setSnackbarMessage(error);
                 setShowSnackbar(true);
+                setShowSpinner(false);
             });
     };
     return (
