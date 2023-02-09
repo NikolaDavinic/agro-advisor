@@ -176,6 +176,7 @@ namespace webapi.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("dataforchart")]
         public async Task<ActionResult> DataForChart()
         {
@@ -191,6 +192,30 @@ namespace webapi.Controllers
                 var result = await _transactionService.GetTransactionDataForChart(userId);
 
                 return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { msg = e.Message });
+            }
+        }
+
+        [Authorize]
+        [HttpGet("expense-income-per-year")]
+        public async Task<ActionResult> NumberTransactionByCategories()
+        {
+            try
+            {
+                var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals("Id"))?.Value;
+
+                if (userId == null)
+                {
+                    return Unauthorized("Greska pri autentifikaciji");
+                }
+
+                var result = await _transactionService.GetTransactionGroupedByYearAndCatergoryName(userId);
+
+                return Ok(result);
+
             }
             catch (Exception e)
             {

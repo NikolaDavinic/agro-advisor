@@ -6,24 +6,15 @@ import { Controller, useForm } from "react-hook-form";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import moment from "moment";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
-
-
+import PieChartCard from "../../components/Chart/PieChartCard";
+import { useApi } from "../../hooks/api.hook";
 
 const Dashboard = () => {
-
   return (
     <Box className="lg:flex w-full">
       <Box className=" w-full flex-col">
         <Chart></Chart>
-        <Box className="w-1/2 lg:flex">
-          <Box>
-            
-            <PieChart positive="pozitivan"/>
-          </Box>
-          <Box>
-            <PieChart positive="negativan"/>
-          </Box>
-        </Box>
+        <PieChartCard></PieChartCard>
       </Box>
       <Box className="w-full py-10">
         <TransactionList title="Istorija transakcija"></TransactionList>

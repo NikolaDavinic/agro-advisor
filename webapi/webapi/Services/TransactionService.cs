@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using System.Reflection.Emit;
 using System.Collections;
+using System.Text.RegularExpressions;
 
 namespace webapi.Services;
 
@@ -116,32 +117,23 @@ public class TransactionService
         return groupedElements;
     }
 
-    public async Task<IEnumerable> GetTransactionGroupedByYearAndCatergoryName(string userId, string positive)
+    public async Task<IEnumerable> GetTransactionGroupedByYearAndCatergoryName(string userId)
     {
         var user = await _context.Users.Find(x => x.Id == userId).FirstOrDefaultAsync();
 
-        if(String.Compare(positive, "pozitivan")==0)
-        {
-            var groupedElements = user.Transactions.GroupBy(e => new { e.CategoryName, e.Date.Year })
-                .Select(g => new
-                {
-                    Key = g.Key,
-                    NumberOfTransaction = g.Where(e => e.Value>=0).Count()
-                });
-            return groupedElements;
-        }
-        else
-        {
-            var groupedElements = user.Transactions.GroupBy(e => new { e.CategoryName, e.Date.Year })
-                .Select(g => new
-                {
-                    Key = g.Key,
-                    NumberOfTransaction = g.Where(e => e.Value < 0).Count()
-                });
-            return groupedElements;
+        var result = _context.Users.AsQueryable()
+            .Where(u => u.Id == userId)
+            .Select(u => u.Transactions)
+            .First()
+            .GroupBy(x => x.Date.Year)
+            .Select((group) => new
+            {
+                Year = group.Key,
+                Expense = group.Where(t => t.Value < 0).GroupBy(e => e.CategoryName).Select((e) => new { CategoryName = e.Key, Count = e.Sum(u => -u.Value) }),
+                Income = group.Where(t => t.Value >= 0).GroupBy(e => e.CategoryName).Select((e) => new { CategoryName = e.Key, Count = e.Sum(u => u.Value) })
+            });
 
-        }
-
+        return result;
     }
 
 }
