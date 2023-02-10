@@ -1,4 +1,4 @@
-import { Box, LinearProgress, MenuItem, Select } from "@mui/material";
+import { Box, Button, Icon, IconButton, LinearProgress, MenuItem, Select } from "@mui/material";
 import {
   DatePicker,
   DesktopDatePicker,
@@ -9,6 +9,8 @@ import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useApi } from "../../hooks/api.hook";
 import PieChart, { PieChartData } from "./PieChart";
+import MatIcon from "../MatIcon/MatIcon";
+
 
 interface CategoryNameCount {
   categoryName: string;
@@ -25,7 +27,7 @@ function PieChartCard() {
   const [selectedYear, setSelectedYear] = useState<number>();
   const [years, setYears] = useState<number[]>([]);
 
-  const { result: chartData, loading } = useApi<PieChartCardData[]>(
+  const { result: chartData, loading, reload} = useApi<PieChartCardData[]>(
     "transaction/expense-income-per-year"
   );
 
@@ -39,25 +41,6 @@ function PieChartCard() {
   }, [chartData]);
 
   console.log(chartData);
-  // const [year, setYear] = React.useState<Dayjs | null>(
-  //     dayjs('2014-08-18T21:11:54'),
-  //   );
-
-  //   const handleChange = (newValue: Dayjs | null) => {
-  //     setValue(newValue);
-  //   };
-
-  // return (
-  //     <div>
-  //         <DesktopDatePicker
-  //             label="Date desktop"
-  //             inputFormat="MM/DD/YYYY"
-  //             value={value}
-  //             onChange={handleChange}
-  //             renderInput={(params) => <TextField {...params} />}
-  //         />
-  //     </div>
-  // )
 
   const packData: (type: "expense" | "income") => PieChartData = (type) => {
     const data = chartData?.find((d) => d.year === selectedYear);
@@ -83,9 +66,13 @@ function PieChartCard() {
   const incomeData = packData("income");
   const expenseData = packData("expense");
 
+  const handleRefresh = () => {
+    reload();
+  }
+
   return (
-    <Box className="w-full md:w-1/2">
-      <Box className="p-2 flex-grow">
+    <Box className="w-full md:w-1/2 gap-5">
+      <Box className="p-2 flex">
         <Select
           value={selectedYear}
           onChange={(e) => setSelectedYear(Number(e.target.value))}
@@ -96,14 +83,23 @@ function PieChartCard() {
             </MenuItem>
           ))}
         </Select>
+          <IconButton onClick={handleRefresh}>
+            <MatIcon color="primary" variant="contained">
+              refresh
+            </MatIcon>
+          </IconButton>
       </Box>
-      <Box className="flex">
-        {incomeData.labels.length > 0 && (
-          <PieChart title="Prihodi" data={packData("income")} />
-        )}
-        {expenseData.values.length > 0 && (
-          <PieChart title="Rashodi" data={packData("expense")} />
-        )}
+      <Box className="w-full lg:flex">
+        <Box className="lg:flex w-full">
+          {incomeData.labels.length > 0 && (
+            <PieChart title="Prihodi" data={packData("income")} />
+          )}
+        </Box>
+        <Box className="lg:flex w-full">
+          {expenseData.values.length > 0 && (
+            <PieChart title="Rashodi" data={packData("expense")} />
+          )}
+        </Box>
       </Box>
     </Box>
   );

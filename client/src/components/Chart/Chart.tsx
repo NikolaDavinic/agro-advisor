@@ -14,7 +14,8 @@ import { Transacation } from "../../models/transaction.model";
 import React from "react";
 import { api } from "../../utils/api/axios";
 import { Box } from "@mui/system";
-import { CircularProgress, LinearProgress } from "@mui/material";
+import { CircularProgress, IconButton, LinearProgress } from "@mui/material";
+import MatIcon from "../MatIcon/MatIcon";
 
 ChartJS.register(
   CategoryScale,
@@ -112,12 +113,25 @@ const Chart = (props: any) => {
     );
   }
 
+  const handleRefresh = () => {
+    dataForChar();
+  }
+
   return (
     <>
       {data?.datasets?.length >= 0 && (
-        <div className="w-full">
-          <Line options={options} data={data} />
-        </div>
+        <Box className="flex-col">
+          <div className="w-full">
+            <Line options={options} data={data} />
+          </div>
+          <Box className="flex justify-center">
+            <IconButton onClick={handleRefresh}>
+              <MatIcon color="primary" variant="contained">
+                refresh
+              </MatIcon>
+            </IconButton>
+          </Box>
+        </Box>
       )}
     </>
   );
