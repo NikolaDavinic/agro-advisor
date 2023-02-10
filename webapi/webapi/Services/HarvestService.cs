@@ -31,60 +31,13 @@ namespace webapi.Services
 
             return harvest;
         }
-        //public async Task<Harvest?> GetAsync(string plotId, string harvestId)
-        //{
-        //    var filter = Builders<Plot>.Filter.Eq(x => x.Id, plotId);
-        //    filter &= Builders<Plot>.Filter.Eq(x => x.User.Id, plotId);
 
-        //    return (await _context.Plots.FindAsync(filter)).FirstOrDefault();
-        //}
         public async Task<List<Harvest>> GetPlotHarvestsAsync(string plotId)
         {
             var filter = Builders<Plot>.Filter.Eq(x => x.Id, plotId);
 
             return (await _context.Plots.Find(filter).FirstOrDefaultAsync()).Harvests;
         }
-
-        //public async Task<Harvest> UpdateAsync(string plotId, HarvestDTO harvestDTO)
-        //{
-        //    var filter = Builders<Plot>.Filter.Eq(x => x.Id, plotId);
-        //    filter &= Builders<Plot>.Filter.Eq(x => x.Harvests.Id, plotId);
-        //    var userdbRef = new MongoDBRef("Users", plotId);
-
-        //    var plot = new Plot
-        //    {
-        //        Id = harvestDTO.Id,
-        //        Area = harvestDTO.Area,
-        //        CurrentCulture = harvestDTO.CurrentCulture,
-        //        Harvests = new List<Harvest>(),
-        //        Municipality = harvestDTO.Municipality,
-        //        PlotNumber = harvestDTO.PlotNumber,
-        //        User = userdbRef,
-        //        BorderPoints = new List<GeoJsonPoint<GeoJson2DGeographicCoordinates>>()
-        //    };
-        //    harvestDTO.BorderPoints.ForEach(point =>
-        //    {
-        //        var loc = GeoJson.Point(new GeoJson2DGeographicCoordinates(point.X, point.Y));
-        //        plot.BorderPoints.Add(loc);
-        //    });
-
-        //    var plotResult = await _context.Plots.ReplaceOneAsync(filter, plot);
-        //    //TODO: Sredi update summary-a, izgleda da ne funkcionise
-        //    var plotSum = new PlotSummary
-        //    {
-        //        Id = new MongoDBRef("Plots", plot.Id),
-        //        Area = plot.Area,
-        //        Municipality = plot.Municipality,
-        //        PlotNumber = plot.PlotNumber
-        //    };
-
-        //    var filterSummary = Builders<User>.Filter.Eq((u) => u.Id, plotId);
-        //    var updateSummary = Builders<User>.Update.Push(u => u.Plots, plotSum);
-
-        //    var result = await _context.Users.UpdateOneAsync(filterSummary, updateSummary);
-
-        //    return plot;
-        //}
 
         public async Task<bool> DeleteAsync(string harvestId, string plotId)
         {
