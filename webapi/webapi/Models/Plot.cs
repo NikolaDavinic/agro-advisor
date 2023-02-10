@@ -10,7 +10,7 @@ namespace webapi.Models
     {
         [BsonId]
         public ObjectId? Id { get; set; }
-        public string? CultureName { get; set; }
+        public string CultureName { get; set; } = null!;
         public decimal Amount { get; set; }
         public DateTime Date { get; set; }
         public Harvest()

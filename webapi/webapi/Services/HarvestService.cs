@@ -14,13 +14,14 @@ namespace webapi.Services
         {
             _context = context;
         }
-        public async Task<Harvest> CreateAsync(HarvestDTO newHarvest,string plotId)
+        public async Task<Harvest> CreateAsync(HarvestDTO newHarvest, string plotId)
         {
             var harvest = new Harvest
             {
                 Amount= newHarvest.Amount,
-                CultureName= newHarvest.CultureName,
-                Date=newHarvest.Date
+                CultureName = newHarvest.CultureName,
+                Date = newHarvest.Date,
+                //CurrentCulture = newHarvest.cu
             };
 
             var filter = Builders<Plot>.Filter.Eq((p) => p.Id, plotId);

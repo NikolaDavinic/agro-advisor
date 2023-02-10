@@ -11,6 +11,7 @@ namespace webapi.Models
         public int Area { get; set; }
         public int PlotNumber { get; set; }
         public string Municipality { get; set; } = null!;
+        public string CurrentCulture { get; set; } = null!;
     }
 
     public class MachinerySummary

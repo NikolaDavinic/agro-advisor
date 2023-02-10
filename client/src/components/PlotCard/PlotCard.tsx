@@ -21,13 +21,9 @@ const PlotCard = ({ plot, ...props }: PlotCardProps) => {
         <Typography fontWeight="bold">
           <>
             <span>
-              <MatIcon style={{ fontSize: 12 }}>
-                numbers
-              </MatIcon>
+              <MatIcon style={{ fontSize: 12 }}>numbers</MatIcon>
               {`${plot.plotNumber}  `}
-              <MatIcon style={{ fontSize: 13 }}>
-                straighten
-              </MatIcon>
+              <MatIcon style={{ fontSize: 13 }}>straighten</MatIcon>
               {`${plot.area}`}m<sup>2</sup>
             </span>
           </>
@@ -35,14 +31,12 @@ const PlotCard = ({ plot, ...props }: PlotCardProps) => {
       </Box>
       <Box>
         <Box>
-          <span className="text-gray-400">Trenutna kultura: </span>
-          <span style={{ color: color }}>
-            {/* ?TODO: Dodaj trenutnu kulturu u plot summary */}
-            {/* {moment(machine.registeredUntil).format("DD/MM/yyyy")} */}
+          <span className="text-gray-400">
+            Trenutna kultura: {plot.currentCulture}
           </span>
         </Box>
       </Box>
-    </Paper >
+    </Paper>
   );
 };
 

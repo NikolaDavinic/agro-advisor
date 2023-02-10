@@ -64,7 +64,7 @@ const PieChart = ({ data, title }: PieDataProps) => {
         <Pie
           options={{
             responsive: true,
-            plugins: { title: { display: true, text: title } },
+            plugins: { title: { display: true, text: title }, tooltip: {} },
           }}
           data={packData(data)}
         />

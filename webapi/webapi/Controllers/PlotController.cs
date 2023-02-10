@@ -102,7 +102,7 @@ namespace webapi.Controllers
 
                 var plots = await _plotService.GetUserPlotSummariesAsync(userId);
 
-                return Ok(plots.Select((p) => new { Id = p.Id.Id.AsString, p.PlotNumber, p.Area, p.Municipality }));
+                return Ok(plots.Select((p) => new { Id = p.Id.Id.AsString, p.PlotNumber, p.Area, p.Municipality, p.CurrentCulture }));
             }
             catch (Exception ex)
             {

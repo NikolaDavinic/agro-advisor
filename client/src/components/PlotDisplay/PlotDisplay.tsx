@@ -69,15 +69,15 @@ const PlotDisplay = ({
   const [borderPoints, setBorderPoints] = useState<LatLngExpression[]>(
     plot.borderPoints.map((point) =>
       //@ts-ignore
-      [point.coordinates.values[0], point.coordinates.values[1]]
+      [point?.coordinates?.values[0] ?? 0, point?.coordinates?.values[1] ?? 0]
     )
   );
-
+  console.log(plot.borderPoints);
   const [startPosition, setStartPosition] = useState<[number, number]>([
     //@ts-ignore
-    plot.borderPoints[0].coordinates.values[0],
+    plot.borderPoints[0]?.coordinates.values[0] ?? 0,
     //@ts-ignore
-    plot.borderPoints[0].coordinates.values[1],
+    plot.borderPoints[0]?.coordinates.values[1] ?? 0,
   ]);
 
   const [currentTab, setCurrentTab] = useState<number>(0);
@@ -107,7 +107,7 @@ const PlotDisplay = ({
         console.error(error);
         openSnackbar({ message: "Doslo je do greske", severity: "error" });
       });
-  }
+  };
   const onDeleteHarvest = (harvestId?: string) => {
     console.log(harvestId);
     api

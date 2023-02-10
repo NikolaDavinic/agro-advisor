@@ -44,7 +44,8 @@ namespace webapi.Services
                 Id = new MongoDBRef("Plots", plot.Id),
                 Area = plot.Area,
                 Municipality = plot.Municipality,
-                PlotNumber = plot.PlotNumber
+                PlotNumber = plot.PlotNumber,
+                CurrentCulture = plot.CurrentCulture
             };
 
             var filter = Builders<User>.Filter.Eq((u) => u.Id, newPlot.UserId);
@@ -106,9 +107,10 @@ namespace webapi.Services
             var plotSum = new PlotSummary
             {
                 Id = new MongoDBRef("Plots", plot.Id),
-                Area = plot.Area,
+                CurrentCulture = plot.CurrentCulture,
                 Municipality = plot.Municipality,
-                PlotNumber = plot.PlotNumber
+                PlotNumber = plot.PlotNumber,
+                Area = plot.Area
             };
 
 
@@ -145,9 +147,12 @@ namespace webapi.Services
                 filterBuilder.ElemMatch(doc => doc.Plots, el => el.Id.Id == plotDTO.Id);
 
             var updateBuilder = Builders<User>.Update;
-            var update = updateBuilder.Set(doc => doc.Plots.FirstMatchingElement().PlotNumber, plot.PlotNumber)
-                                        .Set(doc => doc.Plots.FirstMatchingElement().Area, plot.Area)
-                                        .Set(doc => doc.Plots.FirstMatchingElement().Municipality, plot.Municipality);
+            var update = updateBuilder
+                .Set(doc => doc.Plots.FirstMatchingElement().CurrentCulture, plot.CurrentCulture)
+                .Set(doc => doc.Plots.FirstMatchingElement().Municipality, plot.Municipality)
+                .Set(doc => doc.Plots.FirstMatchingElement().PlotNumber, plot.PlotNumber)
+                .Set(doc => doc.Plots.FirstMatchingElement().Area, plot.Area);
+
 
             _context.Users.UpdateOne(filterUser, update);
 
