@@ -1,91 +1,79 @@
-import ImageListing from "../../components/ImageList/ImageListing";
+import { Box, Card, CardContent, CardMedia, Paper, Typography } from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom';
+import ImageListing from '../../components/ImageList/ImageListing';
+import PageCard from './PageCard';
 
-const itemData = [
-  {
-    img: 'https://images.unsplash.com/photo-1549388604-817d15aa0110',
-    title: 'Bed',
-    author: 'swabdesign',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1525097487452-6278ff080c31',
-    title: 'Books',
-    author: 'Pavel Nekoranec',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1523413651479-597eb2da0ad6',
-    title: 'Sink',
-    author: 'Charles Deluvio',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1563298723-dcfebaa392e3',
-    title: 'Kitchen',
-    author: 'Christian Mackie',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1588436706487-9d55d73a39e3',
-    title: 'Blinds',
-    author: 'Darren Richardson',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1574180045827-681f8a1a9622',
-    title: 'Chairs',
-    author: 'Taylor Simpson',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1530731141654-5993c3016c77',
-    title: 'Laptop',
-    author: 'Ben Kolde',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1481277542470-605612bd2d61',
-    title: 'Doors',
-    author: 'Philipp Berndt',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1517487881594-2787fef5ebf7',
-    title: 'Coffee',
-    author: 'Jen P.',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1516455207990-7a41ce80f7ee',
-    title: 'Storage',
-    author: 'Douglas Sheppard',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1597262975002-c5c3b14bbd62',
-    title: 'Candle',
-    author: 'Fi Bell',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1519710164239-da123dc03ef4',
-    title: 'Coffee table',
-    author: 'Hutomo Abrianto',
-  },
-];
 //Treba samo da se pribave podaci za ovo sto ce da se prikazuje ovde
 const Home = () => {
-  return (
-    <div className="w-full lg:flex-col" style={{color: "var(--primary)"}}>
-      <div className="lg:flex w-full p-5">
-        <div className="w-full p-3">
-          <ImageListing data={itemData} />
-        </div>
-        <div className="w-full border-2 rounded border-green-300 m-3">
-          {/* <ImageListing data={itemData} /> */}
-          Transaskcije
-        </div>
-      </div>
-      <div className="lg:flex w-full p-5">
-        <div className="w-full border-2 rounded border-green-300 items-center m-3">
-          {/* <ImageListing data={itemData} /> */}
-          Berbe
-        </div>
-        <div className="w-full p-3">
-          <ImageListing data={itemData} />
-        </div>
-      </div>
+  const navigate = useNavigate();
 
-    </div>
+  return (
+    <Box className='h-full'>
+      <Box
+        sx={{
+          color: 'var(--primary)',
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: '100% 100%',
+          // height: '100%',
+          position: 'relative',
+          backgroundAttachment: 'fixed',
+          // backgroundPosition: 'center center',
+          backgroundImage: `url(http://localhost:3000/6694962.jpg)`,
+        }}>
+        <Box position='relative'>
+          <Box className='p-5'>
+            <Typography
+              variant='h4'
+              fontWeight='bold'
+              sx={{
+                letterSpacing: '2px',
+                color: 'var(--secondary-light)',
+                textShadow:
+                  '-1px -1px 0 var(--primary), 1px -1px 0 var(--primary), -1px 1px 0 var(--primary), 1px 1px 0 var(--primary)',
+              }}>
+              Dobrodošli na AgroAdvisor
+            </Typography>
+          </Box>
+          <Box
+            className='flex flex-col lg:flex-row gap-5 lg:px-20 p-5 lg:justify-center'
+            sx={{ height: '100%' }}>
+            <Box className='w-full lg:w-1/4 flex-grow'>
+              <Link to='/plots'>
+                <PageCard
+                  title='Parcele'
+                  className='w-full'
+                  image='/plots-page.png'
+                  sx={{ border: '2px solid var(--primary)' }}>
+                  <span>Budite u toku da li vam je komšija preorao među</span>
+                </PageCard>
+              </Link>
+            </Box>
+            <Box className='w-full lg:w-2/5'>
+              <Link to='/dashboard'>
+                <PageCard
+                  title='Transakcije'
+                  image='/dashboard-page.jpg'
+                  className='w-full h-full'
+                  sx={{ border: '2px solid var(--primary)' }}>
+                  Pratitet vaše prihode i rashode
+                </PageCard>
+              </Link>
+            </Box>
+            <Box className='w-full lg:w-1/4 flex-grow'>
+              <Link to='/machines'>
+                <PageCard
+                  title='Mašinerija'
+                  className='w-full'
+                  image='/machinery-page.jpg'
+                  sx={{ border: '2px solid var(--primary)' }}>
+                  <span>Informacije o vašim mašinama na dohvat ruke</span>
+                </PageCard>
+              </Link>
+            </Box>
+          </Box>
+        </Box>
+      </Box>
+    </Box>
   );
 };
 

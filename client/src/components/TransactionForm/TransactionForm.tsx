@@ -9,18 +9,18 @@ import {
   TextField,
   Tooltip,
   Typography,
-} from "@mui/material";
-import { Stack } from "@mui/system";
-import moment from "moment";
-import { useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
-import { useSnackbar } from "../../contexts/snackbar.context";
-import { useApi } from "../../hooks/api.hook";
-import { Category } from "../../models/category.model";
-import { Transacation } from "../../models/transaction.model";
-import { api } from "../../utils/api/axios";
-import MatIcon from "../MatIcon/MatIcon";
-import "./TransactionForm.scss";
+} from '@mui/material';
+import { Stack } from '@mui/system';
+import moment from 'moment';
+import { useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { useSnackbar } from '../../contexts/snackbar.context';
+import { useApi } from '../../hooks/api.hook';
+import { Category } from '../../models/category.model';
+import { Transacation } from '../../models/transaction.model';
+import { api } from '../../utils/api/axios';
+import MatIcon from '../MatIcon/MatIcon';
+import './TransactionForm.scss';
 
 interface TransactionFormProps {
   addingCategoryEn?: boolean;
@@ -38,18 +38,16 @@ interface FormFields {
 
 const TransactionForm = ({
   addingCategoryEn = true,
-  buttonText = "Dodaj",
+  buttonText = 'Dodaj',
   onSubmit,
   transaction,
 }: TransactionFormProps) => {
   const [formState, setFormState] = useState<boolean>(
-    transaction?.value ? (transaction.value < 0 ? true : false) : false
+    transaction?.value ? (transaction.value < 0 ? true : false) : false,
   );
   const [addingCategory, setAddingCategory] = useState<boolean>(false);
-  const [categoryFilter, setCategoryFilter] = useState<string>(
-    transaction?.categoryName ?? ""
-  );
-  const [newCategory, setNewCategory] = useState<string>("");
+  const [categoryFilter, setCategoryFilter] = useState<string>(transaction?.categoryName ?? '');
+  const [newCategory, setNewCategory] = useState<string>('');
 
   const { openSnackbar } = useSnackbar();
 
@@ -63,27 +61,25 @@ const TransactionForm = ({
   } = useForm<FormFields>({
     defaultValues: {
       category: transaction ? { id: transaction?.categoryId } : null,
-      date: (transaction ? new Date(transaction.date) : new Date())
-        .toISOString()
-        .split("T")[0],
-      description: transaction?.description ?? "",
+      date: (transaction ? new Date(transaction.date) : new Date()).toISOString().split('T')[0],
+      description: transaction?.description ?? '',
       value: transaction?.value ? Math.abs(transaction.value) : 0,
     },
-    reValidateMode: "onSubmit",
+    reValidateMode: 'onChange',
   });
 
   const {
     result: categories,
     loading: loadingCategories,
     setResult,
-  } = useApi<Category[]>("/category");
+  } = useApi<Category[]>('/category');
 
   useEffect(() => {
     if (transaction != null) {
       reset({
         category: transaction ? { id: transaction?.categoryId } : null,
-        date: moment(transaction.date).format("yyyy-MM-DD"),
-        description: transaction?.description ?? "",
+        date: moment(transaction.date).format('yyyy-MM-DD'),
+        description: transaction?.description ?? '',
         value: transaction?.value ? Math.abs(transaction.value) : 0,
       });
     }
@@ -96,7 +92,7 @@ const TransactionForm = ({
       value: formState ? -data.value : Number(data.value),
       description: data.description,
       date: new Date(data.date).toISOString(),
-      categoryName: data.category?.name ?? "",
+      categoryName: data.category?.name ?? '',
       categoryId: data.category?.id,
     });
   };
@@ -105,52 +101,46 @@ const TransactionForm = ({
     e.preventDefault();
 
     api
-      .post<Category>("/category", { name: newCategory })
+      .post<Category>('/category', { name: newCategory })
       .then(({ data }) => {
-        setResult((prev) => [data, ...(prev ?? [])]);
-        setValue("category", data);
+        setResult(prev => [data, ...(prev ?? [])]);
+        setValue('category', data);
         openSnackbar({
           message: `Korisnicka kategorija ${newCategory} uspesno dodata`,
         });
-        setNewCategory("");
+        setNewCategory('');
         setAddingCategory(false);
       })
       .catch(() => {
-        openSnackbar({ message: "Doslo je do greske", severity: "error" });
+        openSnackbar({ message: 'Doslo je do greske', severity: 'error' });
       });
   };
 
   return (
-    <Paper className="p-2" elevation={3}>
+    <Paper className='p-2' elevation={3}>
       <Modal
         open={addingCategory}
         onClose={() => setAddingCategory(false)}
-        className="flex justify-center items-center"
-      >
-        <Paper className="w-full md:w-3/5 lg:w-2/5 m-2">
-          <Stack component="form" onSubmit={addCategory}>
+        className='flex justify-center items-center'>
+        <Paper className='w-full md:w-3/5 lg:w-2/5 m-2'>
+          <Stack component='form' onSubmit={addCategory}>
             <ListItem>
-              <Typography variant="h6" color="gray">
+              <Typography variant='h6' color='gray'>
                 Dodaj svoju kategoriju transakcije
               </Typography>
             </ListItem>
             <ListItem>
-              <Box className="w-full">
+              <Box className='w-full'>
                 <TextField
                   value={newCategory}
-                  onChange={(e) => setNewCategory(e.target.value)}
-                  placeholder="Nova kategorija"
-                  className="w-full"
-                ></TextField>
+                  onChange={e => setNewCategory(e.target.value)}
+                  placeholder='Nova kategorija'
+                  className='w-full'></TextField>
               </Box>
             </ListItem>
             <ListItem>
-              <Box className="w-full justify-end flex">
-                <Button
-                  startIcon={<MatIcon>done</MatIcon>}
-                  variant="outlined"
-                  type="submit"
-                >
+              <Box className='w-full justify-end flex'>
+                <Button startIcon={<MatIcon>done</MatIcon>} variant='outlined' type='submit'>
                   Dodaj
                 </Button>
               </Box>
@@ -158,12 +148,13 @@ const TransactionForm = ({
           </Stack>
         </Paper>
       </Modal>
-      <Stack component="form" gap="0.6em" onSubmit={handleSubmit(onSubmitForm)}>
+      <Stack component='form' gap='0.6em' onSubmit={handleSubmit(onSubmitForm)}>
         <Controller
+          rules={{ required: true }}
           render={({ field: { onChange, value } }) => (
             <Autocomplete
               disablePortal
-              getOptionLabel={(o) => o?.name ?? ""}
+              getOptionLabel={o => o?.name ?? ''}
               options={categories ?? []}
               isOptionEqualToValue={(op1, val) => op1.id === val.id}
               loading={loadingCategories}
@@ -172,12 +163,12 @@ const TransactionForm = ({
               value={value}
               renderOption={(props, option) => (
                 <li {...props}>
-                  <Box className="flex w-full items-center justify-between">
+                  <Box className='flex w-full items-center justify-between'>
                     {option.name}
                     {option.userId && (
-                      <Tooltip title="Kategorija koju ste vi dodali" arrow>
+                      <Tooltip title='Kategorija koju ste vi dodali' arrow>
                         <span>
-                          <MatIcon color="primary">person</MatIcon>
+                          <MatIcon color='primary'>person</MatIcon>
                         </span>
                       </Tooltip>
                     )}
@@ -188,72 +179,71 @@ const TransactionForm = ({
               noOptionsText={
                 addingCategoryEn && (
                   <>
-                    <Box className="justify-between flex flex-wrap gap-4 align-middle">
+                    <Box className='justify-between flex flex-wrap gap-4 align-middle'>
                       Nema opcija
                       <Button
-                        variant="outlined"
+                        variant='outlined'
                         onClick={() => {
                           setAddingCategory(true);
                           setNewCategory(categoryFilter);
-                        }}
-                      >
+                        }}>
                         Dodaj
                       </Button>
                     </Box>
                   </>
                 )
               }
-              loadingText="Ucitavanje kategorija..."
-              renderInput={(params) => (
+              loadingText='Ucitavanje kategorija...'
+              renderInput={params => (
                 <TextField
                   {...params}
-                  label="Kategorija"
-                  placeholder="Dodajte svoju kategoriju ukoliko je nema u ovoj listi"
+                  error={Boolean(errors.category)}
+                  size='small'
+                  label='Kategorija'
+                  placeholder='Dodajte svoju kategoriju ukoliko je nema u ovoj listi'
                 />
               )}
             />
           )}
-          name="category"
+          name='category'
           control={control}
         />
 
-        <Box sx={{ display: "flex" }}>
+        <Box sx={{ display: 'flex' }}>
           <Button
-            sx={{ mr: "5px" }}
-            variant="outlined"
-            color={formState ? "error" : "primary"}
-            onClick={() => setFormState((prev) => !prev)}
-          >
+            sx={{ mr: '5px' }}
+            variant='outlined'
+            color={formState ? 'error' : 'primary'}
+            onClick={() => setFormState(prev => !prev)}>
             {formState ? <Icon>remove</Icon> : <Icon>add</Icon>}
           </Button>
           <TextField
-            type="number"
-            label="Iznos"
+            size='small'
+            type='number'
+            label='Iznos'
             error={Boolean(errors.value)}
-            className="form-field"
-            {...register("value", { required: true })}
-            color={formState ? "error" : "primary"}
-          ></TextField>
+            className='form-field'
+            {...register('value', { required: true })}
+            color={formState ? 'error' : 'primary'}></TextField>
         </Box>
         <TextField
-          label="Opis"
-          color="primary"
-          className="form-field"
+          size='small'
+          label='Opis'
+          color='primary'
+          className='form-field'
           error={Boolean(errors.description)}
-          {...register("description", { required: false })}
-        ></TextField>
+          {...register('description', { required: false })}></TextField>
         <TextField
-          type="date"
+          size='small'
+          type='date'
           error={Boolean(errors.date)}
-          {...register("date", { required: true })}
-        ></TextField>
-        <Box className="justify-end flex">
+          {...register('date', { required: true })}></TextField>
+        <Box className='justify-end flex'>
           <Button
-            className="w-auto"
-            variant="outlined"
-            type="submit"
-            startIcon={<MatIcon>check</MatIcon>}
-          >
+            className='w-auto'
+            variant='outlined'
+            type='submit'
+            startIcon={<MatIcon>check</MatIcon>}>
             {buttonText}
           </Button>
         </Box>

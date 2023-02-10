@@ -1,10 +1,10 @@
-import { Box, Button, Menu, MenuItem } from "@mui/material";
-import Icon from "@mui/material/Icon";
-import { useState } from "react";
-import { NavLink } from "react-router-dom";
-import { useAuthContext } from "../../contexts/auth.context";
-import MatIcon from "../MatIcon/MatIcon";
-import "./Sidebar.scss";
+import { Box, Button, Menu, MenuItem } from '@mui/material';
+import Icon from '@mui/material/Icon';
+import { useState } from 'react';
+import { NavLink } from 'react-router-dom';
+import { useAuthContext } from '../../contexts/auth.context';
+import MatIcon from '../MatIcon/MatIcon';
+import './Sidebar.scss';
 
 const Sidebar = (props: any) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -18,84 +18,59 @@ const Sidebar = (props: any) => {
   };
 
   return (
-    <div className="sidebar-content">
-      <nav className="sidebar" style={{ position: "sticky", top: 0 }}>
+    <div className='sidebar-content'>
+      <nav className='sidebar' style={{ position: 'sticky', top: 0 }}>
         <ul>
           <li>
-            <NavLink to="/">
+            <NavLink to='/'>
               {({ isActive }) => (
-                <Icon
-                  sx={{ fontSize: 35 }}
-                  className={`icon ${isActive ? "active" : undefined}`}
-                >
+                <Icon sx={{ fontSize: 35 }} className={`icon ${isActive ? 'active' : undefined}`}>
                   home
                 </Icon>
               )}
             </NavLink>
           </li>
           <li>
-            <NavLink to="/dashboard">
+            <NavLink to='/dashboard'>
               {({ isActive }) => (
-                <Icon
-                  sx={{ fontSize: 35 }}
-                  className={`icon ${isActive ? "active" : undefined}`}
-                >
-                  grid_view
+                <Icon sx={{ fontSize: 35 }} className={`icon ${isActive ? 'active' : undefined}`}>
+                  query_stats
                 </Icon>
               )}
             </NavLink>
           </li>
           <li>
-            <NavLink to="/newplot">
+            <NavLink to='/map'>
               {({ isActive }) => (
-                <Icon
-                  sx={{ fontSize: 35 }}
-                  className={`icon ${isActive ? "active" : undefined}`}
-                >
-                  add
-                </Icon>
-              )}
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/map">
-              {({ isActive }) => (
-                <Icon
-                  sx={{ fontSize: 35 }}
-                  className={`icon ${isActive ? "active" : undefined}`}
-                >
+                <Icon sx={{ fontSize: 35 }} className={`icon ${isActive ? 'active' : undefined}`}>
                   map
                 </Icon>
               )}
             </NavLink>
           </li>
           <li>
-            <NavLink to="/machines">
+            <NavLink to='/machines'>
               {({ isActive }) => (
                 <MatIcon
                   style={{ fontSize: 35 }}
-                  className={`icon ${isActive ? "active" : undefined}`}
-                >
+                  className={`icon ${isActive ? 'active' : undefined}`}>
                   agriculture
                 </MatIcon>
               )}
             </NavLink>
           </li>
           <li>
-            <NavLink to="/plots">
+            <NavLink to='/plots'>
               {({ isActive }) => (
-                <Icon
-                  sx={{ fontSize: 35 }}
-                  className={`icon ${isActive ? "active" : undefined}`}
-                >
+                <Icon sx={{ fontSize: 35 }} className={`icon ${isActive ? 'active' : undefined}`}>
                   grass
                 </Icon>
               )}
             </NavLink>
           </li>
         </ul>
-        <Button onClick={(e) => setAnchorEl(e.currentTarget)}>
-          <Icon sx={{ fontSize: 35 }} className="icon">
+        <Button onClick={e => setAnchorEl(e.currentTarget)}>
+          <Icon sx={{ fontSize: 35 }} className='icon'>
             person
           </Icon>
         </Button>
@@ -104,20 +79,19 @@ const Sidebar = (props: any) => {
           onClose={() => setAnchorEl(null)}
           open={userOptionsOpen}
           anchorOrigin={{
-            vertical: "top",
-            horizontal: "right",
+            vertical: 'top',
+            horizontal: 'right',
           }}
           transformOrigin={{
-            vertical: "bottom",
-            horizontal: "right",
-          }}
-        >
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}>
           <MenuItem onClick={handleLogout}>
-            <Icon className="icon">logout</Icon>Logout
+            <Icon className='icon'>logout</Icon>Logout
           </MenuItem>
         </Menu>
       </nav>
-      <Box className="content" sx={{ overflow: "auto" }}>
+      <Box className='content' sx={{ overflow: 'auto', height: '100vh' }}>
         {props.children}
       </Box>
     </div>

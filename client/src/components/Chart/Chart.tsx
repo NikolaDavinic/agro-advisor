@@ -7,50 +7,42 @@ import {
   Title,
   Tooltip,
   Legend,
-} from "chart.js";
-import { Line } from "react-chartjs-2";
-import { useApi } from "../../hooks/api.hook";
-import { Transacation } from "../../models/transaction.model";
-import React from "react";
-import { api } from "../../utils/api/axios";
-import { Box } from "@mui/system";
-import { CircularProgress, IconButton, LinearProgress } from "@mui/material";
-import MatIcon from "../MatIcon/MatIcon";
+} from 'chart.js';
+import { Line } from 'react-chartjs-2';
+import { useApi } from '../../hooks/api.hook';
+import { Transacation } from '../../models/transaction.model';
+import React from 'react';
+import { api } from '../../utils/api/axios';
+import { Box } from '@mui/system';
+import { CircularProgress, IconButton, LinearProgress } from '@mui/material';
+import MatIcon from '../MatIcon/MatIcon';
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 const labels = [
-  "January",
-  "February",
-  "Marth",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
+  'January',
+  'February',
+  'Marth',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
 ];
 
 export const options = {
   responsive: true,
   plugins: {
     legend: {
-      position: "top" as const,
+      position: 'top' as const,
     },
     title: {
       display: true,
-      text: "Prihod po godinama",
+      text: 'Prihod po godinama',
     },
   },
 };
@@ -66,8 +58,8 @@ const Chart = (props: any) => {
     setLoading(true);
 
     api
-      .get("/transaction/dataforchart")
-      .then((response) => {
+      .get('/transaction/dataforchart')
+      .then(response => {
         const d = response.data;
         const res = makeTwoArraysForChart(d);
         setData(res);
@@ -94,10 +86,10 @@ const Chart = (props: any) => {
       labels,
       datasets: [
         {
-          label: "Prihod",
+          label: 'Prihod',
           data: podaci,
-          backgroundColor: "#2196F3",
-          borderColor: "#2196F3",
+          backgroundColor: '#2196F3',
+          borderColor: '#2196F3',
         },
       ],
     };
@@ -115,22 +107,22 @@ const Chart = (props: any) => {
 
   const handleRefresh = () => {
     dataForChar();
-  }
+  };
 
   return (
     <>
       {data?.datasets?.length >= 0 && (
-        <Box className="flex-col">
-          <div className="w-full">
+        <Box className='flex-col'>
+          <div className='w-full'>
             <Line options={options} data={data} />
           </div>
-          <Box className="flex justify-center">
+          {/* <Box className="flex justify-center">
             <IconButton onClick={handleRefresh}>
               <MatIcon color="primary" variant="contained">
                 refresh
               </MatIcon>
             </IconButton>
-          </Box>
+          </Box> */}
         </Box>
       )}
     </>

@@ -1,6 +1,6 @@
-import { Box, Paper, Typography } from "@mui/material";
-import { Plot } from "../../models/plot.model";
-import MatIcon from "../MatIcon/MatIcon";
+import { Box, Paper, Typography } from '@mui/material';
+import { Plot } from '../../models/plot.model';
+import MatIcon from '../MatIcon/MatIcon';
 
 export interface PlotCardProps {
   plot: Plot;
@@ -8,17 +8,13 @@ export interface PlotCardProps {
 }
 
 const PlotCard = ({ plot, ...props }: PlotCardProps) => {
-  let color: string = "green";
+  let color: string = 'green';
 
   return (
-    <Paper
-      elevation={4}
-      {...props}
-      className={`p-2 flex justify-between ${props.className}`}
-    >
+    <Paper elevation={4} {...props} className={`p-2 flex justify-between ${props.className}`}>
       <Box>
-        <Typography className="text-gray-600">{plot.municipality}</Typography>
-        <Typography fontWeight="bold">
+        <Typography className='text-gray-600'>{plot.municipality}</Typography>
+        <Typography fontWeight='bold'>
           <>
             <span>
               <MatIcon style={{ fontSize: 12 }}>numbers</MatIcon>
@@ -31,9 +27,7 @@ const PlotCard = ({ plot, ...props }: PlotCardProps) => {
       </Box>
       <Box>
         <Box>
-          <span className="text-gray-400">
-            Trenutna kultura: {plot.currentCulture}
-          </span>
+          <span className='text-gray-400'>Trenutna kultura: {plot.currentCulture}</span>
         </Box>
       </Box>
     </Paper>

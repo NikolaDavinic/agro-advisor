@@ -1,18 +1,11 @@
-import {
-  Box,
-  Button,
-  Grid,
-  LinearProgress,
-  Stack,
-  TextField,
-} from "@mui/material";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
-import { useAuthContext } from "../../contexts/auth.context";
-import { useSnackbar } from "../../contexts/snackbar.context";
-import { User } from "../../models/user.model";
-import { api } from "../../utils/api/axios";
+import { Box, Button, Grid, LinearProgress, Stack, TextField } from '@mui/material';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuthContext } from '../../contexts/auth.context';
+import { useSnackbar } from '../../contexts/snackbar.context';
+import { User } from '../../models/user.model';
+import { api } from '../../utils/api/axios';
 
 const SignIn = () => {
   const {
@@ -20,7 +13,7 @@ const SignIn = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<{ email: string; password: string }>({
-    reValidateMode: "onSubmit",
+    reValidateMode: 'onSubmit',
   });
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -35,58 +28,54 @@ const SignIn = () => {
       .post<{ user: User; authToken: string }>(`/user/signin`, creds)
       .then(({ data }) => {
         signin(data);
-        navigate("/home");
+        navigate('/home');
       })
-      .catch((err) => {
+      .catch(err => {
         openSnackbar({
-          message: "Pogresan email ili lozinka",
-          severity: "error",
+          message: 'Pogresan email ili lozinka',
+          severity: 'error',
         });
       })
-      .finally(() => setIsLoading(true));
+      .finally(() => setIsLoading(false));
   });
 
   return (
     <Box
       sx={{
-        height: "100%",
-        p: "1em",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
+        height: '100%',
+        p: '1em',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}>
       <Stack
-        component="form"
+        component='form'
         onSubmit={onSubmit}
         sx={{
-          display: "flex",
-          gap: "0.8em",
-          width: { xs: "100%", sm: "80%" },
-          maxWidth: "600px",
-        }}
-      >
+          display: 'flex',
+          gap: '0.8em',
+          width: { xs: '100%', sm: '80%' },
+          maxWidth: '600px',
+        }}>
         <TextField
-          label="Email"
-          className="form-field"
-          type="email"
-          {...register("email", { required: true })}
-          error={Boolean(errors.email)}
-        ></TextField>
+          label='Email'
+          className='form-field'
+          type='email'
+          {...register('email', { required: true })}
+          error={Boolean(errors.email)}></TextField>
         <TextField
-          label="Password"
-          className="form-field"
-          type="password"
-          {...register("password", { required: true })}
-          error={Boolean(errors.password)}
-        ></TextField>
+          label='Password'
+          className='form-field'
+          type='password'
+          {...register('password', { required: true })}
+          error={Boolean(errors.password)}></TextField>
         {isLoading && <LinearProgress></LinearProgress>}
-        <Button variant="contained" sx={{ p: 1.2 }} type="submit">
+        <Button variant='contained' sx={{ p: 1.2 }} type='submit'>
           Sign In
         </Button>
-        <Grid container justifyContent="flex-end">
+        <Grid container justifyContent='flex-end'>
           <Box>
-            Don't have an account? <Link to="/signup"> Sign Up</Link>
+            Don't have an account? <Link to='/signup'> Sign Up</Link>
           </Box>
         </Grid>
       </Stack>
