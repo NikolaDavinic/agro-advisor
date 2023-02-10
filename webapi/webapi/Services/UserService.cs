@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace webapi.Services;
 
@@ -32,12 +33,21 @@ public class UserService
 
     public async Task CreateAsync(UserDTO newUser)
     {
+        //Geo kodiranje korisnikove adrese
+        var client = new HttpClient();
+        var response = await client.GetAsync($"https://api.maptiler.com/geocoding/${newUser.Address}.json?key=***REMOVED***");
+        var responseBody = await response.Content.ReadAsStringAsync();
+        dynamic json = JsonConvert.DeserializeObject(responseBody);
+        var x = json.features[0].geometry.coordinates[1];
+        var y = json.features[0].geometry.coordinates[0];
+
         await _context.Users.InsertOneAsync(new User
         {
             PasswordHash = HashPassword(newUser.Password),
             Address = newUser.Address,
             Email = newUser.Email,
             Name = newUser.Name,
+            AdressPoint = new Point { X = x, Y = y }
         });
     }
 

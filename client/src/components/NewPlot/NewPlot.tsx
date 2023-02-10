@@ -53,7 +53,6 @@ const MapEvents = (props: MapEventsProps) => {
   return <></>;
 };
 export const homeIcon = L.icon({
-  // iconUrl: 'https://cdn1.iconfinder.com/data/icons/engineers7/102/Untitled-28-512.png',
   iconUrl:
     "https://cdn1.iconfinder.com/data/icons/real-estate-building-flat-vol-3/104/house__location__home__map__Pin-512.png",
   iconSize: [50, 50],
@@ -63,23 +62,11 @@ export const homeIcon = L.icon({
 
 const NewPlot: React.FC = () => {
   const { user } = useAuthContext();
-  const [startPosition, setStartPosition] = useState<[number, number]>([
-    43.331456, 21.892134,
-  ]);
+  const [startPosition, setStartPosition] = useState<[number, number]>(
+    user?.addressPoint ? [user.addressPoint.x, user.addressPoint.y] : [43.331456, 21.892134]);
+
   useEffect(() => {
-    if (user && user.address && user.address?.length > 0) {
-      axios
-        .get(
-          `https://api.maptiler.com/geocoding/${user.address}.json?key=eIgS48TpQ70m77qKYrsx`
-        )
-        .then((res) => {
-          if (res.data.features.length > 0)
-            setStartPosition([
-              res.data.features[0].geometry.coordinates[1],
-              res.data.features[0].geometry.coordinates[0],
-            ]);
-        });
-    }
+    setStartPosition(user?.addressPoint ? [user.addressPoint.x, user.addressPoint.y] : [43.331456, 21.892134]);
   }, [user]);
 
   const [showSpinner, setShowSpinner] = useState<boolean>(false);
@@ -161,7 +148,6 @@ const NewPlot: React.FC = () => {
         setSnackbarMessage(error);
         setShowSnackbar(true);
       });
-    console.log(data);
   };
   return (
     <div className="w-full h-full flex flex-col p-10">
@@ -217,7 +203,7 @@ const NewPlot: React.FC = () => {
       </Typography>
       <div className="w-full h-full">
         <div style={{ minHeight: "450px" }} className="w-full h-3/4 py-4">
-          <MapContainer
+          {user && <MapContainer
             className="h-full w-full cursor-crosshair"
             center={startPosition}
             zoom={15}
@@ -230,7 +216,7 @@ const NewPlot: React.FC = () => {
               startPos={startPosition}
             />
             <Marker icon={homeIcon} position={startPosition}></Marker>
-          </MapContainer>
+          </MapContainer>}
         </div>
         <Button onClick={() => removePoints()} variant="contained">
           Clear Points
