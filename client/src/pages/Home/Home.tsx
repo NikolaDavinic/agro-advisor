@@ -11,10 +11,9 @@ const Home = () => {
     <Box className='h-full'>
       <Box
         sx={{
-          color: 'var(--primary)',
           backgroundRepeat: 'no-repeat',
-          backgroundSize: '100% 100%',
-          // height: '100%',
+          backgroundSize: 'cover',
+          height: '100%',
           position: 'relative',
           backgroundAttachment: 'fixed',
           // backgroundPosition: 'center center',
@@ -55,7 +54,7 @@ const Home = () => {
                   image='/dashboard-page.jpg'
                   className='w-full h-full'
                   sx={{ border: '2px solid var(--primary)' }}>
-                  Pratitet vaše prihode i rashode
+                  Pratite vaše prihode i rashode
                 </PageCard>
               </Link>
             </Box>

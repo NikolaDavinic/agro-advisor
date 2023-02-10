@@ -64,18 +64,18 @@ const SignIn = () => {
           {...register('email', { required: true })}
           error={Boolean(errors.email)}></TextField>
         <TextField
-          label='Password'
+          label='Lozinka'
           className='form-field'
           type='password'
           {...register('password', { required: true })}
           error={Boolean(errors.password)}></TextField>
         {isLoading && <LinearProgress></LinearProgress>}
         <Button variant='contained' sx={{ p: 1.2 }} type='submit'>
-          Sign In
+          Prijava
         </Button>
         <Grid container justifyContent='flex-end'>
           <Box>
-            Don't have an account? <Link to='/signup'> Sign Up</Link>
+            Nemate nalog? <Link to='/signup'> Registrujte se</Link>
           </Box>
         </Grid>
       </Stack>
