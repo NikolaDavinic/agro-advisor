@@ -19,6 +19,10 @@ namespace webapi.Services
         }
         public async Task CreateAsync(PlotDTO newPlot)
         {
+            using var session = await _context.MongoClient.StartSessionAsync();
+
+            session.StartTransaction();
+
             var userdbRef = new MongoDBRef("Users", newPlot.UserId);
             var plot = new Plot
             {
@@ -53,6 +57,7 @@ namespace webapi.Services
 
             var result = await _context.Users.FindOneAndUpdateAsync(filter, update);
 
+            await session.CommitTransactionAsync();
         }
         public async Task<Plot?> GetAsync(string userId,string plotId)
         {
@@ -81,6 +86,9 @@ namespace webapi.Services
         //TODO:Combine Create and Update to CreateUpdate
         public async Task<Plot> UpdateAsync(string userId, PlotDTO plotDTO)
         {
+            using var session = await _context.MongoClient.StartSessionAsync();
+            session.StartTransaction();
+
             var filter = Builders<Plot>.Filter.Eq(x => x.Id, plotDTO.Id);
             filter &= Builders<Plot>.Filter.Eq(x => x.User.Id, userId);
             var userdbRef = new MongoDBRef("Users", userId);
@@ -103,7 +111,6 @@ namespace webapi.Services
             });
 
             var plotResult = await _context.Plots.ReplaceOneAsync(filter, plot);
-            //TODO: Sredi update summary-a, izgleda da ne funkcionise
             var plotSum = new PlotSummary
             {
                 Id = new MongoDBRef("Plots", plot.Id),
@@ -112,35 +119,6 @@ namespace webapi.Services
                 PlotNumber = plot.PlotNumber,
                 Area = plot.Area
             };
-
-
-            //TODO: Radi ali ne radi
-            //var filterSummary = Builders<User>.Filter.Eq((u) => u.Id, userId);
-            //filterSummary &= Builders<User>.Filter.ElemMatch(u => u.Plots, Builders<PlotSummary>.Filter.Eq(x => x.Id.Id, plot.Id));
-
-            //var update = Builders<User>.Update
-            //    .Set(x => x.Plots.First().PlotNumber, plot.PlotNumber)
-            //    .Set(x => x.Plots.First().Area, plot.Area)
-            //    .Set(x => x.Plots.First().Municipality, plot.Municipality);
-
-            //await _context.Users.FindOneAndUpdateAsync(filterSummary, update);
-
-            //2. POKUSAJ ISTO DAJE MENJA PRVI UVEK
-            //var filterUser = Builders<User>.Filter;
-            //var userIdAndPlotIdFilter = filterUser.And(
-            //    filterUser.Eq(x => x.Id, userId),
-            //    filterUser.ElemMatch(x => x.Plots, c => c.Id.Id == plot.Id));
-            //// find user with id and plot id
-            //var user = _context.Users.Find(userIdAndPlotIdFilter).SingleOrDefault();
-
-            //// update with positional operator
-            //var update = Builders<User>.Update;
-            //var plotSetter = update
-            //    .Set(x => x.Plots.First().PlotNumber, plot.PlotNumber)
-            //    .Set(x => x.Plots.First().Area, plot.Area)
-            //    .Set(x => x.Plots.First().Municipality, plot.Municipality);
-
-            //_context.Users.UpdateOne(userIdAndPlotIdFilter, plotSetter);
 
             var filterBuilder = Builders<User>.Filter;
             var filterUser = filterBuilder.Eq(x => x.Id, userId) &
@@ -155,6 +133,8 @@ namespace webapi.Services
 
 
             _context.Users.UpdateOne(filterUser, update);
+
+            await session.CommitTransactionAsync();
 
             return plot;
         }

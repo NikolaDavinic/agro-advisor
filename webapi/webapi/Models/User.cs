@@ -2,6 +2,7 @@
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
 using System.Text.Json.Serialization;
+using webapi.DTO;
 
 namespace webapi.Models
 {
@@ -56,6 +57,7 @@ namespace webapi.Models
         public string PasswordHash { get; set; } = null!;
         public string ImageUrl { get; set; } = null!;
         public string Address { get; set; } = null!;
+        public Point AdressPoint { get; set; } = null!;
         [JsonIgnore]
         public List<PlotSummary> Plots { get; set; } = new();
         [JsonIgnore]

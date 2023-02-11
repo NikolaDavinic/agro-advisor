@@ -49,14 +49,21 @@ const PlotMap: React.FC = () => {
     const [plots, setPlots] = useState<Plot[]>([]);
     const navigate = useNavigate();
 
+    // useEffect(() => {
+    //     setStartPosition(user?.addressPoint ? [user.addressPoint.x, user.addressPoint.y] : [43.331456, 21.892134]);
+    // }, [user]);
+
     useEffect(() => {
-        if (user && user.address && user.address?.length > 0) {
-            axios.get(`https://api.maptiler.com/geocoding/${user.address}.json?key=eIgS48TpQ70m77qKYrsx`)
-                .then(res => {
-                    if (res.data.features.length > 0)
-                        setStartPosition([res.data.features[0].geometry.coordinates[1], res.data.features[0].geometry.coordinates[0]]);
-                })
-        }
+        // if (user && user.address && user.address?.length > 0) {
+        //     axios.get(`https://api.maptiler.com/geocoding/${user.address}.json?key=eIgS48TpQ70m77qKYrsx`)
+        //         .then(res => {
+        //             if (res.data.features.length > 0)
+        //                 setStartPosition([res.data.features[0].geometry.coordinates[1], res.data.features[0].geometry.coordinates[0]]);
+        //         })
+        // }
+        // setStartPosition(user?.addressPoint ? [user.addressPoint.x, user.addressPoint.y] : [43.331456, 21.892134]);
+        // setStartPosition(user?.addressPoint ? [user.addressPoint.x, user.addressPoint.y] : [43.331456, 21.892134]);
+        
         api.get<Plot[]>(`/plot/plots`)
             .then(res => {
                 setShowSpinner(false);

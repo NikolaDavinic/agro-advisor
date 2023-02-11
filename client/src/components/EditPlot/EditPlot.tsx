@@ -66,13 +66,6 @@ const EditPlot: React.FC = ({}: EditPlotProps) => {
   const [area, setArea] = useState<number>(1);
 
   useEffect(() => {
-    // if (user && user.address && user.address?.length > 0) {
-    //     axios.get(`https://api.maptiler.com/geocoding/${user.address}.json?key=eIgS48TpQ70m77qKYrsx`)
-    //         .then(res => {
-    //             if (res.data.features.length > 0)
-    //                 setStartPosition([res.data.features[0].geometry.coordinates[1], res.data.features[0].geometry.coordinates[0]]);
-    //         })
-    // }
     api
       .get<Plot>(`/plot/${plotId}`)
       .then((res) => {
