@@ -1,12 +1,13 @@
 import { Box, Card, CardContent, CardMedia, Paper, Typography } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import ImageListing from '../../components/ImageList/ImageListing';
+import { useAuthContext } from '../../contexts/auth.context';
 import PageCard from './PageCard';
 
 //Treba samo da se pribave podaci za ovo sto ce da se prikazuje ovde
 const Home = () => {
   const navigate = useNavigate();
-
+  const { user } = useAuthContext();
   return (
     <Box className='h-full'>
       <Box
@@ -22,7 +23,7 @@ const Home = () => {
         <Box position='relative'>
           <Box className='p-5'>
             <Typography
-              variant='h4'
+              variant='h5'
               fontWeight='bold'
               sx={{
                 letterSpacing: '2px',
@@ -30,7 +31,7 @@ const Home = () => {
                 textShadow:
                   '-1px -1px 0 var(--secondary-light), 1px -1px 0 var(--secondary-light), -1px 1px 0 var(--secondary-light), 1px 1px 0 var(--secondary-light)',
               }}>
-              Dobrodošli na AgroAdvisor
+              {`Dobrodošli na AgroAdvisor${user && ', ' + user.name}`}
             </Typography>
           </Box>
           <Box
