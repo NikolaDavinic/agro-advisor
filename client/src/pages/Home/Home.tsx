@@ -26,9 +26,9 @@ const Home = () => {
               fontWeight='bold'
               sx={{
                 letterSpacing: '2px',
-                color: 'var(--secondary-light)',
+                color: 'var(--primary)',
                 textShadow:
-                  '-1px -1px 0 var(--primary), 1px -1px 0 var(--primary), -1px 1px 0 var(--primary), 1px 1px 0 var(--primary)',
+                  '-1px -1px 0 var(--secondary-light), 1px -1px 0 var(--secondary-light), -1px 1px 0 var(--secondary-light), 1px 1px 0 var(--secondary-light)',
               }}>
               Dobrodošli na AgroAdvisor
             </Typography>
