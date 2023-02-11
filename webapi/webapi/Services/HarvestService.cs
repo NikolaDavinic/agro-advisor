@@ -21,7 +21,6 @@ namespace webapi.Services
                 Amount= newHarvest.Amount,
                 CultureName = newHarvest.CultureName,
                 Date = newHarvest.Date,
-                //CurrentCulture = newHarvest.cu
             };
 
             var filter = Builders<Plot>.Filter.Eq((p) => p.Id, plotId);
@@ -34,9 +33,13 @@ namespace webapi.Services
 
         public async Task<List<Harvest>> GetPlotHarvestsAsync(string plotId)
         {
-            var filter = Builders<Plot>.Filter.Eq(x => x.Id, plotId);
+            var result = await _context.Plots.AsQueryable()
+                .SelectMany(p => p.Harvests)
+                .OrderByDescending(h => h.Date)
+                .ToAsyncEnumerable()
+                .ToListAsync();
 
-            return (await _context.Plots.Find(filter).FirstOrDefaultAsync()).Harvests;
+            return result;
         }
 
         public async Task<bool> DeleteAsync(string harvestId, string plotId)

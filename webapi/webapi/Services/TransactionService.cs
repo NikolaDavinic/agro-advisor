@@ -130,9 +130,10 @@ public class TransactionService
     {
         var result = (await _context.Users.AsQueryable()
             .Where(u => u.Id == userId)
-            .Select(u => u.Transactions)
-            .FirstAsync())
-            .GroupBy(x => x.Date.Year)
+            .SelectMany(u => u.Transactions)
+            .Select(u => new { u.Date.Year, u.CategoryName, u.Value })
+            .GroupBy(x => x.Year)
+            .ToListAsync())
             .Select((group) => new
             {
                 Year = group.Key,

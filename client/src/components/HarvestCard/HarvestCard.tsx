@@ -1,7 +1,7 @@
-import { Box, Button, Paper, Typography } from "@mui/material";
-import { Harvest } from "../../models/harvest.model";
-import MatIcon from "../MatIcon/MatIcon";
-import moment from "moment";
+import { Box, Button, IconButton, Paper, Tooltip, Typography } from '@mui/material';
+import { Harvest } from '../../models/harvest.model';
+import MatIcon from '../MatIcon/MatIcon';
+import moment from 'moment';
 
 export interface HarvestCardProps {
   harvest: Harvest;
@@ -10,50 +10,52 @@ export interface HarvestCardProps {
 }
 
 const HarvestCard = ({ harvest, onDelete, ...props }: HarvestCardProps) => {
-  let color: string = "green";
+  let color: string = 'green';
 
   return (
-    <Paper
-      elevation={4}
-      {...props}
-      className={`p-2 flex justify-between ${props.className}`}
-    >
-      <Box>
-        {/* <Typography className="text-gray-600">{moment(harvest?.date).format("DD/MM/yyyy")}</Typography> */}
-        <Typography fontWeight="bold">
-          <>
-            <span>
-              <MatIcon style={{ fontSize: 12 }}>
-                grass
-              </MatIcon>
-              {`${harvest.cultureName}  `}
-              <MatIcon style={{ fontSize: 13 }}>
-                warehouse
-              </MatIcon>
-              {`${harvest.amount}`} kg
-            </span>
-          </>
-        </Typography>
-      </Box>
+    <Paper elevation={4} {...props} className={`p-2 flex justify-between items-center`}>
       <Box>
         <Box>
-          <span className="text-gray-400">Datum berbe: </span>
+          <Box className='flex gap-2'>
+            <MatIcon style={{ fontSize: '1.4rem' }} color='primary'>
+              grass
+            </MatIcon>
+            <Typography>
+              <span className='text-gray-400'>Kulturа:</span> {`${harvest.cultureName}  `}
+            </Typography>
+          </Box>
+          <Box className='flex gap-2 items-center'>
+            <MatIcon style={{ fontSize: '1.4rem' }} color='primary'>
+              warehouse
+            </MatIcon>
+            <Typography>
+              <span className='text-gray-400'>Količina:</span> {`${harvest.amount}`} kg
+            </Typography>
+          </Box>
+        </Box>
+      </Box>
+      <Box className='h-full'>
+        <Box className='h-full flex items-center gap-2'>
           <span>
-            {moment(harvest?.date).format("DD/MM/yyyy")}
+            <span className='text-gray-400'>Datum berbe: </span>
+            <span>{moment(harvest?.date).format('DD/MM/yyyy')}</span>
           </span>
-          <span className="max-w-fit">
-            {/* <MatIcon style={{ fontSize: 15 }}>
-              edit
-            </MatIcon> */}
-            <Button onClick={() => onDelete(harvest.id)}>
-              <MatIcon color="error" style={{ fontSize: 15 }}>
-                delete
-              </MatIcon>
-            </Button>
+          <span className='max-w-fit'>
+            <Tooltip
+              title='Obriši berbu'
+              children={
+                <span>
+                  <IconButton onClick={() => onDelete(harvest.id)}>
+                    <MatIcon color='error' style={{ fontSize: '1.2rem' }}>
+                      delete
+                    </MatIcon>
+                  </IconButton>
+                </span>
+              }></Tooltip>
           </span>
         </Box>
       </Box>
-    </Paper >
+    </Paper>
   );
 };
 
