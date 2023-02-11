@@ -89,6 +89,9 @@ namespace webapi.Services
 
         public async Task<Machinery?> UpdateMachineForUser(string userId, Machinery machine)
         {
+            using var session = await _context.MongoClient.StartSessionAsync();
+            session.StartTransaction();
+
             var filter = Builders<Machinery>.Filter.Eq(x => x.Id, machine.Id);
             filter &= Builders<Machinery>.Filter.Eq(x => x.User.Id, userId);
 
@@ -112,7 +115,9 @@ namespace webapi.Services
                 .Set(x => x.Machines.FirstMatchingElement().Type, machine.Type);
 
             await _context.Users.UpdateOneAsync(filterUser, update);
-            
+
+            await session.CommitTransactionAsync();
+
             _fileService.DeleteFiles(imagesToDelete);
 
             return machine;

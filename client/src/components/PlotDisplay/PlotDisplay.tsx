@@ -14,6 +14,7 @@ import {
   Tabs,
 } from '@mui/material';
 import { LatLngExpression, PathOptions } from 'leaflet';
+import moment from 'moment';
 import { useState } from 'react';
 import { MapContainer, Polygon, TileLayer } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
@@ -235,13 +236,17 @@ const PlotDisplay = ({ plot: plotProp, onDelete = () => {} }: PlotDisplayProps) 
               )}
               {plot.harvests.length === 0 && 'Nemate unetih berbi...'}
               {plot.harvests.length > 0 &&
-                plot.harvests?.map(h => (
-                  <HarvestCard
-                    harvest={h}
-                    key={h.id}
-                    className={`cursor-pointer`}
-                    onDelete={harvestId => onDeleteHarvest(harvestId)}></HarvestCard>
-                ))}
+                plot.harvests
+                  .sort((a, b) => {
+                    return new Date(b.date).getTime() - new Date(a.date).getTime();
+                  })
+                  ?.map(h => (
+                    <HarvestCard
+                      harvest={h}
+                      key={h.id}
+                      className={`cursor-pointer`}
+                      onDelete={harvestId => onDeleteHarvest(harvestId)}></HarvestCard>
+                  ))}
             </Stack>
           </div>
         </TabPanel>
