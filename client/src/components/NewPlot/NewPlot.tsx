@@ -95,17 +95,17 @@ const NewPlot: React.FC = () => {
     var passed = true;
     if (area <= 0) {
       setSnackbarSeverity("warning");
-      setSnackbarMessage("Area must be at least 1 square meter!");
+      setSnackbarMessage("Površina mora biti najmanje 1 kv metar!");
       setShowSnackbar(true);
       passed = false;
     } else if (plotNumber <= 0) {
       setSnackbarSeverity("warning");
-      setSnackbarMessage("Plot number must be non zero value!");
+      setSnackbarMessage("Broj parcele mora biti pozitivan!");
       setShowSnackbar(true);
       passed = false;
     } else if (municipality.length === 0) {
       setSnackbarSeverity("warning");
-      setSnackbarMessage("Municipality is required!");
+      setSnackbarMessage("Opština je neophond!");
       setShowSnackbar(true);
       passed = false;
     }
@@ -137,10 +137,10 @@ const NewPlot: React.FC = () => {
     api
       .post("/plot/add", data)
       .then((response) => {
-        // return navigate("/listing/" + response.data[0].id);
         setSnackbarSeverity("success");
-        setSnackbarMessage("Plot added successfully!");
+        setSnackbarMessage("Parcela uspešno dodata!");
         setShowSnackbar(true);
+        setShowSpinner(false);
       })
       .catch((error) => {
         console.error(error);
@@ -160,7 +160,7 @@ const NewPlot: React.FC = () => {
       <TextField
         autoFocus
         margin="normal"
-        label="Municipality"
+        label="Opština"
         type="text"
         // fullWidth
         variant="standard"
@@ -170,7 +170,7 @@ const NewPlot: React.FC = () => {
       <TextField
         autoFocus
         margin="normal"
-        label="Plot Number"
+        label="Broj parcele"
         type="number"
         InputProps={{ inputProps: { min: 1 } }}
         // fullWidth
@@ -181,7 +181,7 @@ const NewPlot: React.FC = () => {
       <TextField
         autoFocus
         margin="normal"
-        label={<p>Area (m{<sup>2</sup>})</p>}
+        label={<p>Površina (m{<sup>2</sup>})</p>}
         type="number"
         InputProps={{ inputProps: { min: 1 } }}
         // fullWidth
@@ -191,7 +191,7 @@ const NewPlot: React.FC = () => {
       />
       <TextField
         margin="normal"
-        label="Current Culture"
+        label="Trenutna kultura"
         type="text"
         // fullWidth
         variant="standard"
@@ -199,7 +199,7 @@ const NewPlot: React.FC = () => {
         value={culture}
       />
       <Typography gutterBottom variant="body1">
-        Draw plot by selecting border points:
+        Nacrtajte parcelu iZborom graničnih tačaka
       </Typography>
       <div className="w-full h-full">
         <div style={{ minHeight: "450px" }} className="w-full h-3/4 py-4">
@@ -219,7 +219,7 @@ const NewPlot: React.FC = () => {
           </MapContainer>}
         </div>
         <Button onClick={() => removePoints()} variant="contained">
-          Clear Points
+          Obriši tačke
           <Icon sx={{ fontSize: 35 }} className="icon">
             delete
           </Icon>
@@ -227,10 +227,10 @@ const NewPlot: React.FC = () => {
       </div>
       <div className="w-full flex flex-row mb-5 pb-5">
         <Button fullWidth onClick={() => onCancel()}>
-          Cancel
+          Odustani
         </Button>
         <Button fullWidth variant="contained" onClick={() => onSubmit()}>
-          Add
+          Dodaj
         </Button>
       </div>
       <Snackbar
