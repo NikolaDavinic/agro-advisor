@@ -33,9 +33,8 @@ public class UserService
 
     public async Task CreateAsync(UserDTO newUser)
     {
-        //Geo kodiranje korisnikove adrese
         var client = new HttpClient();
-        var response = await client.GetAsync($"https://api.maptiler.com/geocoding/${newUser.Address}.json?key=***REMOVED***");
+        var response = await client.GetAsync($"https://api.maptiler.com/geocoding/${newUser.Address}.json?key={_config["MapTiler"]}");
         var responseBody = await response.Content.ReadAsStringAsync();
         dynamic json = JsonConvert.DeserializeObject(responseBody);
         var x = json.features[0].geometry.coordinates[1];

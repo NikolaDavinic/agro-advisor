@@ -55,37 +55,5 @@ namespace webapi.Controllers
                 AuthToken = _usersService.CreateToken(user)
             });
         }
-
-        //[HttpPost("plot")]
-        //public async Task<ActionResult> CreatePlot([FromBody] Plot plot)
-        //{
-        //    await _context.Plots.InsertOneAsync(plot);
-
-        //    //_context.Users.UpdateOne(x => x.Id == plot.UserId, (user) =>
-        //    //{
-        //    //    user.Plots.Add(new PlotSummary
-        //    //    {
-        //    //        Id = plot.Id,
-        //    //        Area = plot.Area,
-        //    //        PlotNumber = plot.PlotNumber,
-        //    //        Municipality = plot.Municipality
-        //    //    });
-
-        //    //    return user;
-        //    //});
-
-        //    var filter = Builders<User>.Filter.Eq("Id", plot.UserId);
-        //    var update = Builders<User>.Update.Push(e => e.Plots, new PlotSummary
-        //    {
-        //        Id = plot.Id,
-        //        Area = plot.Area,
-        //        PlotNumber = plot.PlotNumber,
-        //        Municipality = plot.Municipality
-        //    });
-
-        //    _context.Users.FindOneAndUpdate(filter, update);
-
-        //    return Ok("Valjda radi");
-        //}
     }
 }

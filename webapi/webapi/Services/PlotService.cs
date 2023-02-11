@@ -83,7 +83,6 @@ namespace webapi.Services
             return result;
 
         }
-        //TODO:Combine Create and Update to CreateUpdate
         public async Task<Plot> UpdateAsync(string userId, PlotDTO plotDTO)
         {
             using var session = await _context.MongoClient.StartSessionAsync();
