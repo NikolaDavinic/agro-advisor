@@ -13,7 +13,7 @@
 &ensp;&ensp;<strong>lozinka:</strong>123
   </p>
   <p>
-  Za pokretanje aplikacije potrebno je startovati api (webapi projekat - projekat treba pokrenuti
+  Za pokretanje aplikacije potrebno je webapi projekat - (projekat treba pokrenuti
   na portu 7077) <br />
   Za pokretanje klijentske strane potrebno je pozicionirati se u client folder i izvrsiti komande:
   <br />
@@ -21,3 +21,7 @@
   &ensp;&ensp;npm run start <br />
 </p>
 </div>
+<p>
+
+>**_NAPOMENA:_** Iz projekta na ovom repozitorijumu izostavljeni su connection stringovi
+</p>
